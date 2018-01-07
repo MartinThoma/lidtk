@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Run the lidtk main script."""
+
+# 3rd party modules
+import click
+
+# local modules
+import lidtk
+import lidtk.classifiers.text_cat.textcat_ngram
+import lidtk.classifiers.cld2.cld2_utils
+import lidtk.data.download_documents
+import lidtk.data.create_ml_dataset
+import lidtk.models.mlp
+import lidtk.analysis.unicode_block
+import lidtk.classifiers.langdetect.langdetect_utils as langdetect
+import lidtk.classifiers.char_distribution.char_dist_metric_train_test as cdm
+
+
+@click.group()
+@click.version_option(version=lidtk.__version__)
+def entry_point():
+    pass
+
+entry_point.add_command(lidtk.data.download_documents.main)
+entry_point.add_command(lidtk.data.language_utils.main)
+entry_point.add_command(lidtk.classifiers.text_cat.textcat_ngram.cli)
+entry_point.add_command(lidtk.classifiers.cld2.cld2_utils.entry_point)
+entry_point.add_command(lidtk.data.create_ml_dataset.main)
+entry_point.add_command(lidtk.models.mlp.main)
+entry_point.add_command(langdetect.entry_point)
+entry_point.add_command(lidtk.analysis.unicode_block.main)
+entry_point.add_command(cdm.entry_point)
+
+
+if __name__ == '__main__':
+    entry_point()
