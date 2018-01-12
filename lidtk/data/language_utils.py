@@ -14,7 +14,8 @@ import click
 import numpy as np
 
 # local modules
-from lidtk.classifiers.char_distribution.char_dist_metric_train_test import get_common_characters
+from lidtk.classifiers.char_distribution.char_dist_metric_train_test import \
+    get_common_characters
 from lidtk.utils import make_path_absolute
 from lidtk.data import char_distribution
 
@@ -75,6 +76,18 @@ def main(lang_dir, theta=0.99):
                       u"".join(common_chars),
                       len(common_chars)
                       ))
+    print("Mean paragraph length of mean language paragraph lengths: {}"
+          .format(np.array([el['paraphgrah_len_mean']
+                            for el in lang_stats.values()]).mean()))
+    print("Longest paragraph length: {}"
+          .format(np.array([el['paraphgrah_len_max']
+                            for el in lang_stats.values()]).max()))
+    i = 0
+    for lang, info in lang_stats.items():
+        if info['theta_99_len'] >= 150:
+            i += 1
+            print("{}. {}: {} characters"
+                  .format(i, lang, info['theta_99_len']))
     char_distribution.main(lang_stats)
 
 

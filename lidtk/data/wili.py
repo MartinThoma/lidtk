@@ -46,7 +46,7 @@ def get_language_data(csv_filepath='~/.lidtk/data/labels.csv'):
 
     Returns
     -------
-    list of lists
+    wili_labels : list of dicts
 
     Example
     -------
