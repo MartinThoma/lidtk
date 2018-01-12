@@ -3,8 +3,18 @@
 
 """Run the lidtk main script."""
 
+# core modules
+import logging.config
+import pkg_resources
+import yaml
+
 # 3rd party modules
 import click
+
+filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
+with open(filepath, 'r') as stream:
+    config = yaml.load(stream)
+logging.config.dictConfig(config['LOGGING'])
 
 # local modules
 import lidtk
@@ -15,7 +25,7 @@ import lidtk.classifiers.langdetect_mod
 import lidtk.classifiers.langid_mod
 import lidtk.classifiers.mlp
 import lidtk.classifiers.nn
-import lidtk.classifiers.text_cat.textcat_ngram
+import lidtk.classifiers.text_cat
 import lidtk.data.create_ml_dataset
 import lidtk.data.download_documents
 
@@ -27,7 +37,7 @@ def entry_point():
 
 entry_point.add_command(lidtk.data.download_documents.main)
 entry_point.add_command(lidtk.data.language_utils.main)
-entry_point.add_command(lidtk.classifiers.text_cat.textcat_ngram.cli)
+entry_point.add_command(lidtk.classifiers.text_cat.entry_point)
 entry_point.add_command(lidtk.classifiers.cld2_mod.entry_point)
 entry_point.add_command(lidtk.data.create_ml_dataset.main)
 entry_point.add_command(lidtk.classifiers.mlp.entry_point)

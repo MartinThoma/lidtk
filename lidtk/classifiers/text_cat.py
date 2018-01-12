@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Run classification with CLD2.
+Run classification with text_cat.
 
 Notes
 -----
@@ -15,14 +15,14 @@ import pkg_resources
 
 # 3rd party modules
 import click
-import cld2
+import nltk.classify.textcat
 
 # internal modules
 import lidtk.classifiers
 import lidtk.data.wili as wili
 
 
-class CLD2Classifier(lidtk.classifiers.LIDClassifier):
+class TextCatClassifier(lidtk.classifiers.LIDClassifier):
     def predict(self, text):
         """
         Predicting the language of a text.
@@ -31,13 +31,13 @@ class CLD2Classifier(lidtk.classifiers.LIDClassifier):
         ----------
         text : str
         """
-        is_reliable, text_bytes_found, details = cld2.detect(text,
-                                                             bestEffort=True)
-        return self.map2wili(details[0].language_code)
+        o = nltk.classify.textcat.TextCat()
+        language_code = o.guess_language(text)
+        return language_code
 
-path = 'classifiers/config/cld2.yaml'
+path = 'classifiers/config/textcat.yaml'
 filepath = pkg_resources.resource_filename('lidtk', path)
-classifier = CLD2Classifier(filepath)
+classifier = TextCatClassifier(filepath)
 
 
 ###############################################################################

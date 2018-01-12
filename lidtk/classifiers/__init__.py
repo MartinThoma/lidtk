@@ -103,7 +103,7 @@ class LIDClassifier(ABC):
     def get_mapping_languages(self):
         return sorted([lang for _, lang in self.cfg['mapping'].items()])
 
-    def eval_wili(self, result_file, languages=None):
+    def eval_wili(self, result_file, languages=None, eval_unk=False):
         """
         Evaluate the classifier on WiLI.
 
@@ -127,12 +127,17 @@ class LIDClassifier(ABC):
         results['meta']['experiment_start'] = ('{:%Y-%m-%d %H:%M:%S}'
                                                .format(now))
         cl_results = {}
+        if languages is None:
+            eval_unk = False
         with open(result_filepath, 'w') as filepointer:
             for i, (el, label_t) in enumerate(zip(data['x_test'],
                                                   data['y_test'])):
                 if languages is not None:
                     if label_t not in languages:
-                        continue
+                        if eval_unk:
+                            print("UNK")
+                        else:
+                            continue
                     else:
                         print(label_t)
                 try:
@@ -168,3 +173,5 @@ class LIDClassifier(ABC):
                                indent=4,
                                sort_keys=True,
                                ensure_ascii=False))
+
+

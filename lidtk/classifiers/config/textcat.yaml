@@ -1,0 +1,20 @@
+name: textcat
+mapping:
+  arb:
+  bel:
+  bos:
+  eng: eng
+  fra:
+  hat:
+  hin:
+  kan:
+  kan:
+  kan:
+  khk:
+  lad:
+  mly:
+  mri:
+  pes:
+  por:
+  rus: rus
+  sun:

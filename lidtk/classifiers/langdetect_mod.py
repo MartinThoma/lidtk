@@ -62,7 +62,7 @@ classifier = LangdetectClassifier(filepath)
 ###############################################################################
 # CLI                                                                         #
 ###############################################################################
-@click.group(name='langdetect')
+@click.group(name=classifier.cfg['name'])
 def entry_point():
     """Use the langdetect language classifier."""
 
@@ -115,7 +115,8 @@ def print_languages(label_filepath):
 
 @entry_point.command(name='wili')
 @click.option('--result_file',
-              default='langdetect_results.txt', show_default=True,
+              default='{}_results.txt'.format(classifier.cfg['name']),
+              show_default=True,
               help='Where to store the predictions')
 def eval_wili(result_file):
     """
@@ -131,7 +132,8 @@ def eval_wili(result_file):
 
 @entry_point.command(name='wili_k')
 @click.option('--result_file',
-              default='langdetect_results_known.txt', show_default=True,
+              default='{}_results_known.txt'.format(classifier.cfg['name']),
+              show_default=True,
               help='Where to store the predictions')
 def eval_wili_known(result_file):
     """
@@ -143,3 +145,22 @@ def eval_wili_known(result_file):
         Path to a file where the results will be stored
     """
     classifier.eval_wili(result_file, classifier.get_mapping_languages())
+
+
+@entry_point.command(name='wili_unk')
+@click.option('--result_file',
+              default='{}_results_unknown.txt'.format(classifier.cfg['name']),
+              show_default=True,
+              help='Where to store the predictions')
+def eval_wili_unknown(result_file):
+    """
+    CLI function evaluating the classifier on WiLI.
+
+    Parameters
+    ----------
+    result_file : str
+        Path to a file where the results will be stored
+    """
+    classifier.eval_wili(result_file,
+                         classifier.get_mapping_languages(),
+                         eval_unk=True)
