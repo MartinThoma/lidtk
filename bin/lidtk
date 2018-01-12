@@ -8,14 +8,16 @@ import click
 
 # local modules
 import lidtk
-import lidtk.classifiers.text_cat.textcat_ngram
-import lidtk.classifiers.cld2.cld2_utils
-import lidtk.data.download_documents
-import lidtk.data.create_ml_dataset
-import lidtk.models.mlp
 import lidtk.analysis.unicode_block
-import lidtk.classifiers.langdetect.langdetect_utils as langdetect
 import lidtk.classifiers.char_distribution.char_dist_metric_train_test as cdm
+import lidtk.classifiers.cld2_mod
+import lidtk.classifiers.langdetect_mod
+import lidtk.classifiers.langid_mod
+import lidtk.classifiers.mlp
+import lidtk.classifiers.nn
+import lidtk.classifiers.text_cat.textcat_ngram
+import lidtk.data.create_ml_dataset
+import lidtk.data.download_documents
 
 
 @click.group()
@@ -26,10 +28,12 @@ def entry_point():
 entry_point.add_command(lidtk.data.download_documents.main)
 entry_point.add_command(lidtk.data.language_utils.main)
 entry_point.add_command(lidtk.classifiers.text_cat.textcat_ngram.cli)
-entry_point.add_command(lidtk.classifiers.cld2.cld2_utils.entry_point)
+entry_point.add_command(lidtk.classifiers.cld2_mod.entry_point)
 entry_point.add_command(lidtk.data.create_ml_dataset.main)
-entry_point.add_command(lidtk.models.mlp.main)
-entry_point.add_command(langdetect.entry_point)
+entry_point.add_command(lidtk.classifiers.mlp.entry_point)
+entry_point.add_command(lidtk.classifiers.nn.entry_point)
+entry_point.add_command(lidtk.classifiers.langdetect_mod.entry_point)
+entry_point.add_command(lidtk.classifiers.langid_mod.entry_point)
 entry_point.add_command(lidtk.analysis.unicode_block.main)
 entry_point.add_command(cdm.entry_point)
 
