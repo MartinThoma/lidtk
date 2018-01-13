@@ -25,12 +25,12 @@ def indices_to_one_hot(data, nb_classes):
     Examples
     --------
     >>> indices_to_one_hot([0, 1, 2, 0, 0, 1], 3)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.],
-           [ 1.,  0.,  0.],
-           [ 0.,  1.,  0.]])
+    array([[1., 0., 0.],
+           [0., 1., 0.],
+           [0., 0., 1.],
+           [1., 0., 0.],
+           [1., 0., 0.],
+           [0., 1., 0.]])
     """
     targets = np.array(data).reshape(-1)
     return np.eye(nb_classes)[targets]

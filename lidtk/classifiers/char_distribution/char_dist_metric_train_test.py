@@ -50,7 +50,26 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 
 def ido(x, y):
-    """The ido metric."""
+    """
+    The ido metric.
+
+    Parameters
+    ----------
+    x : numpy array
+        A probability distribution
+    y : numpy array
+        A probability distribution
+
+    Returns
+    -------
+    distance : float
+        How much the two probability distributions overlap.
+
+    Examples
+    --------
+    >>> ido ([0.5, 0.5], [0.1, 0.9])
+    0.4
+    """
     return 1 - np.sum(np.minimum(x, y))
 
 
@@ -65,7 +84,6 @@ comp_metric = ido
 @click.group(name='char-distrib')
 def entry_point():
     """Use the character distribution language classifier."""
-    pass
 
 
 @entry_point.command(name='predict')
