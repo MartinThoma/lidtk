@@ -139,8 +139,3 @@ def load_data(config=None):
 labels = get_language_data(make_path_absolute('~/.lidtk/data/labels.csv'))
 labels_s = [el['Label'] for el in labels]
 n_classes = len(labels)
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

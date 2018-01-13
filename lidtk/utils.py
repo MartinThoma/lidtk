@@ -33,7 +33,7 @@ def get_software_info():
 
     Returns
     -------
-    sw_info : list
+    sw_info : dict
     """
     sw_info = {}
     sw_info['Platform'] = platform.platform()
@@ -47,28 +47,28 @@ def get_hardware_info():
 
     Returns
     -------
-    logstring : list
+    hw_info : dict
     """
-    logstring = []
+    hw_info = {}
     cpuinfo_path = '/proc/cpuinfo'
     if os.path.isfile(cpuinfo_path):
         with open(cpuinfo_path) as f:
             cpuinfo = f.readlines()
         for line in cpuinfo:
             if "model name" in line:
-                logstring.append("CPU: {}".format(line.strip()))
+                hw_info['CPU'] = line.strip()
                 break
 
     gpuinfo_path = '/proc/driver/nvidia/version'
     if os.path.isfile(gpuinfo_path):
         with open(gpuinfo_path) as f:
             version = f.read().strip()
-        logstring.append("GPU driver: {}".format(version))
+        hw_info['GPU driver'] = version
     try:
-        logstring.append("VGA: {}".format(find_vga()))
+        hw_info['VGA'] = find_vga()
     except:
         pass
-    return logstring
+    return hw_info
 
 
 def find_vga():

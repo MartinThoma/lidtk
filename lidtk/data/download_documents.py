@@ -335,7 +335,3 @@ def query(lang, query):
          .format(lang=lang, query=query))
     r = requests.get(q)
     return json.loads(r.text)
-
-
-if __name__ == '__main__':
-    main()
