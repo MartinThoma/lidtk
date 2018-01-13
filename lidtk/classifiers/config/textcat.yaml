@@ -1,20 +1,190 @@
 name: textcat
 mapping:
-  arb:
-  bel:
-  bos:
+  ace: ace
+  afr: afr
+  aka: aka
+  als: als
+  amh: amh
+  ang: ang
+  arb: arb
+  arg: arg
+  asm: asm
+  ast: ast
+  ava: ava
+  ayr: ayr
+  azj: azj
+  bak: bak
+  ban: ban
+  bar: bar
+  bcl: bcl
+  bel: bel
+  ben: ben
+  bod: bod
+  bos: bos
+  bre: bre
+  bul: bul
+  bxr: bxr
+  cat: cat
+  ceb: ceb
+  ces: ces
+  cha: cha
+  cmn: cmn
+  cor: cor
+  cos: cos
+  crs: crs
+  csb: csb
+  cym: cym
+  dan: dan
+  ddn: ddn
+  deu: deu
+  diq: diq
+  dyu: dyu
+  dzo: dzo
+  ell: ell
   eng: eng
-  fra:
-  hat:
-  hin:
-  kan:
-  kan:
-  kan:
-  khk:
-  lad:
-  mly:
-  mri:
-  pes:
-  por:
+  eng: eng
+  epo: epo
+  est: est
+  eus: eus
+  fao: fao
+  fin: fin
+  fra: fra
+  fri: fri
+  frp: frp
+  fur: fur
+  gaz: gaz
+  gla: gla
+  gle: gle
+  glg: glg
+  glv: glv
+  gsc: gsc
+  gsw: gsw
+  gug: gug
+  guj: guj
+  guw: guw
+  hat: hat
+  hau: hau
+  heb: heb
+  hil: hil
+  hin: hin
+  hne: hne
+  hrv: hrv
+  hsb: hsb
+  hun: hun
+  hye: hye
+  ibo: ibo
+  ina: ina
+  ind: ind
+  isl: isl
+  ita: ita
+  ivv: ivv
+  kab: kab
+  kan: kan
+  kat: kat
+  kaz: kaz
+  kbd: kbd
+  khk: khk
+  khm: khm
+  kin: kin
+  kir: kir
+  kmr: kmr
+  knc: knc
+  knn: knn
+  krc: krc
+  ksh: ksh
+  lad: lad
+  lao: lao
+  lav: lav
+  lin: lin
+  lit: lit
+  lld: lld
+  lmo: lmo
+  lnc: lnc
+  ltz: ltz
+  lua: lua
+  lug: lug
+  lus: lus
+  mal: mal
+  mcd: mcd
+  mfe: mfe
+  mkd: mkd
+  mlt: mlt
+  mly: mly
+  mri: mri
+  mrj: mrj
+  mya: mya
+  nap: nap
+  nav: nav
+  nde: nde
+  nds: nds
+  nld: nld
+  nmf: nmf
+  nno: nno
+  nob: nob
+  nso: nso
+  ood: ood
+  ori: ori
+  oss: oss
+  pan: pan
+  pap: pap
+  pbu: pbu
+  pcm: pcm
+  pdc: pdc
+  pes: pes
+  pis: pis
+  plt: plt
+  pms: pms
+  pol: pol
+  por: por
+  prs: prs
+  quh: quh
+  rnd: rnd
+  roh: roh
+  rup: rup
   rus: rus
-  sun:
+  scn: scn
+  sco: sco
+  slk: slk
+  slv: slv
+  sme: sme
+  sna: sna
+  snd: snd
+  som: som
+  sot: sot
+  src: src
+  srp: srp
+  ssw: ssw
+  sun: sun
+  swe: swe
+  swh: swh
+  tam: tam
+  tat: tat
+  tel: tel
+  tet: tet
+  tgk: tgk
+  tgl: tgl
+  tha: tha
+  tig: tig
+  ton: ton
+  tos: tos
+  tsn: tsn
+  tso: tso
+  tuk: tuk
+  tur: tur
+  tvl: tvl
+  tzm: tzm
+  udm: udm
+  uig: uig
+  ukr: ukr
+  umb: umb
+  urd: urd
+  vec: vec
+  ven: ven
+  vie: vie
+  vls: vls
+  wol: wol
+  xho: xho
+  ydd: ydd
+  yor: yor
+  zea: zea
+  zul: zul

@@ -10,8 +10,8 @@ The first value is the identifier, the second is the index of the true class.
 # core modules
 import csv
 
-# local modules
-import wili
+# internal modules
+from lidtk.data import wili
 
 
 def generate_truth_csv(out_filepath):

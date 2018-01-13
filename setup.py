@@ -22,6 +22,11 @@ config = {
         'wikipedia',
         'cld2-cffi',
     ],
+    'tests_require': [
+        'pytest>=3.3.2',
+        'pytest-cov>=2.5.1',
+        'pytest-pep8>=1.0.6',
+    ],
     'keywords': ['Machine Learning', 'Data Science'],
     'download_url': 'https://github.com/MartinThoma/language-identification',
     'classifiers': ['Development Status :: 1 - Planning',

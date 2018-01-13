@@ -3,7 +3,7 @@
 """Analyze a given model."""
 
 # core modules
-import cPickle as pickle
+import pickle
 import imp
 # Make it work for Python 2+3 and with Unicode
 import io

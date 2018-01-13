@@ -20,28 +20,22 @@ be calculated by the earthmovers distance.
 
 # core moduels
 from collections import defaultdict, Counter
-import datetime
-import io
-import json
 import logging
 import os
 import pickle
 import random
 import sys
-import time
+# import time
 random.seed(0)
 
 # 3rd party modules
 from scipy.spatial import distance
-from sklearn.metrics import classification_report
 import numpy as np
-import progressbar
 import scipy.stats
 import click
 
 # local modules
 import lidtk.classifiers
-from lidtk.analysis import manual_error_analysis
 # from lidtk.classifiers import char_features
 from lidtk.data import wili
 from lidtk.utils import make_path_absolute
@@ -55,8 +49,14 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 
+def ido(x, y):
+    """The ido metric."""
+    return 1 - np.sum(np.minimum(x, y))
+
+
 language_models = None
 language_models_chars = None
+comp_metric = ido
 
 
 ###############################################################################
@@ -94,6 +94,8 @@ def eval_wili(result_file):
     result_file : str
         Path to a file where the results will be stored
     """
+    if language_models is None:
+        init_language_models(comp_metric, unicode_cutoff=10**6)
     lidtk.classifiers.eval_wili(result_file, predict)
 
 
@@ -123,7 +125,7 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
     metrics = [ido,  # 0
                distance.braycurtis,  # 1
                distance.canberra,  # 2
-               distance.chebyshev,  # 3
+               distance.chebyshev,  # 3 - l_infty
                distance.cityblock,  # 4
                distance.correlation,  # 5
                distance.cosine,  # 6
@@ -163,25 +165,6 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
                            set_name=set_name))
     cm_filepath = make_path_absolute(os.path.join('~/.lidtk/artifacts',
                                                   cm_filepath))
-    logging.info('Start evaluation on "{}"'.format(set_name))
-    results = evaluate_model(data,
-                             language_models,
-                             metric,
-                             cm_filepath,
-                             config,
-                             chars,
-                             set_name=set_name)
-    logfile = ('errors-char-dist-metric-{:%Y-%m-%d-%H-%M}.log'
-               .format(datetime.datetime.now()))
-    results['report'] = classification_report(data['y_{}'.format(set_name)],
-                                              results['y_pred'])
-    with io.open(logfile, 'w', encoding='utf8') as f:
-        f.write(json.dumps(results,
-                           indent=4,
-                           sort_keys=True,
-                           ensure_ascii=False))
-    manual_error_analysis(results['errors'], ['eng', 'deu', 'fra'])
-    logging.info('Logged to "{}"'.format(logfile))
 
 
 def train(data, unicode_cutoff, coverage, metric):
@@ -371,10 +354,8 @@ def predict(text):
     -------
     language_code : str
     """
-    comp_metric = distance.cityblock
     if language_models is None:
         init_language_models(comp_metric, unicode_cutoff=10**6)
-    pass  # TODO
     x_distribution = get_distribution(text, language_models_chars)
     return predict_param(language_models,
                          comp_metric,
@@ -426,123 +407,3 @@ def predict_param(language_models,
         return min(distances)[1]
     else:
         return distances
-
-
-def ido(x, y):
-    """The ido metric."""
-    return 1 - np.sum(np.minimum(x, y))
-
-
-def evaluate_model(data,
-                   language_models,
-                   comp_metric,
-                   cm_filepath,
-                   config,
-                   chars,
-                   complete_dump=False,
-                   set_name='test'):
-    """
-    Evaluate the model and write the predictions to cm_filepath.
-
-    Parameters
-    ----------
-    data : dict
-        With keys 'x_test', 'y_test'
-    language_models : dict
-        lang => model
-    comp_metric : function with two parameters (model_dist, x_dist)
-    cm_filepath : str
-        Classification matrix file path
-    config : dict
-    complete_dump : boolean, optional (default: False)
-        If this is true, then the probability distribution of the prediction
-        will be stored to cm_filepath
-
-    Returns
-    -------
-    errors : dict of dict of lists
-        Has the form 'errors[true][predicted] = [sample 1, sample 2, ...]'
-    """
-    errors = {}
-    bar = progressbar.ProgressBar(redirect_stdout=True,
-                                  max_value=len(data['y_' + set_name]))
-    done = 0
-    # cm = [[0 for _ in range(len(wili.labels_s))]
-    #       for _ in range(len(wili.labels_s))]
-    total_time = 0
-    # features = char_features.get_features(config, data)
-    # features = features['xs']['x_' + set_name]
-    y_preds = []
-    i = 0
-    logging.info("Write data to '{}'".format(cm_filepath))
-    with open(cm_filepath, "w") as f:
-        for ident, (x, y) in enumerate(zip(data['x_' + set_name],
-                                           data['y_' + set_name])):
-            # x_prep = features[i]
-            # x = preprocess(x, unicode_cutoff)
-            x_prep = get_distribution(x, chars)
-            t0 = time.time()
-            y_pred = predict_param(language_models,
-                                   comp_metric,
-                                   x_prep,
-                                   not complete_dump)
-            t1 = time.time()
-            if complete_dump:
-                predictions = ";".join([str(el) for el in y_pred])
-                f.write("{ident};{predictions}\n"
-                        .format(ident=ident, predictions=predictions))
-            else:
-                true_lang_index = wili.labels_s.index(y_pred)
-                f.write("{ident};{prediction}\n"
-                        .format(ident=ident, prediction=true_lang_index))
-                if y != y_pred:
-                    if y not in errors:
-                        errors[y] = {}
-                    if y_pred not in errors[y]:
-                        errors[y][y_pred] = []
-                    errors[y][y_pred].append(('{}_{}'.format(set_name, ident),
-                                             x))
-            total_time += t1 - t0
-            # pred_lang_index = wili.labels_s.index(y_pred)
-            # cm[true_lang_index][pred_lang_index] += 1
-            y_preds.append(y_pred)
-            done += 1
-            bar.update(done)
-            i += 1
-    bar.finish()
-
-    logging.info(r"Time per example: {:4.2f}\milli\second"
-                 .format((total_time / len(data['y_' + set_name])) * 1000))
-    results = {}
-    results['errors'] = errors
-    results['y_pred'] = y_preds
-    return results
-
-
-def get_parser():
-    """Get parser object."""
-    from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-    parser = ArgumentParser(description=__doc__,
-                            formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-c", "--coverage",
-                        dest="coverage",
-                        default=0.99,
-                        type=float,
-                        help="How much of the dataset should be covered?")
-    parser.add_argument("--max-unicode",
-                        dest="unicode_cutoff",
-                        type=int,
-                        help="don't print status messages to stdout")
-    parser.add_argument("-m", "--metric",
-                        dest="metric",
-                        type=int,
-                        required=True,
-                        help="metric to use")
-    return parser
-
-
-if __name__ == "__main__":
-    args = get_parser().parse_args()
-    main(coverage=args.coverage,
-         metric=args.metric,
-         unicode_cutoff=args.unicode_cutoff)
