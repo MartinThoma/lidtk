@@ -1,0 +1,6 @@
+target_type: one_hot
+feature-extraction:
+  name: tfidf-100.pickle
+  min_df: 100
+  lowercase: false
+  norm: l2

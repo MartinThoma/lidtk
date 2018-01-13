@@ -1,0 +1,6 @@
+features:
+  type: tfidf
+  feature_count: 123
+classifier:
+  weight_path: tfidf_small.h5
+  script_path: networks/relu_small.py

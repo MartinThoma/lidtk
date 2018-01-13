@@ -14,21 +14,59 @@ import numpy as np
 
 # local modules
 from lidtk.data import wili
-from lidtk.classifiers import tfidf_features
+from lidtk.classifiers import tfidf_features as feature_extractor_module
 # import char_features
 # from lidtk.classifiers.char_features import FeatureExtractor
 
 model_name = "mlp-3layer-tfidf-50"
+model = None
 
 
-@click.command(name='mlp', help=__doc__)
+###############################################################################
+# CLI                                                                         #
+###############################################################################
+@click.group(name='mlp')
+def entry_point():
+    """Use the character distribution language classifier."""
+    pass
+
+
+@entry_point.command(name='train', help=__doc__)
 @click.option('--config',
               help='Load YAML configuration file')
-def main(config_filepath):
+def main(config):
     """Load data, train model and evaluate it."""
-    with open(config_filepath, 'r') as stream:
+    with open(config, 'r') as stream:
         config = yaml.load(stream)
-    main_loaded(config, wili, tfidf_features)
+    main_loaded(config, wili, feature_extractor_module)
+
+
+@entry_point.command(name='wili', help=__doc__)
+@click.option('--result_file',
+              default='cld2_results.txt', show_default=True,
+              help='Where to store the predictions')
+@click.option('--config',
+              type=click.Path(exists=True),
+              required=True,
+              help='Load YAML configuration file')
+def eval_wili_cli(result_file, config):
+    """Load a model and evaluate it."""
+    from lidtk.classifiers import eval_wili
+    with open(config, 'r') as stream:
+        config = yaml.load(stream)
+    data = wili.load_data(config)
+    xs = feature_extractor_module.get_features(config, data)
+    # xs = char_features.get_features({}, data)
+    for set_name in ['x_train', 'x_test', 'x_val']:
+        data[set_name] = xs['xs'][set_name]
+    shape = (data['x_train'].shape[1], )
+    globals()['model'] = load_model(config, shape)
+    eval_wili(result_file, predict)
+
+
+def load_model(config, shape):
+    model = create_model(wili.n_classes, shape)
+    return model
 
 
 def main_loaded(config, data_module, feature_extractor_module):
@@ -41,13 +79,8 @@ def main_loaded(config, data_module, feature_extractor_module):
     data_module : Python module
     feature_extractor_module : Python module
     """
-    data = data_module.load_data(config)
-    xs = feature_extractor_module.get_features(config, data)
-    # xs = char_features.get_features({}, data)
-    for set_name in ['x_train', 'x_test', 'x_val']:
-        data[set_name] = xs['xs'][set_name]
-    model = create_model(data_module.n_classes, (data['x_train'].shape[1], ))
-    print(model.summary())
+
+
     optimizer = get_optimizer({'optimizer': {'initial_lr': 0.0001}})
     model.compile(loss='categorical_crossentropy',
                   optimizer=optimizer,
@@ -62,7 +95,7 @@ def main_loaded(config, data_module, feature_extractor_module):
               )
     t1 = time.time()
     # res = get_tptnfpfn(model, data)
-    preds = model.predict(data['x_test'])
+
     t2 = time.time()
     model.save("{}.h5".format(model_name))
     y_pred = np.argmax(preds, axis=1)
@@ -80,6 +113,10 @@ def main_loaded(config, data_module, feature_extractor_module):
                                       y_pred=y_pred) * 100),
                   train_time=(t1 - t0),
                   test_time=(t2 - t1)))
+
+
+def predict(text):
+    preds = model.predict(text)
 
 
 def create_model(nb_classes, input_shape):
