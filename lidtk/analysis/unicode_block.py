@@ -41,6 +41,7 @@ def main(start, end):
 
     print('Label    Chars in range [{} - {}]'.format(start, end))
     print('-' * 80)
-    for i, (label, chars_in_range) in enumerate(sorted(lang_amounts.items(), key=lambda n: n[1], reverse=True), start=1):
+    lang_a = sorted(lang_amounts.items(), key=lambda n: n[1], reverse=True)
+    for i, (label, chars_in_range) in enumerate(lang_a, start=1):
         print('{:>3}. {:<10}  {:>5.2f}%'
               .format(i, label, chars_in_range))

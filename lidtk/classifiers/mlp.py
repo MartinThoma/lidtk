@@ -65,6 +65,7 @@ def eval_wili_cli(result_file, config):
 
 
 def load_model(config, shape):
+    """Load a model."""
     model = create_model(wili.n_classes, shape)
     return model
 
@@ -79,8 +80,7 @@ def main_loaded(config, data_module, feature_extractor_module):
     data_module : Python module
     feature_extractor_module : Python module
     """
-
-
+    data = data_module.get_data()
     optimizer = get_optimizer({'optimizer': {'initial_lr': 0.0001}})
     model.compile(loss='categorical_crossentropy',
                   optimizer=optimizer,
@@ -98,6 +98,7 @@ def main_loaded(config, data_module, feature_extractor_module):
 
     t2 = time.time()
     model.save("{}.h5".format(model_name))
+    preds = model.predict(data['x_test'])
     y_pred = np.argmax(preds, axis=1)
     y_true = np.argmax(data['y_test'], axis=1)
     print(("{clf_name:<30}: {acc:>4.2f}% in {train_time:0.2f}s "
@@ -116,7 +117,9 @@ def main_loaded(config, data_module, feature_extractor_module):
 
 
 def predict(text):
+    """Predict the language of a text."""
     preds = model.predict(text)
+    return preds
 
 
 def create_model(nb_classes, input_shape):

@@ -28,9 +28,10 @@ def get_features(config, data):
         config['feature-extraction'] = {}
     if 'min_df' not in config['feature-extraction']:
         config['feature-extraction']['min_df'] = 50
+    make_lowercase = config['feature-extraction']['lowercase']
     vectorizer = TfidfVectorizer(analyzer='char',
                                  min_df=config['feature-extraction']['min_df'],
-                                 lowercase=config['feature-extraction']['lowercase'],
+                                 lowercase=make_lowercase,
                                  norm=config['feature-extraction']['norm'])
     xs = {}
     vectorizer.fit(data['x_train'])

@@ -10,7 +10,6 @@ import random
 import re
 import sys
 import unicodedata
-random.seed(0)
 
 # 3rd party modules
 import click
@@ -19,6 +18,7 @@ import click
 from lidtk.data import language_utils
 import lidtk
 
+random.seed(0)
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,

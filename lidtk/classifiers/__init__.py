@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Language classifiers."""
+
 # core modules
 from abc import ABC, abstractmethod
 import datetime
@@ -173,5 +175,3 @@ class LIDClassifier(ABC):
                                indent=4,
                                sort_keys=True,
                                ensure_ascii=False))
-
-

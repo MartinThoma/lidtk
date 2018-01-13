@@ -189,7 +189,7 @@ def read_language_file(pickle_filepath):
     --------
     >>> path = make_path_absolute('~/.lidtk/lang/de.pickle')
     >>> data = read_language_file(path)
-    >>> list(de.keys())
+    >>> sorted(list(data.keys()))
     ['paragraphs', 'used_pages']
     """
     with open(pickle_filepath, 'rb') as handle:
@@ -235,7 +235,7 @@ def get_language_data(csv_filepath=None):
     >>> sorted(wiki[0].keys())[6:]
     ['Synonyms', 'Wiki Code', 'Writing system']
     >>> wiki[0]['ISO 369-3']
-    'eng'
+    'ace'
     """
     if csv_filepath is None:
         csv_filepath = make_path_absolute('~/.lidtk/data/labels.csv')

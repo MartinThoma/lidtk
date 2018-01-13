@@ -79,8 +79,8 @@ def get_wiki_codes(skip_langs=None):
     content = [el.strip() for el in content]
     if skip_langs is None:
         skip_langs = []
-        # skip_langs = ['haw', 'ab', 'pi', 'xal', 'nov', 'kl', 'arc', 'na', 'ki',
-        #               'tpi']
+        # skip_langs = ['haw', 'ab', 'pi', 'xal', 'nov', 'kl', 'arc', 'na',
+        #               'ki', 'tpi']
         logging.info("Skip the following wikipedias: {}".format(skip_langs))
     return [lang for lang in content if lang not in skip_langs]
 
@@ -141,7 +141,8 @@ def is_literature(paragraph):
     -------
     is_literature : bool
     """
-    doi_regex = re.compile(r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+)""")
+    doi_regex = re.compile(r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/"""
+                           r"""(?:(?!["&\'<>])\S)+)""")
     issn_regex = re.compile(r"""ISSN \d+""", re.IGNORECASE)
     vol_regex = re.compile(r"""vol\. [IVCXL\d]+""", re.IGNORECASE)
     return ("ISBN" in paragraph or

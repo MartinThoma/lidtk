@@ -26,7 +26,6 @@ import pickle
 import random
 import sys
 # import time
-random.seed(0)
 
 # 3rd party modules
 from scipy.spatial import distance
@@ -44,6 +43,7 @@ from lidtk.utils import make_path_absolute
 from lidtk.classifiers.char_features import FeatureExtractor  # noqa
 
 
+random.seed(0)
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
@@ -135,7 +135,7 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
                ]
     metric = metrics[metric]
 
-    config = {'coverage': coverage}
+    # config = {'coverage': coverage}
 
     # Read data
     data = wili.load_data()
