@@ -9,6 +9,7 @@ import codecs
 
 
 def main():
+    """Convert all pickle language files to txt files."""
     lang_files = glob.glob('lang/*.pickle')
     for lang_file in lang_files:
         lang = lang_file.split('/')[-1].split('.')[0]
@@ -17,6 +18,14 @@ def main():
 
 
 def convert(source_path, target_path):
+    """
+    Convert a single pickle language files to a txt file.
+
+    Parameters
+    ----------
+    source_path : str
+    target_path : str
+    """
     # Load data (deserialize)
     with open(source_path, 'rb') as handle:
         unserialized_data = pickle.load(handle)['paragraphs']

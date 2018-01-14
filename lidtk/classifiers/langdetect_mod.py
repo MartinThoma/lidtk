@@ -27,6 +27,7 @@ DetectorFactory.seed = 0  # Make sure we get consistent results
 
 
 class LangdetectClassifier(lidtk.classifiers.LIDClassifier):
+    """LID with the Langdetect classifier."""
 
     def predict(self, text):
         """
@@ -95,6 +96,7 @@ def predict_proba_cli(text):
 
 @entry_point.command(name='get_languages')
 def get_languages():
+    """Get all predicted languages of for the WiLI dataset."""
     print(classifier.get_languages())
 
 
@@ -104,6 +106,13 @@ def get_languages():
               type=click.Path(exists=True),
               help='CSV file with delimiter ;')
 def print_languages(label_filepath):
+    """
+    Print supported languages of classifier.
+
+    Parameters
+    ----------
+    label_filepath : str
+    """
     label_filepath = os.path.abspath(label_filepath)
     wili_labels = wili.get_language_data(label_filepath)
     iso2name = dict([(el['ISO 369-3'], el['English'])

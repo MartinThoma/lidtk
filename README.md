@@ -19,3 +19,14 @@ Models:
 Misc:
 
 * `labels.csv`
+
+
+## Development
+
+Check tests with `tox`.
+
+Check documentation with
+
+```
+pydocstyle --convention=numpy lidtk
+```

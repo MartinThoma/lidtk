@@ -140,6 +140,18 @@ class FeatureExtractor(object):
         return dists
 
     def get_xs_set(self, data, set_name):
+        """
+        Get featureset.
+
+        Parameters
+        ----------
+        data : dict
+        set_name : str
+
+        Returns
+        -------
+        xs : ndarray
+        """
         train_xs_pickle = ('~/.lidtk/artifacts/data/char_features_{}_{}'
                            .format(self.coverage, set_name))
         train_xs_pickle = make_path_absolute(train_xs_pickle)

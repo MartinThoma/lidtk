@@ -10,21 +10,20 @@ import time
 import yaml
 
 
-def make_paths_absolute(dir_, experiment_meta):
-    for key in experiment_meta.keys():
-        if key.endswith("_path"):
-            experiment_meta[key] = os.path.join(dir_, experiment_meta[key])
-            experiment_meta[key] = os.path.abspath(experiment_meta[key])
-            # if not os.path.isfile(experiment_meta[key]):
-            #     logging.error("%s does not exist.", experiment_meta[key])
-            #     sys.exit(-1)
-        if type(experiment_meta[key]) is dict:
-            experiment_meta[key] = make_paths_absolute(dir_,
-                                                       experiment_meta[key])
-    return experiment_meta
+# internal modules
+from lidtk.utils import make_paths_absolute
 
 
 def get_predictions(experiment_meta, data_module, model_module):
+    """
+    Get predictions for one experiment.
+
+    Parameters
+    ----------
+    experiment_meta : dict
+    data_module : Python module
+    model_module : Python module
+    """
     # Get data
     data = data_module.load_data()
     model = model_module.create_model(data_module.n_classes, None)
@@ -48,7 +47,7 @@ def get_predictions(experiment_meta, data_module, model_module):
 
 
 def get_parser():
-    """Get parser object for script xy.py."""
+    """Get parser object."""
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
     parser = ArgumentParser(description=__doc__,
                             formatter_class=ArgumentDefaultsHelpFormatter)

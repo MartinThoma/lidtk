@@ -10,6 +10,10 @@ Prerequesites
 * pip install detectlanguage
 """
 
+# core modules
+import os
+
+# 3rd party modules
 import detectlanguage
 
 
@@ -56,17 +60,29 @@ class ServiceClassifier(object):
         detectlanguage.configuration.api_key = api_key
 
     def predict(self, text_or_list):
+        """
+        Predict the language.
+
+        Paramters
+        ---------
+        text_or_list : str
+
+        Returns
+        -------
+        languages : list
+        """
         res = detectlanguage.detect(text_or_list)
         return [el[0]['language'] for el in res]
 
 
 def create_model(nb_classes, input_shape):
-    """"""
+    """Create a model for LID."""
     model = ServiceClassifier("c5b442a13bdc4522f2a0463581c5bcb0")
     return model
 
 
 def find_missmatches():
+    """Find which languages detectlanguage and WiLI support."""
     print("detectlanguage supports {} languages."
           .format(len(detectlanguage.languages())))
     import sys
