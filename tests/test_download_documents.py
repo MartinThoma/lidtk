@@ -32,3 +32,9 @@ class UtilsTest(unittest.TestCase):
                    )
         paragraphs = lidtk.data.download_documents.extract_paragraphs(section)
         self.assertEqual(len(paragraphs), 2)
+
+    def test_find_pages(self):
+        lidtk.data.download_documents.find_pages(lang_wiki='en',
+                                                 to_extract=10,
+                                                 max_time_s=30,
+                                                 verbose=False)
