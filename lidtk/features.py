@@ -79,6 +79,18 @@ def train_tfidf_features(config, data):
 
 
 def get_tfidif_features(cfg, samples):
+    """
+    Get Tf-idf features for samples.
+
+    Parameters
+    ----------
+    cfg : dict
+    samples : ndarray
+
+    Returns
+    -------
+    tfidf_features : ndarray
+    """
     if 'vectorizer' not in cfg['features']:
         # Load data (deserialize)
         with open(cfg['features']['vectorizer_path'], 'rb') as handle:

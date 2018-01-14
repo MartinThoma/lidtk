@@ -28,19 +28,27 @@ class LIDClassifier(ABC):
     Parameters
     ----------
     cfg : dict
-    mapping : dict
-        Maps the code of the service to the code used by WiLI.
-        If the service knows a language which is not in WiLI, it is mapped to
-        UNK.
     """
 
     def __init__(self, cfg_path):
+        """Constructor."""
         cfg_path = os.path.abspath(cfg_path)
         with open(cfg_path, 'r') as stream:
             cfg = yaml.load(stream)
         self.cfg = cfg
 
     def map2wili(self, services_code):
+        """
+        Map the classifiers code to ISO 369-3 code.
+
+        Parameters
+        ----------
+        services_code : str
+
+        Returns
+        -------
+        iso_369_3 : str
+        """
         return self.cfg['mapping'].get(services_code, 'UNK')
 
     @abstractmethod
@@ -103,6 +111,14 @@ class LIDClassifier(ABC):
         return sorted(list(languages))
 
     def get_mapping_languages(self):
+        """
+        Get the languages supported by th classifier and supported by WiLI.
+
+        Returns
+        -------
+        languages : list of str
+            Each str is a ISO 369-3 code
+        """
         return sorted([lang for _, lang in self.cfg['mapping'].items()])
 
     def eval_wili(self, result_file, languages=None, eval_unk=False):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 r"""
-Train and test a character frequenceys/earthmovers distance model.
+Train and test character distance models.
 
 The idea is to take the most common characters which make up a proportion of
 \alpha (e.g. 0.9) of the complete data. For language i, let this set of
@@ -51,7 +51,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 def ido(x, y):
     """
-    The ido metric.
+    Calculate the distance of x and y with the ido metric.
 
     Parameters
     ----------
@@ -130,7 +130,7 @@ def eval_wili(result_file):
 @click.option('--unicode_cutoff', default=10**6, show_default=True)
 def main(coverage, metric, unicode_cutoff, set_name='train'):
     """
-    Main function.
+    Train and test character distance models.
 
     Parameters
     ----------

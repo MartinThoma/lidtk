@@ -78,11 +78,14 @@ servicecode2label = {'gv': 'glv', 'gu': 'guj', 'sco': 'sco', 'gd': 'gla',
 
 
 def find_missmatches():
+    """
+    Find which sets CLD-2 supports, but not WiLI and vice-versa.
+
+    Print everything directly
+    """
     print("cld2 supports {} languages."
           .format(len(cld2.LANGUAGES)))
-    import sys
-    sys.path.append("..")
-    import language_utils
+    from lidtk.data import language_utils
     language_data = language_utils.get_language_data("labels.csv")
     wiki_codes = [el['Wiki Code'] for el in language_data]
     english_names = [el['English'].lower().decode('UTF-8')

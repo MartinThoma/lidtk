@@ -19,6 +19,17 @@ import numpy as np
 
 
 def data_preprocessing(data_module):
+    """
+    Calculate preprocessed data.
+
+    Parameters
+    ----------
+    data_module : Python module
+
+    Returns
+    -------
+    data : dict
+    """
     data = data_module.load_data({'target_type': 'one_hot'})
 
     englsh_classnames = [el['English'].decode('utf-8')

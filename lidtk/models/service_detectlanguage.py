@@ -56,6 +56,7 @@ class ServiceClassifier(object):
     """Wrap services in a class to get the desired interface."""
 
     def __init__(self, api_key):
+        """Constructor."""
         self.api_key = api_key
         detectlanguage.configuration.api_key = api_key
 

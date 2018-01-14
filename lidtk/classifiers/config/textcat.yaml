@@ -1,10 +1,15 @@
 name: textcat
 mapping:
+  abn: abn
   ace: ace
+  ach: ach
   afr: afr
+  agr: agr
   aka: aka
   als: als
   amh: amh
+  ami: ami
+  amr: amr
   ang: ang
   arb: arb
   arg: arg
@@ -14,49 +19,70 @@ mapping:
   ayr: ayr
   azj: azj
   bak: bak
+  bam: bam
   ban: ban
   bar: bar
+  bba: bba
+  bcc: bcc
   bcl: bcl
   bel: bel
   ben: ben
+  bis: bis
   bod: bod
   bos: bos
   bre: bre
+  buc: buc
   bul: bul
   bxr: bxr
+  byv: byv
   cat: cat
+  cbr: cbr
   ceb: ceb
   ces: ces
   cha: cha
+  chv: chv
   cmn: cmn
+  cnh: cnh
   cor: cor
   cos: cos
   crs: crs
+  csa: csa
   csb: csb
   cym: cym
   dan: dan
   ddn: ddn
   deu: deu
+  dhv: dhv
   diq: diq
   dyu: dyu
   dzo: dzo
   ell: ell
-  eng: eng
+  emk: emk
+  eml: eml
   eng: eng
   epo: epo
   est: est
   eus: eus
+  ewe: ewe
   fao: fao
+  fij: fij
   fin: fin
   fra: fra
   fri: fri
   frp: frp
+  frr: frr
+  fub: fub
+  fud: fud
   fur: fur
+  gag: gag
   gaz: gaz
+  gjn: gjn
+  gkn: gkn
   gla: gla
   gle: gle
   glg: glg
   glv: glv
+  got: got
   gsc: gsc
   gsw: gsw
   gug: gug
@@ -64,21 +90,26 @@ mapping:
   guw: guw
   hat: hat
   hau: hau
+  haw: haw
   heb: heb
   hil: hil
   hin: hin
+  hmo: hmo
   hne: hne
   hrv: hrv
   hsb: hsb
   hun: hun
   hye: hye
   ibo: ibo
+  ilo: ilo
   ina: ina
   ind: ind
   isl: isl
   ita: ita
   ivv: ivv
+  jav: jav
   kab: kab
+  kal: kal
   kan: kan
   kat: kat
   kaz: kaz
@@ -87,19 +118,25 @@ mapping:
   khm: khm
   kin: kin
   kir: kir
+  kjh: kjh
   kmr: kmr
   knc: knc
   knn: knn
+  kpv: kpv
   krc: krc
+  kri: kri
   ksh: ksh
   lad: lad
   lao: lao
+  lat: lat
   lav: lav
   lin: lin
   lit: lit
   lld: lld
   lmo: lmo
+  lms: lms
   lnc: lnc
+  loz: loz
   ltz: ltz
   lua: lua
   lug: lug
@@ -107,39 +144,58 @@ mapping:
   mal: mal
   mcd: mcd
   mfe: mfe
+  mho: mho
+  mic: mic
+  min: min
   mkd: mkd
   mlt: mlt
   mly: mly
   mri: mri
   mrj: mrj
+  mus: mus
   mya: mya
   nap: nap
+  naq: naq
   nav: nav
+  nbl: nbl
   nde: nde
   nds: nds
+  nia: nia
   nld: nld
   nmf: nmf
   nno: nno
   nob: nob
   nso: nso
+  nya: nya
+  nyk: nyk
+  ojw: ojw
   ood: ood
   ori: ori
   oss: oss
+  pam: pam
   pan: pan
   pap: pap
+  pau: pau
+  pbb: pbb
   pbu: pbu
   pcm: pcm
   pdc: pdc
   pes: pes
+  pih: pih
   pis: pis
   plt: plt
   pms: pms
   pol: pol
+  pon: pon
   por: por
+  prq: prq
   prs: prs
+  prv: prv
   quh: quh
+  rar: rar
   rnd: rnd
   roh: roh
+  ron: ron
   rup: rup
   rus: rus
   scn: scn
@@ -151,15 +207,22 @@ mapping:
   snd: snd
   som: som
   sot: sot
+  spa: spa
   src: src
+  srm: srm
   srp: srp
+  srr: srr
   ssw: ssw
+  sum: sum
   sun: sun
+  sus: sus
+  swb: swb
   swe: swe
   swh: swh
   tam: tam
   tat: tat
   tel: tel
+  teo: teo
   tet: tet
   tgk: tgk
   tgl: tgl
@@ -167,23 +230,27 @@ mapping:
   tig: tig
   ton: ton
   tos: tos
+  tsc: tsc
   tsn: tsn
   tso: tso
   tuk: tuk
   tur: tur
   tvl: tvl
+  tzc: tzc
   tzm: tzm
   udm: udm
   uig: uig
   ukr: ukr
   umb: umb
   urd: urd
+  uzn: uzn
   vec: vec
   ven: ven
   vie: vie
   vls: vls
   wol: wol
   xho: xho
+  yaf: yaf
   ydd: ydd
   yor: yor
   zea: zea
