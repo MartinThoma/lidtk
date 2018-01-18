@@ -21,6 +21,7 @@ import lidtk
 import lidtk.analysis.unicode_block
 import lidtk.classifiers.char_distribution.char_dist_metric_train_test as cdm
 import lidtk.classifiers.cld2_mod
+import lidtk.classifiers.google_mod
 import lidtk.classifiers.langdetect_mod
 import lidtk.classifiers.langid_mod
 import lidtk.classifiers.mlp
@@ -28,6 +29,7 @@ import lidtk.classifiers.nn
 import lidtk.classifiers.text_cat
 import lidtk.data.create_ml_dataset
 import lidtk.data.download_documents
+import lidtk.utils
 
 
 @click.group()
@@ -46,6 +48,8 @@ entry_point.add_command(lidtk.classifiers.langdetect_mod.entry_point)
 entry_point.add_command(lidtk.classifiers.langid_mod.entry_point)
 entry_point.add_command(lidtk.analysis.unicode_block.main)
 entry_point.add_command(cdm.entry_point)
+entry_point.add_command(lidtk.utils.map_classification_result)
+entry_point.add_command(lidtk.classifiers.google_mod.entry_point)
 
 
 if __name__ == '__main__':

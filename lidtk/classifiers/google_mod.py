@@ -15,7 +15,6 @@ import pkg_resources
 
 # 3rd party modules
 import click
-from google.cloud import translate
 
 # internal modules
 import lidtk.classifiers
@@ -33,6 +32,7 @@ class GCClassifier(lidtk.classifiers.LIDClassifier):
         ----------
         text : str
         """
+        from google.cloud import translate
         translate_client = translate.Client()
         result = translate_client.detect_language(text)
         # print('Confidence: {}'.format(result['confidence']))
@@ -146,16 +146,13 @@ def eval_wili_unknown(result_file):
                          eval_unk=True)
 
 
+@entry_point.command(name='list-languages')
 def list_languages():
     """List all available languages."""
+    from google.cloud import translate
     translate_client = translate.Client()
 
     results = translate_client.get_languages()
 
     for language in results:
         print(u'{name} ({language})'.format(**language))
-
-
-print(classifier.predict("Ich bin ein Frosch."))
-
-print(list_languages())
