@@ -9,6 +9,9 @@ import platform
 import subprocess
 import yaml
 
+# 3rd party modules
+import click
+
 
 def make_path_absolute(path):
     """
@@ -82,7 +85,7 @@ def find_vga():
     vga = subprocess.check_output("lspci | grep -i 'vga\|3d\|2d'",
                                   shell=True,
                                   executable='/bin/bash')
-    return vga
+    return str(vga).strip()
 
 
 def load_cfg(yaml_filepath):
@@ -126,3 +129,45 @@ def make_paths_absolute(dir_, cfg):
         if type(cfg[key]) is dict:
             cfg[key] = make_paths_absolute(dir_, cfg[key])
     return cfg
+
+
+@click.command(name='map',
+               help='Map predictions to something known by WiLI')
+@click.option('--config',
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
+@click.option('--source',
+              type=click.Path(exists=True),
+              help='Path to a txt file')
+@click.option('--dest',
+              type=click.Path(exists=False),
+              help='Path to a txt file')
+def map_classification_result(config, source, dest):
+    """
+    Map the classification to something known by WiLI.
+
+    Parameters
+    ----------
+    config : str
+    source : str
+    dest : str
+    """
+    cfg = load_cfg(config)
+
+    # Read data
+    with open(source, 'r') as fp:
+        read_lines = fp.readlines()
+        read_lines = [line.rstrip('\n') for line in read_lines]
+
+    # Create new data
+    new_lines = []
+    for line in read_lines:
+        if line in cfg['mapping']:
+            new_lines.append(cfg['mapping'][line])
+        else:
+            new_lines.append('unk')
+            logging.warning('Map \'{}\' to \'unk\''.format(line))
+
+    # Write text file
+    with open(dest, 'w') as fp:
+        fp.write('\n'.join(new_lines))

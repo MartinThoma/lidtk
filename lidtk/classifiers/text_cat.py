@@ -86,7 +86,7 @@ def print_languages(label_filepath):
     wili_labels = wili.get_language_data(label_filepath)
     iso2name = dict([(el['ISO 369-3'], el['English'])
                      for el in wili_labels])
-    print(', '.join(sorted([iso2name[iso]
+    print(', '.join(sorted([iso2name.get(iso, iso)
                             for iso in classifier.get_mapping_languages()
                             if iso != 'UNK'])))
 

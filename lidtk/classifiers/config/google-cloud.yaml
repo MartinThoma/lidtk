@@ -76,7 +76,7 @@ mapping:
   pa: pan
   ro: ron
   ru: rus
-  Samoan (sm)
+  sm: UNK-sm  # Samoan (sm)
   gd: gla
   sr: srp
   st: UNK-st  # Southern Sotho

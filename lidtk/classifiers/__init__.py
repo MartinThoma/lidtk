@@ -153,7 +153,7 @@ class LIDClassifier(ABC):
                 if languages is not None:
                     if label_t not in languages:
                         if eval_unk:
-                            print("UNK")
+                            print('UNK')
                         else:
                             continue
                     else:
@@ -175,7 +175,7 @@ class LIDClassifier(ABC):
                 except Exception as e:  # catch them all
                     logging.error({'message': 'Exception in eval_wili',
                                    'error': e})
-                    predicted = 'UNK'
+                    predicted = 'UNK-exception'
                 filepointer.write(predicted + '\n')
         bar.finish()
         results['cl_results'] = cl_results

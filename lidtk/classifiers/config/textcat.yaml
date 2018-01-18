@@ -1,103 +1,104 @@
 name: textcat
 mapping:
-  abn: abn
+  abn: unk  # Unknown to WiLI!
   ace: ace
-  ach: ach
+  ach: unk  # Unknown to WiLI!
   afr: afr
-  agr: agr
-  aka: aka
-  als: als
+  agr: unk  # Unknown to WiLI!
+  aka: unk  # Unknown to WiLI!
+  als: sqi  # Unknown to WiLI!
   amh: amh
-  ami: ami
-  amr: amr
+  ami: unk  # Unknown to WiLI!
+  amr: unk  # Unknown to WiLI!
   ang: ang
-  arb: arb
+  arb: ara  # Unknown to WiLI!
   arg: arg
   asm: asm
   ast: ast
   ava: ava
-  ayr: ayr
-  azj: azj
+  ayr: aym  # Unknown to WiLI!
+  azj: aze  # Unknown to WiLI!
   bak: bak
-  bam: bam
-  ban: ban
+  bam: unk  # Unknown to WiLI!
+  ban: unk  # Unknown to WiLI!
   bar: bar
-  bba: bba
-  bcc: bcc
+  bba: unk  # Unknown to WiLI!
+  bcc: unk  # Unknown to WiLI!
   bcl: bcl
   bel: bel
   ben: ben
-  bis: bis
+  bis: unk  # Unknown to WiLI!
   bod: bod
   bos: bos
   bre: bre
-  buc: buc
+  buc: unk  # Unknown to WiLI!
   bul: bul
   bxr: bxr
-  byv: byv
+  byv: unk  # Unknown to WiLI!
   cat: cat
-  cbr: cbr
+  cbr: unk  # Unknown to WiLI!
   ceb: ceb
   ces: ces
-  cha: cha
+  cha: unk  # Unknown to WiLI!
   chv: chv
-  cmn: cmn
-  cnh: cnh
+  cmn: cdo  # Unknown to WiLI!
+  cnh: unk  # Unknown to WiLI!
   cor: cor
   cos: cos
-  crs: crs
-  csa: csa
+  crs: unk  # Unknown to WiLI!
+  csa: unk  # Unknown to WiLI!
   csb: csb
   cym: cym
   dan: dan
-  ddn: ddn
+  ddn: unk  # Unknown to WiLI!
   deu: deu
-  dhv: dhv
+  dhv: unk  # Unknown to WiLI!
   diq: diq
-  dyu: dyu
-  dzo: dzo
+  dyu: unk  # Unknown to WiLI!
+  dzo: bod  # Unknown to WiLI!
   ell: ell
-  emk: emk
-  eml: eml
+  emk: unk  # Unknown to WiLI!
+  eml: unk  # Unknown to WiLI!
+  'eng ': eng
   eng: eng
   epo: epo
   est: est
   eus: eus
-  ewe: ewe
+  ewe: unk  # Unknown to WiLI!
   fao: fao
-  fij: fij
+  fij: unk  # Unknown to WiLI!
   fin: fin
   fra: fra
-  fri: fri
+  fri: wuu  # Unknown to WiLI!
   frp: frp
-  frr: frr
-  fub: fub
-  fud: fud
+  frr: unk  # Unknown to WiLI!
+  fub: unk  # Unknown to WiLI!
+  fud: unk  # Unknown to WiLI!
   fur: fur
   gag: gag
-  gaz: gaz
-  gjn: gjn
-  gkn: gkn
+  gaz: unk  # Unknown to WiLI!
+  gjn: unk  # Unknown to WiLI!
+  gkn: unk  # Unknown to WiLI!
   gla: gla
   gle: gle
   glg: glg
   glv: glv
-  got: got
-  gsc: gsc
+  got: unk  # Unknown to WiLI!
+  gsc: unk  # Unknown to WiLI!
   gsw: gsw
-  gug: gug
+  gug: grn  # Unknown to WiLI!
   guj: guj
-  guw: guw
+  guw: lzh  # Unknown to WiLI!
   hat: hat
   hau: hau
-  haw: haw
+  haw: unk  # Unknown to WiLI!
   heb: heb
-  hil: hil
+  hil: ilo  # Unknown to WiLI!
   hin: hin
-  hmo: hmo
-  hne: hne
+  hmo: unk  # Unknown to WiLI!
+  hne: unk  # Unknown to WiLI!
   hrv: hrv
-  hsb: hsb
+  hsb: dsb  # Unknown to WiLI!
   hun: hun
   hye: hye
   ibo: ibo
@@ -106,25 +107,25 @@ mapping:
   ind: ind
   isl: isl
   ita: ita
-  ivv: ivv
+  ivv: unk  # Unknown to WiLI!
   jav: jav
   kab: kab
-  kal: kal
+  kal: unk  # Unknown to WiLI!
   kan: kan
   kat: kat
   kaz: kaz
   kbd: kbd
-  khk: khk
+  khk: mon  # Unknown to WiLI!
   khm: khm
   kin: kin
   kir: kir
-  kjh: kjh
-  kmr: kmr
-  knc: knc
-  knn: knn
-  kpv: kpv
+  kjh: unk  # Unknown to WiLI!
+  kmr: kur  # Unknown to WiLI!
+  knc: unk  # Unknown to WiLI!
+  knn: unk  # Unknown to WiLI!
+  kpv: unk  # Unknown to WiLI!
   krc: krc
-  kri: kri
+  kri: unk  # Unknown to WiLI!
   ksh: ksh
   lad: lad
   lao: lao
@@ -132,68 +133,68 @@ mapping:
   lav: lav
   lin: lin
   lit: lit
-  lld: lld
+  lld: unk  # Unknown to WiLI!
   lmo: lmo
-  lms: lms
-  lnc: lnc
-  loz: loz
+  lms: unk  # Unknown to WiLI!
+  lnc: oci  # Unknown to WiLI!
+  loz: unk  # Unknown to WiLI!
   ltz: ltz
-  lua: lua
+  lua: unk  # Unknown to WiLI!
   lug: lug
-  lus: lus
+  lus: hak  # Unknown to WiLI!
   mal: mal
-  mcd: mcd
-  mfe: mfe
-  mho: mho
-  mic: mic
+  mcd: unk  # Unknown to WiLI!
+  mfe: lzh  # Unknown to WiLI!
+  mho: unk  # Unknown to WiLI!
+  mic: unk  # Unknown to WiLI!
   min: min
   mkd: mkd
   mlt: mlt
-  mly: mly
+  mly: msa  # Unknown to WiLI!
   mri: mri
   mrj: mrj
-  mus: mus
+  mus: unk  # Unknown to WiLI!
   mya: mya
   nap: nap
-  naq: naq
+  naq: unk  # Unknown to WiLI!
   nav: nav
-  nbl: nbl
-  nde: nde
+  nbl: unk  # Unknown to WiLI!
+  nde: unk  # Unknown to WiLI!
   nds: nds
-  nia: nia
+  nia: unk  # Unknown to WiLI!
   nld: nld
-  nmf: nmf
+  nmf: sin  # Unknown to WiLI!
   nno: nno
   nob: nob
   nso: nso
-  nya: nya
-  nyk: nyk
-  ojw: ojw
-  ood: ood
+  nya: unk  # Unknown to WiLI!
+  nyk: unk  # Unknown to WiLI!
+  ojw: unk  # Unknown to WiLI!
+  ood: oci  # Unknown to WiLI!
   ori: ori
   oss: oss
   pam: pam
   pan: pan
   pap: pap
-  pau: pau
-  pbb: pbb
-  pbu: pbu
-  pcm: pcm
+  pau: unk  # Unknown to WiLI!
+  pbb: unk  # Unknown to WiLI!
+  pbu: pus  # Unknown to WiLI!
+  pcm: zho  # Unknown to WiLI!
   pdc: pdc
-  pes: pes
-  pih: pih
-  pis: pis
-  plt: plt
-  pms: pms
+  pes: fas  # Map to best
+  pih: unk  # Unknown to WiLI!
+  pis: unk  # Unknown to WiLI!
+  plt: mlg  # Unknown to WiLI!
+  pms: unk  # Unknown to WiLI!
   pol: pol
-  pon: pon
+  pon: unk  # Unknown to WiLI!
   por: por
-  prq: prq
-  prs: prs
-  prv: prv
-  quh: quh
-  rar: rar
-  rnd: rnd
+  prq: zh-yue  # Unknown to WiLI!
+  prs: unk  # Unknown to WiLI!
+  prv: unk  # Unknown to WiLI!
+  quh: que  # Unknown to WiLI!
+  rar: unk  # Unknown to WiLI!
+  rnd: unk  # Unknown to WiLI!
   roh: roh
   ron: ron
   rup: rup
@@ -206,52 +207,52 @@ mapping:
   sna: sna
   snd: snd
   som: som
-  sot: sot
+  sot: tsn  # Unknown to WiLI!
   spa: spa
-  src: src
-  srm: srm
+  src: srd  # Unknown to WiLI!
+  srm: unk  # Unknown to WiLI!
   srp: srp
-  srr: srr
-  ssw: ssw
-  sum: sum
+  srr: unk  # Unknown to WiLI!
+  ssw: jpn  # Unknown to WiLI!
+  sum: unk  # Unknown to WiLI!
   sun: sun
-  sus: sus
-  swb: swb
+  sus: unk  # Unknown to WiLI!
+  swb: unk  # Unknown to WiLI!
   swe: swe
-  swh: swh
+  swh: swa  # Unknown to WiLI!
   tam: tam
   tat: tat
   tel: tel
-  teo: teo
+  teo: unk  # Unknown to WiLI!
   tet: tet
   tgk: tgk
   tgl: tgl
   tha: tha
-  tig: tig
+  tig: unk  # Unknown to WiLI!
   ton: ton
-  tos: tos
-  tsc: tsc
+  tos: unk  # Unknown to WiLI!
+  tsc: unk  # Unknown to WiLI!
   tsn: tsn
-  tso: tso
+  tso: unk  # Unknown to WiLI!
   tuk: tuk
   tur: tur
-  tvl: tvl
-  tzc: tzc
-  tzm: tzm
+  tvl: unk  # Unknown to WiLI!
+  tzc: unk  # Unknown to WiLI!
+  tzm: kab  # Unknown to WiLI!
   udm: udm
   uig: uig
   ukr: ukr
-  umb: umb
+  umb: unk  # Unknown to WiLI!
   urd: urd
-  uzn: uzn
+  uzn: unk  # Unknown to WiLI!
   vec: vec
-  ven: ven
+  ven: unk  # Unknown to WiLI!
   vie: vie
   vls: vls
   wol: wol
   xho: xho
-  yaf: yaf
-  ydd: ydd
+  yaf: unk  # Unknown to WiLI!
+  ydd: yid  # Unknown to WiLI!
   yor: yor
   zea: zea
-  zul: zul
+  zul: xho  # Unknown to WiLI!
