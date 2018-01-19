@@ -27,6 +27,7 @@ import lidtk.classifiers.langid_mod
 import lidtk.classifiers.mlp
 import lidtk.classifiers.nn
 import lidtk.classifiers.text_cat
+import lidtk.classifiers.tfidf_nn
 import lidtk.data.create_ml_dataset
 import lidtk.data.download_documents
 import lidtk.utils
@@ -50,6 +51,7 @@ entry_point.add_command(lidtk.analysis.unicode_block.main)
 entry_point.add_command(cdm.entry_point)
 entry_point.add_command(lidtk.utils.map_classification_result)
 entry_point.add_command(lidtk.classifiers.google_mod.entry_point)
+entry_point.add_command(lidtk.classifiers.tfidf_nn.entry_point)
 
 
 if __name__ == '__main__':

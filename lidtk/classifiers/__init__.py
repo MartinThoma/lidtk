@@ -10,7 +10,6 @@ import json
 import logging
 import os
 import time
-import yaml
 
 # 3rd party modules
 import progressbar
@@ -33,9 +32,7 @@ class LIDClassifier(ABC):
     def __init__(self, cfg_path):
         """Constructor."""
         cfg_path = os.path.abspath(cfg_path)
-        with open(cfg_path, 'r') as stream:
-            cfg = yaml.load(stream)
-        self.cfg = cfg
+        self.cfg = lidtk.utils.load_cfg(cfg_path)
 
     def map2wili(self, services_code):
         """

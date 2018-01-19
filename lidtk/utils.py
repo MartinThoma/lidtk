@@ -121,7 +121,7 @@ def make_paths_absolute(dir_, cfg):
     cfg : dict
     """
     for key in cfg.keys():
-        if key.endswith("_path"):
+        if hasattr(key, 'endswith') and key.endswith("_path"):
             cfg[key] = os.path.join(dir_, cfg[key])
             cfg[key] = os.path.abspath(cfg[key])
             if not os.path.isfile(cfg[key]):

@@ -35,6 +35,7 @@ config = {
         'langid>=1.1.6',
         'langdetect>=1.0.7',
         'detectlanguage==1.2.1',
+        'h5py'
     ],
     'tests_require': [
         'pytest>=3.3.2',
