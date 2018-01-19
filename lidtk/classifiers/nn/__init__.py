@@ -8,7 +8,6 @@ import logging
 # 3rd party modules
 import click
 import imp
-import keras.models
 
 # internal modules
 import lidtk.classifiers
@@ -92,6 +91,7 @@ def init_nn(config):
     ----------
     config : dict
     """
+    import keras.models
     weigths = config['classifier']['weight_path']
     globals()['nn'] = keras.models.load_model(weigths)
 
