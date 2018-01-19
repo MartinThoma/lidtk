@@ -4,7 +4,6 @@
 
 # core modules
 import pickle
-import imp
 # Make it work for Python 2+3 and with Unicode
 import io
 try:
@@ -18,22 +17,18 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 
 
-def data_preprocessing(data_module):
+def data_preprocessing():
     """
     Calculate preprocessed data.
-
-    Parameters
-    ----------
-    data_module : Python module
 
     Returns
     -------
     data : dict
     """
-    data = data_module.load_data({'target_type': 'one_hot'})
+    from lidtk.data import wili
+    data = wili.load_data({'target_type': 'one_hot'})
 
-    englsh_classnames = [el['English'].decode('utf-8')
-                         for el in data_module.labels]
+    englsh_classnames = [el['English'].decode('utf-8') for el in wili.labels]
     # Write JSON file
     with io.open('wili-labels.json', 'w', encoding='utf8') as outfile:
         str_ = json.dumps(englsh_classnames, sort_keys=True,
@@ -71,18 +66,12 @@ def get_parser():
                         help="Keras model filename",
                         required=True,
                         metavar="FILE")
-    parser.add_argument("-d", "--data",
-                        dest="data_module_path",
-                        required=True,
-                        help="A Python module with a load_data function",
-                        metavar="FILE")
     return parser
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
-    data_module = imp.load_source('data_module', args.data_module_path)
     from keras.models import load_model
     model = load_model(args.classifier_filename)
-    data = data_preprocessing(data_module)
+    data = data_preprocessing()
     generate_confusion_matrix_report(model, data)
