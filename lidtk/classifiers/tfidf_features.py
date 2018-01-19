@@ -45,9 +45,8 @@ def get_features(config, data):
 
 def analyze_vocabulary(vectorizer):
     """Show which vocabulary is used by the vectorizer."""
-    voc = sorted([unicode(key)
-                  for key, _ in ret['vectorizer'].vocabulary_.items()])
-    print(u','.join(voc))
+    voc = sorted([key for key, _ in ret['vectorizer'].vocabulary_.items()])
+    print(','.join(voc))
     print("Vocabulary: {}".format(len(voc)))
 
 
