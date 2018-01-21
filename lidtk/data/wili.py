@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 # internal modules
+import lidtk.utils
 from lidtk.utils import make_path_absolute
 
 isodict = None
@@ -65,13 +66,13 @@ def indices_to_one_hot(data, nb_classes):
     return np.eye(nb_classes)[targets]
 
 
-def get_language_data(csv_filepath='~/.lidtk/data/labels.csv'):
+def get_language_data(csv_filepath=None):
     """
     Get language data.
 
     Parameters
     ----------
-    csv_filepath : str
+    csv_filepath : str, optional (default: labels_path from cfg)
 
     Returns
     -------
@@ -85,6 +86,9 @@ def get_language_data(csv_filepath='~/.lidtk/data/labels.csv'):
     >>> wiki[0]['ISO 369-3']
     'ace'
     """
+    if csv_filepath is None:
+        cfg = lidtk.utils.load_cfg()
+        csv_filepath = cfg['labels_path']
     csv_filepath = make_path_absolute(csv_filepath)
     with open(csv_filepath, 'r') as fp:
         wiki = [{k: v for k, v in row.items()}
@@ -125,12 +129,13 @@ def load_data(config=None):
     """
     if config is None:
         config = {}
-    x_train_path = make_path_absolute('~/.lidtk/data/x_train.txt')
+    cfg = lidtk.utils.load_cfg()
+    x_train_path = cfg['x_train_path']
     logging.info("wili.load_data uses x_train_path='{}'"
                  .format(x_train_path))
     with codecs.open(x_train_path, 'r', 'utf-8') as f:
         x_train = f.read().strip().split("\n")
-    y_train_path = make_path_absolute('~/.lidtk/data/y_train.txt')
+    y_train_path = cfg['y_train_path']
     logging.info("wili.load_data uses y_train_path='{}'"
                  .format(y_train_path))
     with codecs.open(y_train_path, 'r', 'utf-8') as f:
@@ -140,12 +145,12 @@ def load_data(config=None):
                                                       stratify=y_train,
                                                       test_size=0.2,
                                                       random_state=0)
-    x_test_path = make_path_absolute('~/.lidtk/data/x_test.txt')
+    x_test_path = cfg['x_test_path']
     logging.info("wili.load_data uses x_test_path='{}'"
                  .format(x_test_path))
     with codecs.open(x_test_path, 'r', 'utf-8') as f:
         x_test = f.read().strip().split("\n")
-    y_test_path = make_path_absolute('~/.lidtk/data/y_test.txt')
+    y_test_path = cfg['y_test_path']
     logging.info("wili.load_data uses y_test_path='{}'"
                  .format(y_test_path))
     with codecs.open(y_test_path, 'r', 'utf-8') as f:
@@ -164,7 +169,7 @@ def load_data(config=None):
             'labels': globals()["labels"]}
     return data
 
-
-labels = get_language_data(make_path_absolute('~/.lidtk/data/labels.csv'))
+cfg = lidtk.utils.load_cfg()
+labels = get_language_data(cfg['labels_path'])
 labels_s = [el['Label'] for el in labels]
 n_classes = len(labels)

@@ -62,10 +62,10 @@ The usual order is:
 
 1. `lidtk download`: Please use [WiLI-2018](https://zenodo.org/record/841984) instead of downloading the dataset on your own.
 2. `lidtk create-dataset`: This step can be skipped if you use WiLI-2018
-3. `lidtk analyze-data`
-4. `lidtk tfidf_nn vectorizer train`
-5. `lidtk tfidf_nn mlp train`
-6. `lidtk tfidf_nn wili`
+3. `lidtk analyze-unicode-block --start 0 --end 128`
+4. `lidtk tfidf_nn train vectorizer --config lidtk/classifiers/config/tfidf_nn.yaml`
+5. `lidtk tfidf_nn train vectorizer --config lidtk/classifiers/config/tfidf_nn.yaml`
+6. `lidtk tfidf_nn wili --config lidtk/classifiers/config/tfidf_nn.yaml`
 
 Or to use one directly:
 

@@ -37,7 +37,6 @@ import click
 import lidtk.classifiers
 # from lidtk.classifiers import char_features
 from lidtk.data import wili
-from lidtk.utils import make_path_absolute
 
 # Needed to import for pickle
 from lidtk.classifiers.char_features import FeatureExtractor  # noqa
@@ -181,8 +180,8 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
                            coverage=coverage,
                            cutoff=unicode_cutoff,
                            set_name=set_name))
-    cm_filepath = make_path_absolute(os.path.join('~/.lidtk/artifacts',
-                                                  cm_filepath))
+    cfg = lidtk.utils.load_cfg()
+    cm_filepath = os.path.join(cfg['artifacts_path'], cm_filepath)
 
 
 def train(data, unicode_cutoff, coverage, metric):

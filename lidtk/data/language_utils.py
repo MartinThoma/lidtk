@@ -16,16 +16,17 @@ import numpy as np
 # local modules
 from lidtk.classifiers.char_distribution.char_dist_metric_train_test import \
     get_common_characters
-from lidtk.utils import make_path_absolute
 from lidtk.data import char_distribution
+import lidtk.utils
 
 iso2wiki = None
 wiki2iso = None
 wiki2label = None
+cfg = lidtk.utils.load_cfg()
 
 
 @click.command(name='analyze-data', help=__doc__)
-@click.option('--lang_dir', default="lang/*.pickle", show_default=True)
+@click.option('--lang_dir', default=cfg['lang_dir_path'], show_default=True)
 @click.option('--theta', default=0.99, show_default=True)
 def main(lang_dir, theta=0.99):
     """
@@ -39,6 +40,10 @@ def main(lang_dir, theta=0.99):
     """
     files = sorted(glob.glob(lang_dir))
     lang_stats = {}
+    if len(files) == 0:
+        print('No files found at \'{}\'. You might want to download first.'
+              .format(lang_dir))
+        return
     print("theta={}".format(theta))
     print("lang:                 characters             paragraphs      ")
     print("-------------------------------------------------------------")
@@ -187,6 +192,7 @@ def read_language_file(pickle_filepath):
 
     Examples
     --------
+    >>> from lidtk.utils import make_path_absolute
     >>> path = make_path_absolute('~/.lidtk/lang/de.pickle')
     >>> data = read_language_file(path)
     >>> sorted(list(data.keys()))
@@ -238,7 +244,8 @@ def get_language_data(csv_filepath=None):
     'ace'
     """
     if csv_filepath is None:
-        csv_filepath = make_path_absolute('~/.lidtk/data/labels.csv')
+        cfg = lidtk.utils.load_cfg()
+        csv_filepath = cfg['labels_path']
     with open(csv_filepath, 'r') as fp:
         wiki = [{k: v for k, v in row.items()}
                 for row in csv.DictReader(fp,

@@ -1,4 +1,13 @@
 base_path: '~/.lidtk'
+artifacts_path: '~/.lidtk/artifacts'
+lang_dir_path: '~/.lidtk/lang/*.pickle'
+labels_path: '~/.lidtk/data/labels.csv'
+x_train_path: '~/.lidtk/data/x_train.txt'
+y_train_path: '~/.lidtk/data/y_train.txt'
+x_test_path: '~/.lidtk/data/x_test.txt'
+y_test_path: '~/.lidtk/data/y_test.txt'
+train_xs_pickle_path: '~/.lidtk/artifacts/data/char_features_{}_{}'
+feature_extractor_path: '~/.lidtk/artifacts/features/char_extractor_{}.pickle'
 LOGGING:
   version: 1
   disable_existing_loggers: False
@@ -38,5 +47,5 @@ LOGGING:
           propagate: no
 
   root:
-      level: INFO
+      level: DEBUG
       handlers: [console, info_file_handler, error_file_handler]

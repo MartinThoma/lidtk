@@ -5,6 +5,7 @@
 # core modules
 import logging
 import os
+import pkg_resources
 import platform
 import subprocess
 import yaml
@@ -88,18 +89,20 @@ def find_vga():
     return str(vga).strip()
 
 
-def load_cfg(yaml_filepath):
+def load_cfg(yaml_filepath=None):
     """
     Load a YAML configuration file.
 
     Parameters
     ----------
-    yaml_filepath : str
+    yaml_filepath : str, optional (default: package config file)
 
     Returns
     -------
     cfg : dict
     """
+    if yaml_filepath is None:
+        yaml_filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
     # Read YAML experiment definition file
     with open(yaml_filepath, 'r') as stream:
         cfg = yaml.load(stream)
@@ -122,10 +125,11 @@ def make_paths_absolute(dir_, cfg):
     """
     for key in cfg.keys():
         if hasattr(key, 'endswith') and key.endswith("_path"):
-            cfg[key] = os.path.join(dir_, cfg[key])
+            if cfg[key].startswith('~'):
+                cfg[key] = os.path.expanduser(cfg[key])
+            else:
+                cfg[key] = os.path.join(dir_, cfg[key])
             cfg[key] = os.path.abspath(cfg[key])
-            if not os.path.isfile(cfg[key]):
-                logging.error("%s does not exist.", cfg[key])
         if type(cfg[key]) is dict:
             cfg[key] = make_paths_absolute(dir_, cfg[key])
     return cfg

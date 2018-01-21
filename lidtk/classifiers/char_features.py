@@ -8,22 +8,13 @@ from collections import defaultdict, Counter
 import logging
 import os
 import pickle
-import sys
 
 # 3rd party modules
 import numpy as np
 import progressbar
 
 # local modules
-from lidtk.utils import make_path_absolute
-
-
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
-                    level=logging.DEBUG,
-                    stream=sys.stdout)
-
-feature_extractor_path = '~/.lidtk/artifacts/features/char_extractor_{}.pickle'
-feature_extractor_path = make_path_absolute(feature_extractor_path)
+import lidtk.utils
 
 
 class FeatureExtractor(object):
@@ -151,9 +142,9 @@ class FeatureExtractor(object):
         -------
         xs : ndarray
         """
-        train_xs_pickle = ('~/.lidtk/artifacts/data/char_features_{}_{}'
+        cfg = lidtk.utils.load_cfg()
+        train_xs_pickle = (cfg['train_xs_pickle_path']
                            .format(self.coverage, set_name))
-        train_xs_pickle = make_path_absolute(train_xs_pickle)
         if not os.path.exists(train_xs_pickle + ".npy"):
             logging.info("Start creating {} x {}"
                          .format(len(data[set_name]), len(self.chars)))
@@ -162,7 +153,7 @@ class FeatureExtractor(object):
             np.save(train_xs_pickle, xs)
         else:
             # Load the transformed data
-            xs = np.load(train_xs_pickle + ".npy")
+            xs = np.load(train_xs_pickle + '.npy')
         return xs
 
     def _get_common_characters(self, character_counter, coverage=1.0):
@@ -212,7 +203,8 @@ def get_features(config, data):
     features : dict
         'vectorizer' and 'xs'
     """
-    feature_extractor_path = (globals()['feature_extractor_path']
+    cfg = lidtk.utils.load_cfg()
+    feature_extractor_path = (cfg['feature_extractor_path']
                               .format(config['coverage']))
     if not os.path.isfile(feature_extractor_path):
         logging.info("Create vectorizer")
