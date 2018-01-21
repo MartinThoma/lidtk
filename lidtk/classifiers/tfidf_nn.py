@@ -93,7 +93,8 @@ train_entry_point.add_command(lidtk.classifiers.mlp.main)
 @entry_point.command(name='predict')
 @click.option('--text')
 @click.option('--config', 'config_filepath',
-              type=click.Path(exists=True))
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
 def predict_cli(text, config_filepath):
     """
     Command line interface function for predicting the language of a text.
@@ -102,6 +103,7 @@ def predict_cli(text, config_filepath):
     ----------
     text : str
     config_filepath : str
+        Path to a YAML configuration file.
     """
     load_classifier(config_filepath)
     print(classifier.predict(text))
@@ -109,9 +111,17 @@ def predict_cli(text, config_filepath):
 
 @entry_point.command(name='get_languages')
 @click.option('--config', 'config_filepath',
-              type=click.Path(exists=True))
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
 def get_languages(config_filepath):
-    """Get all predicted languages of for the WiLI dataset."""
+    """
+    Get all predicted languages of for the WiLI dataset.
+
+    Parameters
+    ----------
+    config_filepath : str
+        Path to a YAML configuration file.
+    """
     load_classifier(config_filepath)
     print(classifier.get_languages())
 
@@ -121,14 +131,20 @@ def get_languages(config_filepath):
               required=True,
               type=click.Path(exists=True),
               help='CSV file with delimiter ;')
-def print_languages(label_filepath):
+@click.option('--config', 'config_filepath',
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
+def print_languages(config_filepath, label_filepath):
     """
     Print supported languages of classifier.
 
     Parameters
     ----------
+    config_filepath : str
+        Path to a YAML configuration file.
     label_filepath : str
     """
+    load_classifier(config_filepath)
     label_filepath = os.path.abspath(label_filepath)
     wili_labels = wili.get_language_data(label_filepath)
     iso2name = dict([(el['ISO 369-3'], el['English'])
@@ -143,49 +159,19 @@ def print_languages(label_filepath):
               default='{}_results.txt'.format(classifier_name),
               show_default=True,
               help='Where to store the predictions')
-def eval_wili(result_file):
+@click.option('--config', 'config_filepath',
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
+def eval_wili(config_filepath, result_file):
     """
     CLI function evaluating the classifier on WiLI.
 
     Parameters
     ----------
+    config_filepath : str
+        Path to a YAML configuration file.
     result_file : str
         Path to a file where the results will be stored
     """
+    load_classifier(config_filepath)
     classifier.eval_wili(result_file)
-
-
-@entry_point.command(name='wili_k')
-@click.option('--result_file',
-              default='{}_results_known.txt'.format(classifier_name),
-              show_default=True,
-              help='Where to store the predictions')
-def eval_wili_known(result_file):
-    """
-    CLI function evaluating the classifier on WiLI.
-
-    Parameters
-    ----------
-    result_file : str
-        Path to a file where the results will be stored
-    """
-    classifier.eval_wili(result_file, classifier.get_mapping_languages())
-
-
-@entry_point.command(name='wili_unk')
-@click.option('--result_file',
-              default='{}_results_unknown.txt'.format(classifier_name),
-              show_default=True,
-              help='Where to store the predictions')
-def eval_wili_unknown(result_file):
-    """
-    CLI function evaluating the classifier on WiLI.
-
-    Parameters
-    ----------
-    result_file : str
-        Path to a file where the results will be stored
-    """
-    classifier.eval_wili(result_file,
-                         classifier.get_mapping_languages(),
-                         eval_unk=True)
