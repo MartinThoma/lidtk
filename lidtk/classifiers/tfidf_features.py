@@ -60,7 +60,9 @@ def get_features(config, data):
     xs = {}
     vectorizer.fit(data['x_train'])
     # Serialize trained vectorizer
-    with open(config['feature-extraction']['name'], 'wb') as fin:
+    logging.info('Serialize vectorizer to \'{}\''
+                 .format(config['feature-extraction']['serialization_path']))
+    with open(config['feature-extraction']['serialization_path'], 'wb') as fin:
         pickle.dump(vectorizer, fin)
     for set_name in ['x_train', 'x_test', 'x_val']:
         xs[set_name] = vectorizer.transform(data[set_name]).toarray()
