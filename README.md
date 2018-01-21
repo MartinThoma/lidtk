@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/116556356.svg)](https://zenodo.org/badge/latestdoi/116556356)
+
 # lidtk
 
 lidtk - the language identification toolkit - was written in order to
