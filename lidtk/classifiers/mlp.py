@@ -110,8 +110,7 @@ def create_model(nb_classes, input_shape):
     input_ = Input(shape=input_shape)
     x = input_
     x = Dense(512, activation='relu')(x)
-    x = Dense(nb_classes)(x)
-    x = Activation('softmax')(x)
+    x = Dense(nb_classes, activation='softmax')(x)
     model = Model(inputs=input_, outputs=x)
     return model
 

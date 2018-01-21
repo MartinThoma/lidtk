@@ -15,7 +15,6 @@ import numpy as np
 import progressbar
 
 # local modules
-from lidtk.data import wili
 from lidtk.utils import make_path_absolute
 
 
@@ -231,10 +230,3 @@ def get_features(config, data):
     for set_name in ['x_val', 'x_train', 'x_test']:
         xs[set_name] = vectorizer.get_xs_set(data, set_name)
     return {'vectorizer': vectorizer, 'xs': xs}
-
-
-if __name__ == '__main__':
-    data = wili.load_data()
-    logging.info("data loaded")
-    ret = get_features({'coverage': 0.8}, data)
-    logging.info(ret['xs']['x_train'][:20])
