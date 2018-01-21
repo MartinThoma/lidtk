@@ -4,13 +4,37 @@
 """Create tfidf.pickle."""
 
 # core modules
+import logging
 import pickle
 
 # 3rd party modules
 from sklearn.feature_extraction.text import TfidfVectorizer
+import click
 
 # local modules
 from lidtk.data import wili
+from lidtk.utils import load_cfg
+
+
+@click.command(name='vectorizer',
+               help='Train Tfidf vectorizer')
+@click.option('--config', 'config_file',
+              type=click.Path(exists=True),
+              help='Path to a YAML configuration file')
+def main(config_file):
+    config = load_cfg(config_file)
+    data = wili.load_data()
+    ret = get_features(config, data)
+    analyze_vocabulary(ret)
+    print("First 20 samplex of x_train:")
+    print(ret['xs']['x_train'][0])
+    filepath = config['feature-extraction']['serialization_path']
+    with open(filepath, 'wb') as handle:
+        logging.info('Store model to \'{}\''
+                     .format(filepath))
+        pickle.dump(ret['vectorizer'],
+                    handle,
+                    protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def get_features(config, data):
@@ -43,34 +67,15 @@ def get_features(config, data):
     return {'vectorizer': vectorizer, 'xs': xs}
 
 
-def analyze_vocabulary(vectorizer):
+def analyze_vocabulary(ret):
     """Show which vocabulary is used by the vectorizer."""
     voc = sorted([key for key, _ in ret['vectorizer'].vocabulary_.items()])
     print(','.join(voc))
     print("Vocabulary: {}".format(len(voc)))
 
 
-def get_parser():
-    """Get parser object."""
-    from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-    parser = ArgumentParser(description=__doc__,
-                            formatter_class=ArgumentDefaultsHelpFormatter)
-    # parser.add_argument("--config",
-    #                     dest="filename",
-    #                     help="Read configuration file",
-    #                     metavar="FILE",
-    #                     required=True)
-    return parser
-
-
-if __name__ == '__main__':
-    args = get_parser().parse_args()
-    data = wili.load_data()
-    config = {'feature-extraction': {'min_df': 50,
-                                     'name': 'tfidf-50.pickle',
-                                     'lowercase': True,
-                                     'norm': 'l2'}}
-    ret = get_features(config, data)
-    analyze_vocabulary(data)
-    print("First 20 samplex of x_train:")
-    print(ret['xs']['x_train'][:20])
+def load_feature_extractor(config):
+    filepath = config['feature-extraction']['serialization_path']
+    with open(filepath, 'rb') as handle:
+        vectorizer = pickle.load(handle)
+    return vectorizer

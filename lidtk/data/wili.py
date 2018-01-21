@@ -18,9 +18,38 @@ from lidtk.utils import make_path_absolute
 isodict = None
 
 
+def lang_codes_to_one_hot(data, wili_codes):
+    """
+    Convert an iterable of ISO 369-3 codes to a one-hot array.
+
+    Parameters
+    ----------
+    data : list of str
+        Each str is a WiLI language code
+    wili_codes : list of str
+        List of WiLi language codes codes which define the order.
+        This has to contain any code in data
+
+    Returns
+    -------
+    transformed : ndarray
+    """
+    transformed = [wili_codes.index(el) for el in data]
+    return indices_to_one_hot(transformed, len(wili_codes))
+
+
 def indices_to_one_hot(data, nb_classes):
     """
     Convert an iterable of indices to one-hot encoded labels.
+
+    Parameters
+    ----------
+    data : list of int
+    nb_classes : int
+
+    Returns
+    -------
+    transformed : ndarray
 
     Examples
     --------

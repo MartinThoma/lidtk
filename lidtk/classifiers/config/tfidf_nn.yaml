@@ -1,4 +1,10 @@
 name: tfidf_nn
+feature-extraction:
+  name: 'tfidf-50-2018-01-21.pickle'
+  min_df: 50
+  lowercase: true
+  norm: l2
+  serialization_path: '../../models/tfidf-100.pickle'
 vectorizer_src_path: '../../models/tfidf-100.pickle'
 model_src_path: '../../models/mlp-3layer-tfidf-50.h5'
 mapping:

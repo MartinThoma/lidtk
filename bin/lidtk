@@ -24,7 +24,6 @@ import lidtk.classifiers.cld2_mod
 import lidtk.classifiers.google_mod
 import lidtk.classifiers.langdetect_mod
 import lidtk.classifiers.langid_mod
-import lidtk.classifiers.mlp
 import lidtk.classifiers.nn
 import lidtk.classifiers.text_cat
 import lidtk.classifiers.tfidf_nn
@@ -43,7 +42,6 @@ entry_point.add_command(lidtk.data.language_utils.main)
 entry_point.add_command(lidtk.classifiers.text_cat.entry_point)
 entry_point.add_command(lidtk.classifiers.cld2_mod.entry_point)
 entry_point.add_command(lidtk.data.create_ml_dataset.main)
-entry_point.add_command(lidtk.classifiers.mlp.entry_point)
 entry_point.add_command(lidtk.classifiers.nn.entry_point)
 entry_point.add_command(lidtk.classifiers.langdetect_mod.entry_point)
 entry_point.add_command(lidtk.classifiers.langid_mod.entry_point)

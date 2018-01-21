@@ -6,6 +6,7 @@ Run classification with tfidf-features and Neural Network classifier.
 """
 
 # core modules
+import os
 import pickle
 import pkg_resources
 
@@ -14,8 +15,9 @@ import numpy as np
 import click
 
 # local modules
-import lidtk.classifiers
 from lidtk.data import wili
+import lidtk.classifiers.mlp
+import lidtk.classifiers.tfidf_features
 
 
 class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
@@ -59,6 +61,14 @@ classifier.load(classifier.cfg['vectorizer_src_path'],
 @click.group(name=classifier.cfg['name'])
 def entry_point():
     """Use the TfidfNNClassifier classifier."""
+
+
+@entry_point.group(name='train')
+def train_entry_point():
+    """Train the TfidfNNClassifier classifier."""
+
+train_entry_point.add_command(lidtk.classifiers.tfidf_features.main)
+train_entry_point.add_command(lidtk.classifiers.mlp.main)
 
 
 @entry_point.command(name='predict')
