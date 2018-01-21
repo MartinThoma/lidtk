@@ -5,8 +5,12 @@ feature-extraction:
   lowercase: true
   norm: l2
   serialization_path: '../../models/tfidf-100.pickle'
-vectorizer_src_path: '../../models/tfidf-100.pickle'
-model_src_path: '../../models/mlp-3layer-tfidf-50.h5'
+classification:
+  artifacts_path: '../../models/mlp-3layer-tfidf-50.h5'
+  optimizer:
+    initial_lr: 0.0001
+    batch_size: 32
+    epochs: 20
 mapping:
   0: 'ace'
   1: 'afr'

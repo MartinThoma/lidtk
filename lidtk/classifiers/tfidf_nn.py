@@ -3,6 +3,7 @@
 """
 Run classification with tfidf-features and Neural Network classifier.
 
+tfidf = text frequency, inverse document frequency
 """
 
 # core modules
@@ -18,6 +19,31 @@ import click
 from lidtk.data import wili
 import lidtk.classifiers.mlp
 import lidtk.classifiers.tfidf_features
+
+classifier_name = 'tfidf_nn'
+classifier = None
+
+
+def load_classifier(filepath):
+    """
+    Load a TfidfNNClassifier.
+
+    Parameters
+    ----------
+    filepath : str
+
+    Returns
+    -------
+    classifier : TfidfNNClassifier object
+    """
+    if filepath is None:
+        filepath = 'classifiers/config/tfidf_nn.yaml'
+        filepath = pkg_resources.resource_filename('lidtk', filepath)
+    classifier = TfidfNNClassifier(filepath)
+    classifier.load(classifier.cfg['feature-extraction']['serialization_path'],
+                    classifier.cfg['classification']['artifacts_path'])
+    globals()['classifier'] = classifier
+    return classifier
 
 
 class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
@@ -48,17 +74,10 @@ class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
         return most_likely[0]
 
 
-path = 'classifiers/config/tfidf_nn.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
-classifier = TfidfNNClassifier(filepath)
-classifier.load(classifier.cfg['vectorizer_src_path'],
-                classifier.cfg['model_src_path'])
-
-
 ###############################################################################
 # CLI                                                                         #
 ###############################################################################
-@click.group(name=classifier.cfg['name'])
+@click.group(name=classifier_name)
 def entry_point():
     """Use the TfidfNNClassifier classifier."""
 
@@ -73,20 +92,27 @@ train_entry_point.add_command(lidtk.classifiers.mlp.main)
 
 @entry_point.command(name='predict')
 @click.option('--text')
-def predict_cli(text):
+@click.option('--config', 'config_filepath',
+              type=click.Path(exists=True))
+def predict_cli(text, config_filepath):
     """
     Command line interface function for predicting the language of a text.
 
     Parameters
     ----------
     text : str
+    config_filepath : str
     """
+    load_classifier(config_filepath)
     print(classifier.predict(text))
 
 
 @entry_point.command(name='get_languages')
-def get_languages():
+@click.option('--config', 'config_filepath',
+              type=click.Path(exists=True))
+def get_languages(config_filepath):
     """Get all predicted languages of for the WiLI dataset."""
+    load_classifier(config_filepath)
     print(classifier.get_languages())
 
 
@@ -114,7 +140,7 @@ def print_languages(label_filepath):
 
 @entry_point.command(name='wili')
 @click.option('--result_file',
-              default='{}_results.txt'.format(classifier.cfg['name']),
+              default='{}_results.txt'.format(classifier_name),
               show_default=True,
               help='Where to store the predictions')
 def eval_wili(result_file):
@@ -131,7 +157,7 @@ def eval_wili(result_file):
 
 @entry_point.command(name='wili_k')
 @click.option('--result_file',
-              default='{}_results_known.txt'.format(classifier.cfg['name']),
+              default='{}_results_known.txt'.format(classifier_name),
               show_default=True,
               help='Where to store the predictions')
 def eval_wili_known(result_file):
@@ -148,7 +174,7 @@ def eval_wili_known(result_file):
 
 @entry_point.command(name='wili_unk')
 @click.option('--result_file',
-              default='{}_results_unknown.txt'.format(classifier.cfg['name']),
+              default='{}_results_unknown.txt'.format(classifier_name),
               show_default=True,
               help='Where to store the predictions')
 def eval_wili_unknown(result_file):

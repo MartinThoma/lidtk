@@ -61,17 +61,16 @@ def main_loaded(config, data_module, feature_extractor_module):
         data[set_name] = wili.lang_codes_to_one_hot(data[set_name],
                                                     wili.labels_s)
     # data['x_test'] = vectorizer.transform(data['x_test'])
-    optimizer = get_optimizer({'optimizer': {'initial_lr': 0.0001}})
+    optimizer = get_optimizer(config)
     logging.debug(data['x_train'][0])
     model = load_model(config, data['x_train'][0].shape)
     model.compile(loss='categorical_crossentropy',
                   optimizer=optimizer,
                   metrics=['accuracy'])
     t0 = time.time()
-    logging.debug(data['y_train'][:20])
     model.fit(data['x_train'], data['y_train'],
-              batch_size=32,
-              epochs=20,
+              batch_size=config['classification']['optimizer']['batch_size'],
+              epochs=config['classification']['optimizer']['epochs'],
               validation_data=(data['x_val'], data['y_val']),
               shuffle=True,
               # callbacks=callbacks
@@ -80,16 +79,12 @@ def main_loaded(config, data_module, feature_extractor_module):
     # res = get_tptnfpfn(model, data)
 
     t2 = time.time()
-    model.save("{}.h5".format(model_name))
+    model.save(config['classification']['artifacts_path'])
+    logging.info('Save model to \'{}\''
+                 .format(config['classification']['artifacts_path']))
     preds = model.predict(data['x_test'])
     y_pred = np.argmax(preds, axis=1)
     y_true = np.argmax(data['y_test'], axis=1)
-    print(("{clf_name:<30}: {acc:>4.2f}% in {train_time:0.2f}s "
-           "train / {test_time:0.2f}s test")
-          .format(clf_name="Random",
-                  acc=(1. / 211),
-                  train_time=0.00,
-                  test_time=0.00))
     print(("{clf_name:<30}: {acc:>4.2f}% in {train_time:0.2f}s "
            "train / {test_time:0.2f}s test")
           .format(clf_name="MLP",
@@ -124,6 +119,6 @@ def create_model(nb_classes, input_shape):
 def get_optimizer(config):
     """Return an optimizer."""
     from keras.optimizers import Adam
-    lr = config['optimizer']['initial_lr']
+    lr = config['classification']['optimizer']['initial_lr']
     optimizer = Adam(lr=lr)  # Using Adam instead of SGD to speed up training
     return optimizer
