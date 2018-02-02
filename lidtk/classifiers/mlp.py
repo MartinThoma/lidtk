@@ -103,7 +103,7 @@ def predict(text):
 def create_model(nb_classes, input_shape):
     """Create a MLP model."""
     # from keras.layers import Dropout
-    from keras.layers import Activation, Input
+    from keras.layers import Input
     from keras.layers import Dense
     from keras.models import Model
 
