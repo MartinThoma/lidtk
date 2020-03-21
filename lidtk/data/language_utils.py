@@ -2,23 +2,23 @@
 
 """Utility function for the languages themselves."""
 
-# core modules
-from collections import Counter
+# Core Library modules
 import csv
 import glob
 import os
 import pickle
+from collections import Counter
 
-# 3rd party modules
+# Third party modules
 import click
 import numpy as np
 
-# local modules
+# First party modules
+import lidtk.utils
 from lidtk.classifiers.char_distribution.char_dist_metric_train_test import (
     get_common_characters,
 )
 from lidtk.data import char_distribution
-import lidtk.utils
 
 iso2wiki = None
 wiki2iso = None

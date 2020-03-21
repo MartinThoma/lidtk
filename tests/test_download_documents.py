@@ -1,7 +1,7 @@
-# core modules
+# Core Library modules
 import unittest
 
-# internal modules
+# First party modules
 import lidtk.data.download_documents
 
 
@@ -27,8 +27,8 @@ class UtilsTest(unittest.TestCase):
             "A new test. A new test. A new test. A new test."
             "A new test. A new test. A new test. A new test.\n"
             r"\displaystyle \frac{123}{456} + 3 + 5 + \pi + "
-            " 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + "
-            " 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + "
+            r" 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + "
+            r" 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + 3 + 5 + \pi + "
         )
         paragraphs = lidtk.data.download_documents.extract_paragraphs(section)
         self.assertEqual(len(paragraphs), 2)

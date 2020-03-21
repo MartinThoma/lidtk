@@ -1,10 +1,10 @@
-# core modules
+# Core Library modules
 import unittest
 
-# 3rd party modules
+# Third party modules
 from click.testing import CliRunner
 
-# internal modules
+# First party modules
 import lidtk.classifiers.char_distribution.char_dist_metric_train_test as todo
 
 

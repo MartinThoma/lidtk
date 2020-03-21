@@ -2,10 +2,10 @@
 
 """Convert a language pickle file to a txt."""
 
-# core modules
+# Core Library modules
+import codecs
 import glob
 import pickle
-import codecs
 
 
 def main():

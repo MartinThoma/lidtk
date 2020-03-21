@@ -2,7 +2,7 @@
 
 """Create sharable dataset from downloaded texts."""
 
-# core modules
+# Core Library modules
 import glob
 import logging
 import os
@@ -11,12 +11,12 @@ import re
 import sys
 import unicodedata
 
-# 3rd party modules
+# Third party modules
 import click
 
-# local scripts
-from lidtk.data import language_utils
+# First party modules
 import lidtk
+from lidtk.data import language_utils
 
 random.seed(0)
 
@@ -34,7 +34,7 @@ def normalize_data(paragraph):
     Some symbols can be written in multiple ways.
     """
     paragraph = unicodedata.normalize("NFC", paragraph)
-    paragraph = re.sub("\s+", " ", paragraph).strip()
+    paragraph = re.sub(r"\s+", " ", paragraph).strip()
     return paragraph
 
 

@@ -2,7 +2,8 @@
 
 """Create a sequential model."""
 
-from keras.layers import Activation, Input, Dense
+# Third party modules
+from keras.layers import Activation, Dense, Input
 
 # from keras.layers import Dropout
 # from keras.layers.normalization import BatchNormalization

@@ -2,16 +2,16 @@
 
 """Utility functions for lidtk."""
 
-# core modules
+# Core Library modules
 import logging
 import os
-import pkg_resources
 import platform
 import subprocess
-import yaml
 
-# 3rd party modules
+# Third party modules
 import click
+import pkg_resources
+import yaml
 
 
 def make_path_absolute(path):
@@ -84,7 +84,7 @@ def find_vga():
     vga : str
     """
     vga = subprocess.check_output(
-        "lspci | grep -i 'vga\|3d\|2d'", shell=True, executable="/bin/bash"
+        r"lspci | grep -i 'vga\|3d\|2d'", shell=True, executable="/bin/bash"
     )
     return str(vga).strip()
 

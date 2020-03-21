@@ -3,16 +3,16 @@
 
 """Load WiLI-Dataset."""
 
-# core modules
+# Core Library modules
 import codecs
 import csv
 import logging
 
-# 3rd party modules
-from sklearn.model_selection import train_test_split
+# Third party modules
 import numpy as np
+from sklearn.model_selection import train_test_split
 
-# internal modules
+# First party modules
 import lidtk.utils
 from lidtk.utils import make_path_absolute
 

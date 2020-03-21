@@ -1,5 +1,5 @@
-from setuptools import find_packages
-from setuptools import setup
+# Third party modules
+from setuptools import find_packages, setup
 
 config = {
     "name": "lidtk",

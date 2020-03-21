@@ -9,13 +9,11 @@ Notes
 * https://pypi.python.org/pypi/cld2-cffi
 """
 
-# core modules
+# Third party modules
+import cld2
 import pkg_resources
 
-# 3rd party modules
-import cld2
-
-# internal modules
+# First party modules
 import lidtk.classifiers
 
 

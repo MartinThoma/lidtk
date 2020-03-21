@@ -3,17 +3,17 @@
 
 """Extract character features."""
 
-# core modules
-from collections import defaultdict, Counter
+# Core Library modules
 import logging
 import os
 import pickle
+from collections import Counter, defaultdict
 
-# 3rd party modules
+# Third party modules
 import numpy as np
 import progressbar
 
-# local modules
+# First party modules
 import lidtk.utils
 
 

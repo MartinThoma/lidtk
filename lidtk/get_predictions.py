@@ -2,15 +2,16 @@
 
 """Get predictions."""
 
-# core modules
+# Core Library modules
 import imp
 import os
 import pprint
 import time
+
+# Third party modules
 import yaml
 
-
-# internal modules
+# First party modules
 from lidtk.utils import make_paths_absolute
 
 

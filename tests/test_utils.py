@@ -1,8 +1,10 @@
-# core modules
-import pkg_resources
+# Core Library modules
 import unittest
 
-# internal modules
+# Third party modules
+import pkg_resources
+
+# First party modules
 import lidtk.utils
 
 

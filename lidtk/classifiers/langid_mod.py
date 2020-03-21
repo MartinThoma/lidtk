@@ -8,13 +8,11 @@ Notes
 * https://github.com/saffsd/langid.py
 """
 
-# core modules
+# Third party modules
+import langid
 import pkg_resources
 
-# 3rd party modules
-import langid
-
-# internal modules
+# First party modules
 import lidtk.classifiers
 
 

@@ -10,9 +10,9 @@ Prerequesites
 * pip install detectlanguage
 """
 
+# Third party modules
 import cld2
 from fuzzywuzzy import process
-
 
 servicecode2label = {
     "gv": "glv",

@@ -2,14 +2,14 @@
 
 """Neural Network Classifier."""
 
-# core modules
+# Core Library modules
+import imp
 import logging
 
-# 3rd party modules
+# Third party modules
 import click
-import imp
 
-# internal modules
+# First party modules
 import lidtk.classifiers
 import lidtk.features
 import lidtk.utils

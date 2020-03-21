@@ -3,22 +3,19 @@
 
 """Train and evaluate a MLP."""
 
-# core modules
+# Core Library modules
 import logging
 import time
 
-# 3rd party modules
-from sklearn.metrics import accuracy_score
+# Third party modules
 import click
 import numpy as np
+from sklearn.metrics import accuracy_score
 
-# local modules
-from lidtk.data import wili
+# First party modules
 from lidtk.classifiers import tfidf_features as feature_extractor_module
+from lidtk.data import wili
 from lidtk.utils import load_cfg
-
-# import char_features
-# from lidtk.classifiers.char_features import FeatureExtractor
 
 model_name = "mlp-3layer-tfidf-50"
 model = None

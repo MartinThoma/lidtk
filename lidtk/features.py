@@ -2,10 +2,10 @@
 
 """Feature Extraction module."""
 
-# core modules
+# Core Library modules
 import pickle
 
-# 3rd party modules
+# Third party modules
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 

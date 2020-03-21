@@ -2,14 +2,14 @@
 
 """Analyze  how important a Unicode block is for the different languages."""
 
-# core modules
+# Core Library modules
 import logging
 
-# 3rd party modules
+# Third party modules
 import click
 import numpy as np
 
-# internal modules
+# First party modules
 from lidtk.data import wili
 
 

@@ -9,17 +9,13 @@ Notes
 * Based on: https://github.com/shuyo/language-detection
 """
 
-# core modules
-import pkg_resources
-
-# 3rd party modules
-from langdetect import detect_langs, detect
-from langdetect import DetectorFactory
+# Third party modules
 import click
+import pkg_resources
+from langdetect import DetectorFactory, detect, detect_langs
 
-# internal modules
+# First party modules
 import lidtk.classifiers
-
 
 DetectorFactory.seed = 0  # Make sure we get consistent results
 

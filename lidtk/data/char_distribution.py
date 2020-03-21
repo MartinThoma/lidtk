@@ -3,7 +3,7 @@
 
 """Visualize C_0.99 for all languages except the 10 with most characters."""
 
-# 3rd party modules
+# Third party modules
 import matplotlib.pyplot as plt
 import seaborn as sns
 

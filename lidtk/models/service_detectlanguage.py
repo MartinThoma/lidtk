@@ -10,12 +10,11 @@ Prerequesites
 * pip install detectlanguage
 """
 
-# core modules
+# Core Library modules
 import os
 
-# 3rd party modules
+# Third party modules
 import detectlanguage
-
 
 detectlanguage2label = {
     u"gv": "glv",

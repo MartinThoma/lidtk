@@ -6,19 +6,19 @@ Run classification with tfidf-features and Neural Network classifier.
 tfidf = text frequency, inverse document frequency
 """
 
-# core modules
+# Core Library modules
 import os
 import pickle
+
+# Third party modules
+import click
+import numpy as np
 import pkg_resources
 
-# 3rd party modules
-import numpy as np
-import click
-
-# local modules
-from lidtk.data import wili
+# First party modules
 import lidtk.classifiers.mlp
 import lidtk.classifiers.tfidf_features
+from lidtk.data import wili
 
 classifier_name = "tfidf_nn"
 classifier = None
@@ -162,7 +162,7 @@ def print_languages(config_filepath, label_filepath):
     load_classifier(config_filepath)
     label_filepath = os.path.abspath(label_filepath)
     wili_labels = wili.get_language_data(label_filepath)
-    iso2name = dict([(el["ISO 369-3"], el["English"]) for el in wili_labels])
+    iso2name = {el["ISO 369-3"]: el["English"] for el in wili_labels}
     print(
         ", ".join(
             sorted(

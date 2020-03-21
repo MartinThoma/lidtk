@@ -3,15 +3,15 @@
 
 """Create tfidf.pickle."""
 
-# core modules
+# Core Library modules
 import logging
 import pickle
 
-# 3rd party modules
-from sklearn.feature_extraction.text import TfidfVectorizer
+# Third party modules
 import click
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-# local modules
+# First party modules
 from lidtk.data import wili
 from lidtk.utils import load_cfg
 

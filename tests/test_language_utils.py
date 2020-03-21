@@ -1,11 +1,11 @@
-# core modules
-import pkg_resources
+# Core Library modules
 import unittest
 
-# 3rd party modules
+# Third party modules
+import pkg_resources
 from click.testing import CliRunner
 
-# internal modules
+# First party modules
 from lidtk.data import language_utils
 
 

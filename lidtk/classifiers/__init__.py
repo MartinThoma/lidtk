@@ -2,23 +2,23 @@
 
 """Language classifiers."""
 
-# core modules
-from abc import ABC, abstractmethod
+# Core Library modules
 import datetime
 import io
 import json
 import logging
 import os
 import time
+from abc import ABC, abstractmethod
 
-# 3rd party modules
-import progressbar
-import numpy as np
+# Third party modules
 import click
+import numpy as np
+import progressbar
 
-# internal modules
-from lidtk.data import wili
+# First party modules
 import lidtk.utils
+from lidtk.data import wili
 
 
 class LIDClassifier(ABC):
@@ -235,7 +235,7 @@ def classifier_cli_factor(classifier):
         """
         label_filepath = os.path.abspath(label_filepath)
         wili_labels = wili.get_language_data(label_filepath)
-        iso2name = dict([(el["ISO 369-3"], el["English"]) for el in wili_labels])
+        iso2name = {el["ISO 369-3"]: el["English"] for el in wili_labels}
         print(
             ", ".join(
                 sorted(

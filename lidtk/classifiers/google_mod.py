@@ -9,10 +9,10 @@ Notes
 * See https://cloud.google.com/translate/docs/detecting-language
 """
 
-# core modules
+# Third party modules
 import pkg_resources
 
-# internal modules
+# First party modules
 import lidtk.classifiers
 
 

@@ -2,26 +2,25 @@
 
 """Download 1000 documents of each language."""
 
-# core modules
+# Core Library modules
 import json
 import logging
 import os
 import pickle
-import pkg_resources
 import random
 import re
-import requests
 import time
 import unicodedata
 
-# 3rd party modules
+# Third party modules
 import click
+import pkg_resources
 import progressbar
+import requests
 import wikipedia
 
-# internal modules
+# First party modules
 from lidtk.utils import make_path_absolute
-
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -95,7 +94,7 @@ def normalize_data(paragraph):
     paragraph : str
     """
     paragraph = unicodedata.normalize("NFC", paragraph)
-    paragraph = re.sub("\s+", " ", paragraph).strip()
+    paragraph = re.sub(r"\s+", " ", paragraph).strip()
     return paragraph.strip()
 
 
@@ -117,7 +116,7 @@ def extract_paragraphs(section, min_paragraph_length=140):
         paragraph = normalize_data(paragraph)
         if len(paragraph) < min_paragraph_length:
             continue
-        is_math = "\displaystyle" in paragraph
+        is_math = r"\displaystyle" in paragraph
         if is_literature(paragraph) or is_math:
             continue  # It is something that we want to ignore
         paragraphs.append(paragraph)

@@ -3,20 +3,15 @@
 
 """Run the lidtk main script."""
 
-# core modules
+# Core Library modules
 import logging.config
+
+# Third party modules
+import click
 import pkg_resources
 import yaml
 
-# 3rd party modules
-import click
-
-filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
-with open(filepath, 'r') as stream:
-    config = yaml.load(stream)
-logging.config.dictConfig(config['LOGGING'])
-
-# local modules
+# First party modules
 import lidtk
 import lidtk.analysis.unicode_block
 import lidtk.classifiers.char_distribution.char_dist_metric_train_test as cdm
@@ -30,6 +25,12 @@ import lidtk.classifiers.tfidf_nn
 import lidtk.data.create_ml_dataset
 import lidtk.data.download_documents
 import lidtk.utils
+
+filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
+with open(filepath, 'r') as stream:
+    config = yaml.load(stream)
+logging.config.dictConfig(config['LOGGING'])
+
 
 
 @click.group()

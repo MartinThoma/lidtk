@@ -18,30 +18,26 @@ which has the most similar distribution. Similarity of distributions can
 be calculated by the earthmovers distance.
 """
 
-# core moduels
-from collections import defaultdict, Counter
+# Core Library modules
 import logging
 import os
 import pickle
 import random
 import sys
+from collections import Counter, defaultdict
 
-# import time
-
-# 3rd party modules
-from scipy.spatial import distance
+# Third party modules
+import click
 import numpy as np
 import scipy.stats
-import click
+from scipy.spatial import distance
 
-# local modules
+# First party modules
 import lidtk.classifiers
-
-# from lidtk.classifiers import char_features
-from lidtk.data import wili
 
 # Needed to import for pickle
 from lidtk.classifiers.char_features import FeatureExtractor  # noqa
+from lidtk.data import wili
 
 
 random.seed(0)
