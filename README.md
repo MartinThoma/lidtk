@@ -18,7 +18,7 @@ If you want the latest version:
 
 ```
 $ git clone https://github.com/MartinThoma/lidtk.git; cd lidtk
-$ pip instell -e . --user
+$ pip install -e . --user
 ```
 
 I recommend getting the [WiLI-2018 dataset](https://zenodo.org/record/841984).
