@@ -7,7 +7,7 @@ Keras==2.0.6
 langdetect==1.0.7
 langid==1.1.6
 matplotlib==2.1.2
-nltk==3.2.5
+nltk==3.4.5
 numpy==1.14.0
 progressbar2==3.34.3
 PyYAML==3.12
