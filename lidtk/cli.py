@@ -26,17 +26,17 @@ import lidtk.data.create_ml_dataset
 import lidtk.data.download_documents
 import lidtk.utils
 
-filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
-with open(filepath, 'r') as stream:
+filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
+with open(filepath, "r") as stream:
     config = yaml.load(stream)
-logging.config.dictConfig(config['LOGGING'])
-
+logging.config.dictConfig(config["LOGGING"])
 
 
 @click.group()
 @click.version_option(version=lidtk.__version__)
 def entry_point():
     pass
+
 
 entry_point.add_command(lidtk.data.download_documents.main)
 entry_point.add_command(lidtk.data.language_utils.main)
@@ -53,5 +53,5 @@ entry_point.add_command(lidtk.classifiers.google_mod.entry_point)
 entry_point.add_command(lidtk.classifiers.tfidf_nn.entry_point)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     entry_point()
