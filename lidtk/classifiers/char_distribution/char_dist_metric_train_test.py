@@ -25,6 +25,7 @@ import os
 import pickle
 import random
 import sys
+
 # import time
 
 # 3rd party modules
@@ -35,6 +36,7 @@ import click
 
 # local modules
 import lidtk.classifiers
+
 # from lidtk.classifiers import char_features
 from lidtk.data import wili
 
@@ -43,9 +45,11 @@ from lidtk.classifiers.char_features import FeatureExtractor  # noqa
 
 
 random.seed(0)
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
-                    level=logging.DEBUG,
-                    stream=sys.stdout)
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s %(message)s",
+    level=logging.DEBUG,
+    stream=sys.stdout,
+)
 
 
 def ido(x, y):
@@ -80,13 +84,13 @@ comp_metric = ido
 ###############################################################################
 # CLI                                                                         #
 ###############################################################################
-@click.group(name='char-distrib')
+@click.group(name="char-distrib")
 def entry_point():
     """Use the character distribution language classifier."""
 
 
-@entry_point.command(name='predict')
-@click.option('--text')
+@entry_point.command(name="predict")
+@click.option("--text")
 def predict_cli(text):
     """
     Command line interface function for predicting the language of a text.
@@ -98,10 +102,13 @@ def predict_cli(text):
     print(predict(text))
 
 
-@entry_point.command(name='wili')
-@click.option('--result_file',
-              default='char_dist_metric_results.txt', show_default=True,
-              help='Where to store the predictions')
+@entry_point.command(name="wili")
+@click.option(
+    "--result_file",
+    default="char_dist_metric_results.txt",
+    show_default=True,
+    help="Where to store the predictions",
+)
 def eval_wili(result_file):
     """
     CLI function evaluating the classifier on WiLI.
@@ -112,22 +119,24 @@ def eval_wili(result_file):
         Path to a file where the results will be stored
     """
     if language_models is None:
-        init_language_models(comp_metric, unicode_cutoff=10**6)
+        init_language_models(comp_metric, unicode_cutoff=10 ** 6)
     lidtk.classifiers.eval_wili(result_file, predict)
 
 
 ###############################################################################
 # Logic                                                                       #
 ###############################################################################
-@entry_point.command(name='train')
-@click.option('--coverage', default=0.8, show_default=True)
-@click.option('--metric', default=0, show_default=True)
-@click.option('--set_name',
-              default='train',
-              show_default=True,
-              type=click.Choice(['train', 'test', 'val']))
-@click.option('--unicode_cutoff', default=10**6, show_default=True)
-def main(coverage, metric, unicode_cutoff, set_name='train'):
+@entry_point.command(name="train")
+@click.option("--coverage", default=0.8, show_default=True)
+@click.option("--metric", default=0, show_default=True)
+@click.option(
+    "--set_name",
+    default="train",
+    show_default=True,
+    type=click.Choice(["train", "test", "val"]),
+)
+@click.option("--unicode_cutoff", default=10 ** 6, show_default=True)
+def main(coverage, metric, unicode_cutoff, set_name="train"):
     """
     Train and test character distance models.
 
@@ -139,17 +148,18 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
     set_name : str
         Define on which set to evaluate
     """
-    metrics = [ido,  # 0
-               distance.braycurtis,  # 1
-               distance.canberra,  # 2
-               distance.chebyshev,  # 3 - l_infty
-               distance.cityblock,  # 4
-               distance.correlation,  # 5
-               distance.cosine,  # 6
-               distance.euclidean,  # 7
-               distance.sqeuclidean,  # 8
-               scipy.stats.entropy,  # 9
-               ]
+    metrics = [
+        ido,  # 0
+        distance.braycurtis,  # 1
+        distance.canberra,  # 2
+        distance.chebyshev,  # 3 - l_infty
+        distance.cityblock,  # 4
+        distance.correlation,  # 5
+        distance.cosine,  # 6
+        distance.euclidean,  # 7
+        distance.sqeuclidean,  # 8
+        scipy.stats.entropy,  # 9
+    ]
     metric = metrics[metric]
 
     # config = {'coverage': coverage}
@@ -162,26 +172,27 @@ def main(coverage, metric, unicode_cutoff, set_name='train'):
     trained = train(data, unicode_cutoff, coverage, metric)
 
     # Create model for each language and store it
-    out_tmp = get_counts_by_lang(trained['common_chars'],
-                                 trained['char_counter_by_lang'])
+    out_tmp = get_counts_by_lang(
+        trained["common_chars"], trained["char_counter_by_lang"]
+    )
     language_models, chars = out_tmp
-    model_filename = ('~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle'
-                      .format(metric=metric.__name__,
-                              cutoff=unicode_cutoff))
+    model_filename = "~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle".format(
+        metric=metric.__name__, cutoff=unicode_cutoff
+    )
     model_filename = os.path.expanduser(model_filename)
-    with open(model_filename, 'wb') as handle:
-        model_info = {'language_models': language_models,
-                      'chars': chars}
+    with open(model_filename, "wb") as handle:
+        model_info = {"language_models": language_models, "chars": chars}
         pickle.dump(model_info, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     # Evaluate
-    cm_filepath = ("char_{metric}_{coverage}_{cutoff}_{set_name}.cm.csv"
-                   .format(metric=metric.__name__,
-                           coverage=coverage,
-                           cutoff=unicode_cutoff,
-                           set_name=set_name))
+    cm_filepath = "char_{metric}_{coverage}_{cutoff}_{set_name}.cm.csv".format(
+        metric=metric.__name__,
+        coverage=coverage,
+        cutoff=unicode_cutoff,
+        set_name=set_name,
+    )
     cfg = lidtk.utils.load_cfg()
-    cm_filepath = os.path.join(cfg['artifacts_path'], cm_filepath)
+    cm_filepath = os.path.join(cfg["artifacts_path"], cm_filepath)
 
 
 def train(data, unicode_cutoff, coverage, metric):
@@ -200,25 +211,29 @@ def train(data, unicode_cutoff, coverage, metric):
     results : dict
     """
     char_counter_by_lang = defaultdict(Counter)
-    for x, y in zip(data['x_train'], data['y_train']):
+    for x, y in zip(data["x_train"], data["y_train"]):
         char_counter_by_lang[y] += Counter(preprocess(x, unicode_cutoff))
 
     common_chars_by_lang = {}
     for key, character_counter in char_counter_by_lang.items():
-        common_chars_by_lang[key] = get_common_characters(character_counter,
-                                                          coverage=coverage)
+        common_chars_by_lang[key] = get_common_characters(
+            character_counter, coverage=coverage
+        )
     common_chars = set()
     for lang, char_list in common_chars_by_lang.items():
         common_chars = common_chars.union(char_list)
     common_chars = list(common_chars)
-    logging.info("|{metric} & {coverage}% & {cutoff} &  {characters} chars"
-                 .format(metric=metric.__name__,
-                         coverage=(coverage * 100),
-                         cutoff=unicode_cutoff,
-                         characters=len(common_chars)))
+    logging.info(
+        "|{metric} & {coverage}% & {cutoff} &  {characters} chars".format(
+            metric=metric.__name__,
+            coverage=(coverage * 100),
+            cutoff=unicode_cutoff,
+            characters=len(common_chars),
+        )
+    )
     results = {}
-    results['common_chars'] = common_chars
-    results['char_counter_by_lang'] = char_counter_by_lang
+    results["common_chars"] = common_chars
+    results["char_counter_by_lang"] = char_counter_by_lang
     return results
 
 
@@ -242,22 +257,21 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
     language_model = {}
     for lang, char_counter in char_counter_by_lang.items():
         total_count = sum(count for count in char_counter.values())
-        other_count = sum(count for char, count in char_counter.items()
-                          if char not in common_chars)
-        language_model[lang] = {'other': (float(other_count) /
-                                          float(total_count))}
+        other_count = sum(
+            count for char, count in char_counter.items() if char not in common_chars
+        )
+        language_model[lang] = {"other": (float(other_count) / float(total_count))}
         for char in common_chars:
-            language_model[lang][char] = (float(char_counter[char]) /
-                                          total_count)
+            language_model[lang][char] = float(char_counter[char]) / total_count
 
     logging.info("Language model ready")
-    for lang in ['deu', 'eng', 'fra']:
-        print(u"{lang}: {model}".format(lang=lang,
-                                        model=model_repr(language_model,
-                                                         lang)))
+    for lang in ["deu", "eng", "fra"]:
+        print(
+            u"{lang}: {model}".format(lang=lang, model=model_repr(language_model, lang))
+        )
 
     # should be the same for all languages
-    chars = sorted(language_model['eng'].keys())
+    chars = sorted(language_model["eng"].keys())
     print(chars)
 
     language_models = {}
@@ -266,7 +280,7 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
     return language_models, chars
 
 
-def preprocess(x, unicode_cutoff, cut_off_char=u'澳'):
+def preprocess(x, unicode_cutoff, cut_off_char=u"澳"):
     """
     Preprocess the string x.
 
@@ -305,9 +319,7 @@ def get_common_characters(character_counter, coverage=1.0):
         of all character occurences, ordered by count (most common first).
     """
     assert coverage > 0.0
-    counts = sorted(character_counter.items(),
-                    key=lambda n: (n[1], n[0]),
-                    reverse=True)
+    counts = sorted(character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True)
     chars = []
     count_sum = sum([el[1] for el in counts])
     count_sum_min = coverage * count_sum
@@ -322,8 +334,7 @@ def get_common_characters(character_counter, coverage=1.0):
 
 def model_repr(models, key):
     """Get a model representation."""
-    m = [(char, proba)
-         for char, proba in models[key].items() if proba > 0.0001]
+    m = [(char, proba) for char, proba in models[key].items() if proba > 0.0001]
     m = sorted(m, key=lambda n: n[1], reverse=True)
     s = ""
     for char, prob in m:
@@ -347,7 +358,7 @@ def get_distribution(x, chars):
         Has the same length as chars
     """
     dist = np.zeros(len(chars), dtype=np.float32)
-    other_index = chars.index('other')
+    other_index = chars.index("other")
     for el in x:
         if el in chars:
             dist[chars.index(el)] += 1
@@ -372,31 +383,25 @@ def predict(text):
     language_code : str
     """
     if language_models is None:
-        init_language_models(comp_metric, unicode_cutoff=10**6)
+        init_language_models(comp_metric, unicode_cutoff=10 ** 6)
     x_distribution = get_distribution(text, language_models_chars)
-    return predict_param(language_models,
-                         comp_metric,
-                         x_distribution,
-                         best_only=True)
+    return predict_param(language_models, comp_metric, x_distribution, best_only=True)
 
 
 def init_language_models(metric, unicode_cutoff):
     """Initialize the language_models global variable."""
-    model_filename = ('~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle'
-                      .format(metric=metric.__name__,
-                              cutoff=unicode_cutoff))
+    model_filename = "~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle".format(
+        metric=metric.__name__, cutoff=unicode_cutoff
+    )
     model_filename = os.path.expanduser(model_filename)
     # Load data (deserialize)
-    with open(model_filename, 'rb') as handle:
+    with open(model_filename, "rb") as handle:
         data = pickle.load(handle)
-    globals()['language_models'] = data['language_models']
-    globals()['language_models_chars'] = data['chars']
+    globals()["language_models"] = data["language_models"]
+    globals()["language_models_chars"] = data["chars"]
 
 
-def predict_param(language_models,
-                  comp_metric,
-                  x_distribution,
-                  best_only=True):
+def predict_param(language_models, comp_metric, x_distribution, best_only=True):
     """
     Predict the language of x.
 

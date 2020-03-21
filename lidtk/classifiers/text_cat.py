@@ -34,8 +34,9 @@ class TextCatClassifier(lidtk.classifiers.LIDClassifier):
         language_code = o.guess_language(text)
         return language_code
 
-path = 'classifiers/config/textcat.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
+
+path = "classifiers/config/textcat.yaml"
+filepath = pkg_resources.resource_filename("lidtk", path)
 classifier = TextCatClassifier(filepath)
 
 

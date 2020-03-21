@@ -32,8 +32,9 @@ class LangidClassifier(lidtk.classifiers.LIDClassifier):
         language_code, score = langid.classify(text)
         return self.map2wili(language_code)
 
-path = 'classifiers/config/langid.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
+
+path = "classifiers/config/langid.yaml"
+filepath = pkg_resources.resource_filename("lidtk", path)
 classifier = LangidClassifier(filepath)
 
 

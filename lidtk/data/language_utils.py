@@ -14,8 +14,9 @@ import click
 import numpy as np
 
 # local modules
-from lidtk.classifiers.char_distribution.char_dist_metric_train_test import \
-    get_common_characters
+from lidtk.classifiers.char_distribution.char_dist_metric_train_test import (
+    get_common_characters,
+)
 from lidtk.data import char_distribution
 import lidtk.utils
 
@@ -25,9 +26,9 @@ wiki2label = None
 cfg = lidtk.utils.load_cfg()
 
 
-@click.command(name='analyze-data', help=__doc__)
-@click.option('--lang_dir', default=cfg['lang_dir_path'], show_default=True)
-@click.option('--theta', default=0.99, show_default=True)
+@click.command(name="analyze-data", help=__doc__)
+@click.option("--lang_dir", default=cfg["lang_dir_path"], show_default=True)
+@click.option("--theta", default=0.99, show_default=True)
 def main(lang_dir, theta=0.99):
     """
     Analyze the distribution of languages.
@@ -41,8 +42,9 @@ def main(lang_dir, theta=0.99):
     files = sorted(glob.glob(lang_dir))
     lang_stats = {}
     if len(files) == 0:
-        print('No files found at \'{}\'. You might want to download first.'
-              .format(lang_dir))
+        print(
+            "No files found at '{}'. You might want to download first.".format(lang_dir)
+        )
         return
     print("theta={}".format(theta))
     print("lang:                 characters             paragraphs      ")
@@ -51,52 +53,55 @@ def main(lang_dir, theta=0.99):
         wiki_code = os.path.splitext(os.path.split(filepath)[1])[0]
         iso = get_iso(wiki_code)
         lang_data = read_language_file(filepath)
-        chars = get_characters(lang_data['paragraphs'])
+        chars = get_characters(lang_data["paragraphs"])
         char_occurences = np.array([el[1] for el in chars.items()])
         char_occurences = char_occurences / float(char_occurences.sum())
-        paraphgrah_lengths = np.array([len(el)
-                                       for el in lang_data['paragraphs']])
+        paraphgrah_lengths = np.array([len(el) for el in lang_data["paragraphs"]])
         common_chars = get_common_characters(chars, theta)  # sorted()
-        lang_stats[iso] = {'theta_100_len': len(chars),
-                           'theta_99_len': len(get_common_characters(chars,
-                                                                     0.99)),
-                           'theta_80_len': len(get_common_characters(chars,
-                                                                     0.99)),
-                           'chars': chars,
-                           'paraphgrah_len_min': paraphgrah_lengths.min(),
-                           'paraphgrah_len_max': paraphgrah_lengths.max(),
-                           'paraphgrah_len_mean': paraphgrah_lengths.mean(),
-                           }
-        print(u"{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "
-              u"| [{:>5} {:6.1f} {:>6}] '{}' ({} chars)"
-              .format(iso,
-                      len(chars),
-                      char_occurences.min() * 100,  # least common char
-                      get_percentile_like(char_occurences, 0.99) * 100,
-                      char_occurences.mean() * 100,  # mean common char
-                      char_occurences.max() * 100,  # most common char
-                      paraphgrah_lengths.min(),
-                      paraphgrah_lengths.mean(),
-                      paraphgrah_lengths.max(),
-                      u"".join(common_chars),
-                      len(common_chars)
-                      ))
-    print("Mean paragraph length of mean language paragraph lengths: {}"
-          .format(np.array([el['paraphgrah_len_mean']
-                            for el in lang_stats.values()]).mean()))
-    print("Longest paragraph length: {}"
-          .format(np.array([el['paraphgrah_len_max']
-                            for el in lang_stats.values()]).max()))
+        lang_stats[iso] = {
+            "theta_100_len": len(chars),
+            "theta_99_len": len(get_common_characters(chars, 0.99)),
+            "theta_80_len": len(get_common_characters(chars, 0.99)),
+            "chars": chars,
+            "paraphgrah_len_min": paraphgrah_lengths.min(),
+            "paraphgrah_len_max": paraphgrah_lengths.max(),
+            "paraphgrah_len_mean": paraphgrah_lengths.mean(),
+        }
+        print(
+            u"{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "
+            u"| [{:>5} {:6.1f} {:>6}] '{}' ({} chars)".format(
+                iso,
+                len(chars),
+                char_occurences.min() * 100,  # least common char
+                get_percentile_like(char_occurences, 0.99) * 100,
+                char_occurences.mean() * 100,  # mean common char
+                char_occurences.max() * 100,  # most common char
+                paraphgrah_lengths.min(),
+                paraphgrah_lengths.mean(),
+                paraphgrah_lengths.max(),
+                u"".join(common_chars),
+                len(common_chars),
+            )
+        )
+    print(
+        "Mean paragraph length of mean language paragraph lengths: {}".format(
+            np.array([el["paraphgrah_len_mean"] for el in lang_stats.values()]).mean()
+        )
+    )
+    print(
+        "Longest paragraph length: {}".format(
+            np.array([el["paraphgrah_len_max"] for el in lang_stats.values()]).max()
+        )
+    )
     i = 0
     for lang, info in lang_stats.items():
-        if info['theta_99_len'] >= 150:
+        if info["theta_99_len"] >= 150:
             i += 1
-            print("{}. {}: {} characters"
-                  .format(i, lang, info['theta_99_len']))
+            print("{}. {}: {} characters".format(i, lang, info["theta_99_len"]))
     char_distribution.main(lang_stats)
 
 
-def check_presence(lang_dir='lang'):
+def check_presence(lang_dir="lang"):
     """
     Check how many files of the wiki2iso dict are present.
 
@@ -111,16 +116,17 @@ def check_presence(lang_dir='lang'):
     """
     wiki = wiki2iso.keys()
     for wikicode in wiki:
-        path = os.path.join(lang_dir, '{}.pickle'.format(wikicode))
+        path = os.path.join(lang_dir, "{}.pickle".format(wikicode))
         if not os.path.isfile(path):
-            print("{} could not be found, but was expected due to wikifile"
-                  .format(path))
-    found_files = glob.glob('{}/*.pickle'.format(lang_dir))
+            print(
+                "{} could not be found, but was expected due to wikifile".format(path)
+            )
+    found_files = glob.glob("{}/*.pickle".format(lang_dir))
     for path in found_files:
         wikicode = path.split("/")[1].split(".")[0]
         if wikicode not in wiki2iso:
             print("Found '{}' unexpectedly".format(wikicode))
-    return {'found_files': found_files}
+    return {"found_files": found_files}
 
 
 def get_label(wiki_code):
@@ -198,7 +204,7 @@ def read_language_file(pickle_filepath):
     >>> sorted(list(data.keys()))
     ['paragraphs', 'used_pages']
     """
-    with open(pickle_filepath, 'rb') as handle:
+    with open(pickle_filepath, "rb") as handle:
         unserialized_data = pickle.load(handle)
     return unserialized_data
 
@@ -206,15 +212,14 @@ def read_language_file(pickle_filepath):
 def analyze_language_families(csv_filepath):
     """Analyze which language families are present in the dataset."""
     # Read CSV file
-    with open(csv_filepath, 'r') as fp:
-        reader = csv.reader(fp, delimiter=';', quotechar='"')
+    with open(csv_filepath, "r") as fp:
+        reader = csv.reader(fp, delimiter=";", quotechar='"')
         # next(reader, None)  # skip the headers
         wiki = [row for row in reader]
 
-    languages = sorted([el['English'] for el in wiki])
-    language_fams = [el['Language family'] for el in wiki]
-    language_family_counter = sorted(Counter(language_fams).items(),
-                                     key=lambda n: n[1])
+    languages = sorted([el["English"] for el in wiki])
+    language_fams = [el["Language family"] for el in wiki]
+    language_family_counter = sorted(Counter(language_fams).items(), key=lambda n: n[1])
     for key, value in language_family_counter:
         print("{}: {}".format(key, value))
     print(", ".join(languages))
@@ -245,12 +250,14 @@ def get_language_data(csv_filepath=None):
     """
     if csv_filepath is None:
         cfg = lidtk.utils.load_cfg()
-        csv_filepath = cfg['labels_path']
-    with open(csv_filepath, 'r') as fp:
-        wiki = [{k: v for k, v in row.items()}
-                for row in csv.DictReader(fp,
-                                          skipinitialspace=True,
-                                          delimiter=';', quotechar='"')]
+        csv_filepath = cfg["labels_path"]
+    with open(csv_filepath, "r") as fp:
+        wiki = [
+            {k: v for k, v in row.items()}
+            for row in csv.DictReader(
+                fp, skipinitialspace=True, delimiter=";", quotechar='"'
+            )
+        ]
     return wiki
 
 
@@ -263,13 +270,13 @@ def initialize(wiki):
     wiki : list of dicts
         Each dict represents a langauge
     """
-    globals()['iso2wiki'] = {}
-    globals()['wiki2iso'] = {}
-    globals()['wiki2label'] = {}
+    globals()["iso2wiki"] = {}
+    globals()["wiki2iso"] = {}
+    globals()["wiki2label"] = {}
     for el in wiki:
-        globals()['iso2wiki'][el['ISO 369-3']] = el['Wiki Code']
-        globals()['wiki2iso'][el['Wiki Code']] = el['ISO 369-3']
-        globals()['wiki2label'][el['Wiki Code']] = el['Label']
+        globals()["iso2wiki"][el["ISO 369-3"]] = el["Wiki Code"]
+        globals()["wiki2iso"][el["Wiki Code"]] = el["ISO 369-3"]
+        globals()["wiki2label"][el["Wiki Code"]] = el["Label"]
 
 
 def print_all_languages(wiki):
@@ -281,7 +288,7 @@ def print_all_languages(wiki):
     wiki : list of dicts
         Each dict represents a langauge
     """
-    languages = sorted([el['English'] for el in wiki])
+    languages = sorted([el["English"] for el in wiki])
     languages = [l for l in languages if len(l) > 0]
     print(", ".join(languages))
 
@@ -296,14 +303,15 @@ def print_language_families(wiki, found_files):
         Each dict represents a langauge
     found_files : list of str
     """
-    languages = sorted([el['English'] for el in wiki])
+    languages = sorted([el["English"] for el in wiki])
     languages = [l for l in languages if len(l) > 0]
-    language_fams = [el['Language family'] for el in wiki]
-    sorted_fams = sorted(Counter(language_fams).items(),
-                         key=lambda n: n[1],
-                         reverse=True)
-    print("## Total languages: {} ({} files)".format(len(language_fams),
-                                                     len(found_files)))
+    language_fams = [el["Language family"] for el in wiki]
+    sorted_fams = sorted(
+        Counter(language_fams).items(), key=lambda n: n[1], reverse=True
+    )
+    print(
+        "## Total languages: {} ({} files)".format(len(language_fams), len(found_files))
+    )
     for key, value in sorted_fams:
         print("{}: {}".format(key, value))
     print(", ".join(languages))
@@ -325,15 +333,15 @@ def group_by_language_family(wiki):
     families = []
     fam2index = {}
     for language in wiki:
-        eng = language['English']
-        if language['Language family'] not in fam2index:
-            fam2index[language['Language family']] = len(fam2index)
-            families.append({language['Language family']: [eng]})
+        eng = language["English"]
+        if language["Language family"] not in fam2index:
+            fam2index[language["Language family"]] = len(fam2index)
+            families.append({language["Language family"]: [eng]})
         else:
-            d = families[fam2index[language['Language family']]]
+            d = families[fam2index[language["Language family"]]]
             key = d.keys()[0]
             d[key].append(eng)
-    return {'': families}
+    return {"": families}
 
 
 def get_characters(lang_data):
@@ -350,6 +358,7 @@ def get_characters(lang_data):
     characters : Counter Object
     """
     from collections import Counter
+
     characters = Counter()  # maps the character to the count
     for paragraph in lang_data:
         characters += Counter(paragraph)
@@ -382,11 +391,12 @@ wiki = get_language_data()
 initialize(wiki)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
     found = check_presence()
     main()
     # print(globals()['wiki2iso'])
-    print_language_families(wiki, found['found_files'])
+    print_language_families(wiki, found["found_files"])
     print(group_by_language_family(wiki))

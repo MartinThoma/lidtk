@@ -31,17 +31,18 @@ def get_predictions(experiment_meta, data_module, model_module):
     n_elements = 20
 
     t0 = time.time()
-    y_pred = model.predict(data['x_test'][:n_elements])
+    y_pred = model.predict(data["x_test"][:n_elements])
     print(y_pred)
     t1 = time.time()
     elapsed_time = t1 - t0
     print("time: {}s".format(elapsed_time))
     print("time per element: {}s".format(elapsed_time / n_elements))
 
-    os.makedirs(experiment_meta['artifacts_path'])
-    pred_txt = os.path.join(experiment_meta['artifacts_path'],
-                            'predictions_langdetect.txt')
-    with open(pred_txt, 'w') as f:
+    os.makedirs(experiment_meta["artifacts_path"])
+    pred_txt = os.path.join(
+        experiment_meta["artifacts_path"], "predictions_langdetect.txt"
+    )
+    with open(pred_txt, "w") as f:
         for pred in y_pred:
             f.write("{}\n".format(pred))
 
@@ -49,27 +50,31 @@ def get_predictions(experiment_meta, data_module, model_module):
 def get_parser():
     """Get parser object."""
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-    parser = ArgumentParser(description=__doc__,
-                            formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-f", "--file",
-                        dest="experiment_filepath",
-                        required=True,
-                        help="experiment file",
-                        metavar="FILE")
+
+    parser = ArgumentParser(
+        description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "-f",
+        "--file",
+        dest="experiment_filepath",
+        required=True,
+        help="experiment file",
+        metavar="FILE",
+    )
     return parser
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
     # Read YAML experiment definition file
-    with open(args.experiment_filepath, 'r') as stream:
+    with open(args.experiment_filepath, "r") as stream:
         meta = yaml.load(stream)
     # Make paths absolute
     meta = make_paths_absolute(os.path.dirname(args.experiment_filepath), meta)
 
-    data_module = imp.load_source('data_module',
-                                  meta['dataset']['script_path'])
-    model_module = imp.load_source('data_module', meta['model']['script_path'])
+    data_module = imp.load_source("data_module", meta["dataset"]["script_path"])
+    model_module = imp.load_source("data_module", meta["model"]["script_path"])
 
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(meta)

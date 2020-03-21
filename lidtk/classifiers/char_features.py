@@ -51,18 +51,20 @@ class FeatureExtractor(object):
         for x, y in zip(xs, ys):
             char_counter_by_lang[y] += Counter(x)
 
-        logging.info("get common characters to get coverage of {}"
-                     .format(self.coverage))
+        logging.info(
+            "get common characters to get coverage of {}".format(self.coverage)
+        )
         common_chars_by_lang = {}
         for key, character_counter in char_counter_by_lang.items():
             common_chars_by_lang[key] = self._get_common_characters(
-                character_counter, coverage=self.coverage)
+                character_counter, coverage=self.coverage
+            )
 
         logging.info("unify set of common characters")
         common_chars = set()
         for lang, char_list in common_chars_by_lang.items():
             common_chars = common_chars.union(char_list)
-        common_chars.add('other')
+        common_chars.add("other")
         self.chars = list(common_chars)
         for index, char in enumerate(self.chars):
             self.char2index[char] = index
@@ -95,7 +97,7 @@ class FeatureExtractor(object):
             if el in self.chars:
                 dist[self.char2index[el]] += 1.0
             else:
-                dist[self.char2index['other']] += 1.0
+                dist[self.char2index["other"]] += 1.0
         # Normalize
         dist /= dist.sum()
         return dist
@@ -115,12 +117,10 @@ class FeatureExtractor(object):
             TODO
         """
         target_shape = (len(xs), len(self.chars))
-        logging.info("transform_multiple to target_shape={}"
-                     .format(target_shape))
+        logging.info("transform_multiple to target_shape={}".format(target_shape))
         dists = np.zeros(target_shape)
         if bar:
-            bar = progressbar.ProgressBar(redirect_stdout=True,
-                                          max_value=len(xs))
+            bar = progressbar.ProgressBar(redirect_stdout=True, max_value=len(xs))
         for i in range(len(xs)):
             dists[i] = self.transform_single(xs[i])
             if bar:
@@ -143,17 +143,17 @@ class FeatureExtractor(object):
         xs : ndarray
         """
         cfg = lidtk.utils.load_cfg()
-        train_xs_pickle = (cfg['train_xs_pickle_path']
-                           .format(self.coverage, set_name))
+        train_xs_pickle = cfg["train_xs_pickle_path"].format(self.coverage, set_name)
         if not os.path.exists(train_xs_pickle + ".npy"):
-            logging.info("Start creating {} x {}"
-                         .format(len(data[set_name]), len(self.chars)))
+            logging.info(
+                "Start creating {} x {}".format(len(data[set_name]), len(self.chars))
+            )
             xs = self.transform_multiple(data[set_name], bar=True)
             # Serialize the transformed data
             np.save(train_xs_pickle, xs)
         else:
             # Load the transformed data
-            xs = np.load(train_xs_pickle + '.npy')
+            xs = np.load(train_xs_pickle + ".npy")
         return xs
 
     def _get_common_characters(self, character_counter, coverage=1.0):
@@ -174,9 +174,9 @@ class FeatureExtractor(object):
             common first).
         """
         assert coverage > 0.0
-        counts = sorted(character_counter.items(),
-                        key=lambda n: (n[1], n[0]),
-                        reverse=True)
+        counts = sorted(
+            character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True
+        )
         chars = []
         count_sum = sum([el[1] for el in counts])
         count_sum_min = coverage * count_sum
@@ -204,21 +204,20 @@ def get_features(config, data):
         'vectorizer' and 'xs'
     """
     cfg = lidtk.utils.load_cfg()
-    feature_extractor_path = (cfg['feature_extractor_path']
-                              .format(config['coverage']))
+    feature_extractor_path = cfg["feature_extractor_path"].format(config["coverage"])
     if not os.path.isfile(feature_extractor_path):
         logging.info("Create vectorizer")
-        vectorizer = FeatureExtractor(data['x_train'],
-                                      data['y_train'],
-                                      coverage=config['coverage'])
+        vectorizer = FeatureExtractor(
+            data["x_train"], data["y_train"], coverage=config["coverage"]
+        )
         # Serialize trained vectorizer
-        with open(feature_extractor_path, 'wb') as f:
+        with open(feature_extractor_path, "wb") as f:
             pickle.dump(vectorizer, f)
     else:
         # Load the trained vectorizer
-        with open(feature_extractor_path, 'rb') as handle:
+        with open(feature_extractor_path, "rb") as handle:
             vectorizer = pickle.load(handle)
     xs = {}
-    for set_name in ['x_val', 'x_train', 'x_test']:
+    for set_name in ["x_val", "x_train", "x_test"]:
         xs[set_name] = vectorizer.get_xs_set(data, set_name)
-    return {'vectorizer': vectorizer, 'xs': xs}
+    return {"vectorizer": vectorizer, "xs": xs}

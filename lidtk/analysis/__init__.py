@@ -36,8 +36,11 @@ def manual_error_analysis(errors, author_known_languages):
         if label not in errors:
             continue
         for true_lang, errors_lang in conv_err[label].items():
-            print("## True: {}, Predicted: {} (count: {})"
-                  .format(true_lang, label, len(errors_lang)))
+            print(
+                "## True: {}, Predicted: {} (count: {})".format(
+                    true_lang, label, len(errors_lang)
+                )
+            )
             for nb, el in enumerate(errors_lang):
                 print("{}. {}".format(nb, el))
             print("")

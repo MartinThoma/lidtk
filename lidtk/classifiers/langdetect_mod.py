@@ -48,13 +48,12 @@ class LangdetectClassifier(lidtk.classifiers.LIDClassifier):
         probabilities = detect_langs(text)
         converted = []
         for el in probabilities:
-            converted.append({'lang': self.map2wili(el.lang),
-                              'prob': el.prob})
+            converted.append({"lang": self.map2wili(el.lang), "prob": el.prob})
         return converted
 
 
-path = 'classifiers/config/langdetect.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
+path = "classifiers/config/langdetect.yaml"
+filepath = pkg_resources.resource_filename("lidtk", path)
 classifier = LangdetectClassifier(filepath)
 
 
@@ -64,8 +63,8 @@ classifier = LangdetectClassifier(filepath)
 entry_point = lidtk.classifiers.classifier_cli_factor(classifier)
 
 
-@entry_point.command(name='predict_proba')
-@click.option('--text')
+@entry_point.command(name="predict_proba")
+@click.option("--text")
 def predict_proba_cli(text):
     """
     CLI function for predicting the probability of a language of a text.

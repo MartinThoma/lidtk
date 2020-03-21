@@ -26,9 +26,9 @@ from lidtk.utils import make_path_absolute
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-@click.command(name='download', help=__doc__)
-@click.option('--to_extract', default=1000, show_default=True)
-@click.option('--target_dir', default='~/.data/langs/', show_default=True)
+@click.command(name="download", help=__doc__)
+@click.option("--to_extract", default=1000, show_default=True)
+@click.option("--target_dir", default="~/.data/langs/", show_default=True)
 def main(to_extract, target_dir):
     """
     Extract language data from Wikipedia projects.
@@ -45,18 +45,14 @@ def main(to_extract, target_dir):
     for lang in get_wiki_codes():
         logging.info("#" * 80)
         logging.info(lang)
-        pickle_filename = os.path.join(target_dir,
-                                       '{lang}.pickle'.format(lang=lang))
+        pickle_filename = os.path.join(target_dir, "{lang}.pickle".format(lang=lang))
         if not os.path.exists(pickle_filename):
             paragraphs, used_pages = find_pages(lang, to_extract)
             if len(paragraphs) < to_extract:
                 continue
-            data = {'paragraphs': paragraphs[:to_extract],
-                    'used_pages': used_pages}
-            with open(pickle_filename, 'wb') as handle:
-                pickle.dump(data,
-                            handle,
-                            protocol=pickle.HIGHEST_PROTOCOL)
+            data = {"paragraphs": paragraphs[:to_extract], "used_pages": used_pages}
+            with open(pickle_filename, "wb") as handle:
+                pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def get_wiki_codes(skip_langs=None):
@@ -72,8 +68,7 @@ def get_wiki_codes(skip_langs=None):
     -------
     wiki_codes : list
     """
-    wiki_languages_filepath = pkg_resources.resource_filename('lidtk',
-                                                              'languages.csv')
+    wiki_languages_filepath = pkg_resources.resource_filename("lidtk", "languages.csv")
     with open(wiki_languages_filepath) as f:
         content = f.read().strip().split("\n")
     content = [el.strip() for el in content]
@@ -99,8 +94,8 @@ def normalize_data(paragraph):
     -------
     paragraph : str
     """
-    paragraph = unicodedata.normalize('NFC', paragraph)
-    paragraph = re.sub('\s+', ' ', paragraph).strip()
+    paragraph = unicodedata.normalize("NFC", paragraph)
+    paragraph = re.sub("\s+", " ", paragraph).strip()
     return paragraph.strip()
 
 
@@ -141,22 +136,22 @@ def is_literature(paragraph):
     -------
     is_literature : bool
     """
-    doi_regex = re.compile(r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/"""
-                           r"""(?:(?!["&\'<>])\S)+)""")
+    doi_regex = re.compile(
+        r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/""" r"""(?:(?!["&\'<>])\S)+)"""
+    )
     issn_regex = re.compile(r"""ISSN \d+""", re.IGNORECASE)
     vol_regex = re.compile(r"""vol\. [IVCXL\d]+""", re.IGNORECASE)
-    return ("ISBN" in paragraph or
-            doi_regex.search(paragraph) or
-            issn_regex.search(paragraph) or
-            vol_regex.search(paragraph) or
-            "https://" in paragraph or
-            "http://" in paragraph)
+    return (
+        "ISBN" in paragraph
+        or doi_regex.search(paragraph)
+        or issn_regex.search(paragraph)
+        or vol_regex.search(paragraph)
+        or "https://" in paragraph
+        or "http://" in paragraph
+    )
 
 
-def find_pages(lang_wiki='de',
-               to_extract=1000,
-               max_time_s=4 * 60 * 60,
-               verbose=False):
+def find_pages(lang_wiki="de", to_extract=1000, max_time_s=4 * 60 * 60, verbose=False):
     """
     Extract paragraphs from random wikipedia pages of a given language.
 
@@ -179,56 +174,47 @@ def find_pages(lang_wiki='de',
     queried = []
     bar = progressbar.ProgressBar(redirect_stdout=True, max_value=to_extract)
     t0 = time.time()
-    while (len(extracted_paragraphs) < to_extract and
-           (time.time() - t0) < max_time_s):
+    while len(extracted_paragraphs) < to_extract and (time.time() - t0) < max_time_s:
         random_pages = wikipedia.random(pages=10)
         for random_page in random_pages:
-            if '/' in random_page:
+            if "/" in random_page:
                 # see https://to.wikipedia.org/wiki/Tuʻi_Tonga_Fefine/en
                 continue
-            parse_page(random_page,
-                       extracted_paragraphs,
-                       queried,
-                       used_pages,
-                       bar,
-                       verbose,
-                       to_extract)
+            parse_page(
+                random_page,
+                extracted_paragraphs,
+                queried,
+                used_pages,
+                bar,
+                verbose,
+                to_extract,
+            )
     # print("Start extracting pages")
     if False and len(extracted_paragraphs) < to_extract:
-        apcontinue = ''
+        apcontinue = ""
         max_reached = False
         while not max_reached and len(extracted_paragraphs) < to_extract:
-            out = get_all_page_titles(lang_wiki,
-                                      apcontinue=apcontinue,
-                                      max_pages=10)
-            page_titles_queue = out['page_titles']
-            max_reached = out['max_reached']
-            apcontinue = out['apcontinue']
+            out = get_all_page_titles(lang_wiki, apcontinue=apcontinue, max_pages=10)
+            page_titles_queue = out["page_titles"]
+            max_reached = out["max_reached"]
+            apcontinue = out["apcontinue"]
             random.shuffle(page_titles_queue)
             print("Loaded {} pages".format(len(page_titles_queue)))
-            while (len(extracted_paragraphs) < to_extract and
-                   len(page_titles_queue) > 0):
+            while len(extracted_paragraphs) < to_extract and len(page_titles_queue) > 0:
                 print(len(page_titles_queue))
                 page_title, revision_id = page_titles_queue.pop()
-                parse_page(page_title,
-                           extracted_paragraphs,
-                           queried,
-                           used_pages,
-                           bar,
-                           verbose)
+                parse_page(
+                    page_title, extracted_paragraphs, queried, used_pages, bar, verbose
+                )
 
     bar.update(to_extract)
     bar.finish()
     return extracted_paragraphs, list(used_pages)
 
 
-def parse_page(random_page,
-               extracted_paragraphs,
-               queried,
-               used_pages,
-               bar,
-               verbose,
-               to_extract):
+def parse_page(
+    random_page, extracted_paragraphs, queried, used_pages, bar, verbose, to_extract
+):
     """
     Parse a page and add its content to the corpus.
 
@@ -273,7 +259,7 @@ def parse_page(random_page,
                 print("###")
 
 
-def get_all_page_titles(lang, apcontinue='', max_pages=float('inf')):
+def get_all_page_titles(lang, apcontinue="", max_pages=float("inf")):
     """
     Get all page titles.
 
@@ -295,25 +281,31 @@ def get_all_page_titles(lang, apcontinue='', max_pages=float('inf')):
     """
     page_titles = []
     apcontinue = True
-    q = ["list=allpages", "aplimit=2", "apfilterredir=nonredirects",
-         "apcontinue={}".format(apcontinue)]
+    q = [
+        "list=allpages",
+        "aplimit=2",
+        "apfilterredir=nonredirects",
+        "apcontinue={}".format(apcontinue),
+    ]
     max_reached = False
     while apcontinue and len(page_titles) < max_pages:
         result = query(lang, q)
-        page_titles += [(p['title'], p['pageid'])
-                        for p in result['query']['allpages']]
-        if 'continue' not in result:
+        page_titles += [(p["title"], p["pageid"]) for p in result["query"]["allpages"]]
+        if "continue" not in result:
             print("continue not in result")
             apcontinue = None
             break
-        apcontinue = result['continue']['apcontinue']
+        apcontinue = result["continue"]["apcontinue"]
         q[2] = u"apcontinue={}".format(apcontinue)
         if len(page_titles) > max_pages:
             print("max_pages reached")
             max_reached = True
             break
-    return {'page_titles': page_titles, 'apcontinue': apcontinue,
-            'max_reached': max_reached}
+    return {
+        "page_titles": page_titles,
+        "apcontinue": apcontinue,
+        "max_reached": max_reached,
+    }
 
 
 def query(lang, query):
@@ -330,8 +322,9 @@ def query(lang, query):
     decoded_response : dict
     """
     query = "&".join(query)
-    q = (u"https://{lang}.wikipedia.org/w/api.php?action=query&{query}"
-         "&format=json"
-         .format(lang=lang, query=query))
+    q = (
+        u"https://{lang}.wikipedia.org/w/api.php?action=query&{query}"
+        "&format=json".format(lang=lang, query=query)
+    )
     r = requests.get(q)
     return json.loads(r.text)

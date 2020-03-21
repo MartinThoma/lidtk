@@ -13,12 +13,9 @@ import numpy as np
 from lidtk.data import wili
 
 
-@click.command(name='analyze-unicode-block', help=__doc__)
-@click.option('--start', default=123, show_default=True)
-@click.option('--end',
-              default=456,
-              show_default=True,
-              help='End of Unicode range')
+@click.command(name="analyze-unicode-block", help=__doc__)
+@click.option("--start", default=123, show_default=True)
+@click.option("--end", default=456, show_default=True, help="End of Unicode range")
 def main(start, end):
     """Run."""
     # Read data
@@ -26,7 +23,7 @@ def main(start, end):
     logging.info("Finished loading data")
 
     lang_amounts = {}
-    for paragraph, label in zip(data['x_train'], data['y_train']):
+    for paragraph, label in zip(data["x_train"], data["y_train"]):
         if label not in lang_amounts:
             lang_amounts[label] = []
         chars_in_range = 0
@@ -39,9 +36,8 @@ def main(start, end):
     for key in lang_amounts.keys():
         lang_amounts[key] = np.array(lang_amounts[key]).mean() * 100
 
-    print('Label    Chars in range [{} - {}]'.format(start, end))
-    print('-' * 80)
+    print("Label    Chars in range [{} - {}]".format(start, end))
+    print("-" * 80)
     lang_a = sorted(lang_amounts.items(), key=lambda n: n[1], reverse=True)
     for i, (label, chars_in_range) in enumerate(lang_a, start=1):
-        print('{:>3}. {:<10}  {:>5.2f}%'
-              .format(i, label, chars_in_range))
+        print("{:>3}. {:<10}  {:>5.2f}%".format(i, label, chars_in_range))

@@ -30,12 +30,12 @@ class CLD2Classifier(lidtk.classifiers.LIDClassifier):
         ----------
         text : str
         """
-        is_reliable, text_bytes_found, details = cld2.detect(text,
-                                                             bestEffort=True)
+        is_reliable, text_bytes_found, details = cld2.detect(text, bestEffort=True)
         return self.map2wili(details[0].language_code)
 
-path = 'classifiers/config/cld2.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
+
+path = "classifiers/config/cld2.yaml"
+filepath = pkg_resources.resource_filename("lidtk", path)
 classifier = CLD2Classifier(filepath)
 
 

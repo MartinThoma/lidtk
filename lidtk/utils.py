@@ -40,8 +40,8 @@ def get_software_info():
     sw_info : dict
     """
     sw_info = {}
-    sw_info['Platform'] = platform.platform()
-    sw_info['Python Version'] = platform.python_version()
+    sw_info["Platform"] = platform.platform()
+    sw_info["Python Version"] = platform.python_version()
     return sw_info
 
 
@@ -54,22 +54,22 @@ def get_hardware_info():
     hw_info : dict
     """
     hw_info = {}
-    cpuinfo_path = '/proc/cpuinfo'
+    cpuinfo_path = "/proc/cpuinfo"
     if os.path.isfile(cpuinfo_path):
         with open(cpuinfo_path) as f:
             cpuinfo = f.readlines()
         for line in cpuinfo:
             if "model name" in line:
-                hw_info['CPU'] = line.strip()
+                hw_info["CPU"] = line.strip()
                 break
 
-    gpuinfo_path = '/proc/driver/nvidia/version'
+    gpuinfo_path = "/proc/driver/nvidia/version"
     if os.path.isfile(gpuinfo_path):
         with open(gpuinfo_path) as f:
             version = f.read().strip()
-        hw_info['GPU driver'] = version
+        hw_info["GPU driver"] = version
     try:
-        hw_info['VGA'] = find_vga()
+        hw_info["VGA"] = find_vga()
     except:
         pass
     return hw_info
@@ -83,9 +83,9 @@ def find_vga():
     -------
     vga : str
     """
-    vga = subprocess.check_output("lspci | grep -i 'vga\|3d\|2d'",
-                                  shell=True,
-                                  executable='/bin/bash')
+    vga = subprocess.check_output(
+        "lspci | grep -i 'vga\|3d\|2d'", shell=True, executable="/bin/bash"
+    )
     return str(vga).strip()
 
 
@@ -102,9 +102,9 @@ def load_cfg(yaml_filepath=None):
     cfg : dict
     """
     if yaml_filepath is None:
-        yaml_filepath = pkg_resources.resource_filename('lidtk', 'config.yaml')
+        yaml_filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
     # Read YAML experiment definition file
-    with open(yaml_filepath, 'r') as stream:
+    with open(yaml_filepath, "r") as stream:
         cfg = yaml.load(stream)
     cfg = make_paths_absolute(os.path.dirname(yaml_filepath), cfg)
     return cfg
@@ -124,8 +124,8 @@ def make_paths_absolute(dir_, cfg):
     cfg : dict
     """
     for key in cfg.keys():
-        if hasattr(key, 'endswith') and key.endswith("_path"):
-            if cfg[key].startswith('~'):
+        if hasattr(key, "endswith") and key.endswith("_path"):
+            if cfg[key].startswith("~"):
                 cfg[key] = os.path.expanduser(cfg[key])
             else:
                 cfg[key] = os.path.join(dir_, cfg[key])
@@ -135,17 +135,12 @@ def make_paths_absolute(dir_, cfg):
     return cfg
 
 
-@click.command(name='map',
-               help='Map predictions to something known by WiLI')
-@click.option('--config',
-              type=click.Path(exists=True),
-              help='Path to a YAML configuration file')
-@click.option('--source',
-              type=click.Path(exists=True),
-              help='Path to a txt file')
-@click.option('--dest',
-              type=click.Path(exists=False),
-              help='Path to a txt file')
+@click.command(name="map", help="Map predictions to something known by WiLI")
+@click.option(
+    "--config", type=click.Path(exists=True), help="Path to a YAML configuration file"
+)
+@click.option("--source", type=click.Path(exists=True), help="Path to a txt file")
+@click.option("--dest", type=click.Path(exists=False), help="Path to a txt file")
 def map_classification_result(config, source, dest):
     """
     Map the classification to something known by WiLI.
@@ -159,19 +154,19 @@ def map_classification_result(config, source, dest):
     cfg = load_cfg(config)
 
     # Read data
-    with open(source, 'r') as fp:
+    with open(source, "r") as fp:
         read_lines = fp.readlines()
-        read_lines = [line.rstrip('\n') for line in read_lines]
+        read_lines = [line.rstrip("\n") for line in read_lines]
 
     # Create new data
     new_lines = []
     for line in read_lines:
-        if line in cfg['mapping']:
-            new_lines.append(cfg['mapping'][line])
+        if line in cfg["mapping"]:
+            new_lines.append(cfg["mapping"][line])
         else:
-            new_lines.append('unk')
-            logging.warning('Map \'{}\' to \'unk\''.format(line))
+            new_lines.append("unk")
+            logging.warning("Map '{}' to 'unk'".format(line))
 
     # Write text file
-    with open(dest, 'w') as fp:
-        fp.write('\n'.join(new_lines))
+    with open(dest, "w") as fp:
+        fp.write("\n".join(new_lines))

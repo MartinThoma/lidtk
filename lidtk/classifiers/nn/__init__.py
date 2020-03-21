@@ -21,14 +21,14 @@ config = None
 ###############################################################################
 # CLI                                                                         #
 ###############################################################################
-@click.group(name='nn')
+@click.group(name="nn")
 def entry_point():
     """Use a neural network classifier."""
     pass
 
 
-@entry_point.command(name='predict')
-@click.option('--text')
+@entry_point.command(name="predict")
+@click.option("--text")
 def predict_cli(text):
     """
     Command line interface function for predicting the language of a text.
@@ -41,14 +41,20 @@ def predict_cli(text):
     print(predict(text))
 
 
-@entry_point.command(name='wili')
-@click.option('--result_file',
-              default='char_dist_metric_results.txt', show_default=True,
-              help='Where to store the predictions')
-@click.option('--config',
-              default='config.yaml', show_default=True,
-              type=click.Path(exists=True),
-              help='configuration file for the classifier')
+@entry_point.command(name="wili")
+@click.option(
+    "--result_file",
+    default="char_dist_metric_results.txt",
+    show_default=True,
+    help="Where to store the predictions",
+)
+@click.option(
+    "--config",
+    default="config.yaml",
+    show_default=True,
+    type=click.Path(exists=True),
+    help="configuration file for the classifier",
+)
 def eval_wili(result_file, config):
     """
     CLI function evaluating the classifier on WiLI.
@@ -58,7 +64,7 @@ def eval_wili(result_file, config):
     result_file : str
         Path to a file where the results will be stored
     """
-    globals()['config'] = lidtk.utils.load_cfg(config)
+    globals()["config"] = lidtk.utils.load_cfg(config)
     init_nn(config)
     lidtk.classifiers.eval_wili(result_file, predict)
 
@@ -79,7 +85,7 @@ def predict(text):
     language : str
     """
     features = lidtk.features.extract(config, text)
-    prediction = globals()['nn'].predict(features)
+    prediction = globals()["nn"].predict(features)
     return prediction
 
 
@@ -92,15 +98,15 @@ def init_nn(config):
     config : dict
     """
     import keras.models
-    weigths = config['classifier']['weight_path']
-    globals()['nn'] = keras.models.load_model(weigths)
+
+    weigths = config["classifier"]["weight_path"]
+    globals()["nn"] = keras.models.load_model(weigths)
 
 
-@entry_point.command(name='train')
-@click.option('--config',
-              default='config.yaml',
-              show_default=True,
-              type=click.Path(exists=True))
+@entry_point.command(name="train")
+@click.option(
+    "--config", default="config.yaml", show_default=True, type=click.Path(exists=True)
+)
 def train(config, data=None):
     """
     Train a neural network.
@@ -115,7 +121,8 @@ def train(config, data=None):
         # Read data
         data = wili.load_data()
         logging.info("Finished loading data")
-    nn_module = imp.load_source('nn_module', cfg['classifier']['script_path'])
-    model = nn_module.create_model(lidtk.features.get_dim(cfg),
-                                   len(set(data['y_train'])))
+    nn_module = imp.load_source("nn_module", cfg["classifier"]["script_path"])
+    model = nn_module.create_model(
+        lidtk.features.get_dim(cfg), len(set(data["y_train"]))
+    )
     print(model.summary())

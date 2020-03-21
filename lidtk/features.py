@@ -21,12 +21,12 @@ def extract(cfg, text):
     -------
     features : object
     """
-    if cfg['features']['type'] == 'raw':
+    if cfg["features"]["type"] == "raw":
         return text
-    elif cfg['features']['type'] == 'tfidf':
+    elif cfg["features"]["type"] == "tfidf":
         return get_tfidif_features(cfg, [text])[0]
     else:
-        raise NotImplemented("Feature: {}".format(cfg['features']['type']))
+        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
 
 
 def get_dim(cfg):
@@ -41,12 +41,12 @@ def get_dim(cfg):
     -------
     feature_dim : int
     """
-    if cfg['features']['type'] == 'raw':
-        raise NotImplemented("Feature: {}".format(cfg['features']['type']))
-    elif cfg['features']['type'] == 'tfidf':
+    if cfg["features"]["type"] == "raw":
+        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
+    elif cfg["features"]["type"] == "tfidf":
         pass  # TODO
     else:
-        raise NotImplemented("Feature: {}".format(cfg['features']['type']))
+        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
 
 
 def train_tfidf_features(config, data):
@@ -60,22 +60,24 @@ def train_tfidf_features(config, data):
     """
     if config is None:
         config = {}
-    if 'features' not in config:
-        config['features'] = {}
-    if 'min_df' not in config['features']:
-        config['features']['min_df'] = 50
-    vectorizer = TfidfVectorizer(analyzer='char',
-                                 min_df=config['features']['min_df'],
-                                 lowercase=config['features']['lowercase'],
-                                 norm=config['features']['norm'])
+    if "features" not in config:
+        config["features"] = {}
+    if "min_df" not in config["features"]:
+        config["features"]["min_df"] = 50
+    vectorizer = TfidfVectorizer(
+        analyzer="char",
+        min_df=config["features"]["min_df"],
+        lowercase=config["features"]["lowercase"],
+        norm=config["features"]["norm"],
+    )
     xs = {}
-    vectorizer.fit(data['x_train'])
+    vectorizer.fit(data["x_train"])
     # Serialize trained vectorizer
-    with open(config['features']['name'], 'wb') as fin:
+    with open(config["features"]["name"], "wb") as fin:
         pickle.dump(vectorizer, fin)
-    for set_name in ['x_train', 'x_test', 'x_val']:
+    for set_name in ["x_train", "x_test", "x_val"]:
         xs[set_name] = vectorizer.transform(data[set_name]).toarray()
-    return {'vectorizer': vectorizer, 'xs': xs}
+    return {"vectorizer": vectorizer, "xs": xs}
 
 
 def get_tfidif_features(cfg, samples):
@@ -91,9 +93,9 @@ def get_tfidif_features(cfg, samples):
     -------
     tfidf_features : ndarray
     """
-    if 'vectorizer' not in cfg['features']:
+    if "vectorizer" not in cfg["features"]:
         # Load data (deserialize)
-        with open(cfg['features']['vectorizer_path'], 'rb') as handle:
+        with open(cfg["features"]["vectorizer_path"], "rb") as handle:
             vectorizer = pickle.load(handle)
-        cfg['features']['vectorizer'] = vectorizer
-    return vectorizer.transform(cfg['features']['vectorizer'])
+        cfg["features"]["vectorizer"] = vectorizer
+    return vectorizer.transform(cfg["features"]["vectorizer"])

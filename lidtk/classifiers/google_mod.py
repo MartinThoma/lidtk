@@ -28,14 +28,16 @@ class GCClassifier(lidtk.classifiers.LIDClassifier):
         text : str
         """
         from google.cloud import translate
+
         translate_client = translate.Client()
         result = translate_client.detect_language(text)
         # print('Confidence: {}'.format(result['confidence']))
         # print('Language: {}'.format(result['language']))
-        return result['language']  # self.map2wili(details[0].language_code)
+        return result["language"]  # self.map2wili(details[0].language_code)
 
-path = 'classifiers/config/google-cloud.yaml'
-filepath = pkg_resources.resource_filename('lidtk', path)
+
+path = "classifiers/config/google-cloud.yaml"
+filepath = pkg_resources.resource_filename("lidtk", path)
 classifier = GCClassifier(filepath)
 
 
@@ -45,13 +47,14 @@ classifier = GCClassifier(filepath)
 entry_point = lidtk.classifiers.classifier_cli_factor(classifier)
 
 
-@entry_point.command(name='list-languages')
+@entry_point.command(name="list-languages")
 def list_languages():
     """List all available languages."""
     from google.cloud import translate
+
     translate_client = translate.Client()
 
     results = translate_client.get_languages()
 
     for language in results:
-        print(u'{name} ({language})'.format(**language))
+        print(u"{name} ({language})".format(**language))

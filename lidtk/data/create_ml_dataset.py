@@ -20,9 +20,11 @@ import lidtk
 
 random.seed(0)
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
-                    level=logging.DEBUG,
-                    stream=sys.stdout)
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s %(message)s",
+    level=logging.DEBUG,
+    stream=sys.stdout,
+)
 
 
 def normalize_data(paragraph):
@@ -31,21 +33,25 @@ def normalize_data(paragraph):
 
     Some symbols can be written in multiple ways.
     """
-    paragraph = unicodedata.normalize('NFC', paragraph)
-    paragraph = re.sub('\s+', ' ', paragraph).strip()
+    paragraph = unicodedata.normalize("NFC", paragraph)
+    paragraph = re.sub("\s+", " ", paragraph).strip()
     return paragraph
 
 
-@click.command(name='create-dataset', help=__doc__)
-@click.option('--nb_elements', default=1000, show_default=True)
-@click.option('--source_path',
-              default='~/.lidtk/lang/*.pickle',
-              show_default=True,
-              help='Path to directory where the source pickle files are.')
-@click.option('--data_path',
-              default='~/.lidtk/data',
-              show_default=True,
-              help='Path to directory where the created dataset gets stored.')
+@click.command(name="create-dataset", help=__doc__)
+@click.option("--nb_elements", default=1000, show_default=True)
+@click.option(
+    "--source_path",
+    default="~/.lidtk/lang/*.pickle",
+    show_default=True,
+    help="Path to directory where the source pickle files are.",
+)
+@click.option(
+    "--data_path",
+    default="~/.lidtk/data",
+    show_default=True,
+    help="Path to directory where the created dataset gets stored.",
+)
 def main(nb_elements, source_path, data_path):
     """
     Create dataset.
@@ -58,9 +64,9 @@ def main(nb_elements, source_path, data_path):
     * y_test.txt
     * urls.txt
     """
-    set_names = ['train', 'test']
-    xs = {'train': [], 'test': []}
-    ys = {'train': [], 'test': []}
+    set_names = ["train", "test"]
+    xs = {"train": [], "test": []}
+    ys = {"train": [], "test": []}
     urls = []
     lang_path = lidtk.utils.make_path_absolute(source_path)
     files = sorted(glob.glob(lang_path))
@@ -70,11 +76,14 @@ def main(nb_elements, source_path, data_path):
         label = language_utils.get_label(wiki_code)
         lang_data_p = language_utils.read_language_file(filepath)
 
-        lang_data = lang_data_p['paragraphs']
-        used_pages = lang_data_p['used_pages']
+        lang_data = lang_data_p["paragraphs"]
+        used_pages = lang_data_p["used_pages"]
         for page_id in used_pages:
-            urls.append("https://{lang}.wikipedia.org/w/index.php?oldid={id}"
-                        .format(lang=wiki_code, id=page_id))
+            urls.append(
+                "https://{lang}.wikipedia.org/w/index.php?oldid={id}".format(
+                    lang=wiki_code, id=page_id
+                )
+            )
 
         # normalize
         lang_data = [normalize_data(el) for el in lang_data]
@@ -83,7 +92,7 @@ def main(nb_elements, source_path, data_path):
         indices = list(range(nb_elements))
         nb_train = int(nb_elements / 2)
         random.shuffle(indices)
-        indices = {'train': indices[:nb_train], 'test': indices[nb_train:]}
+        indices = {"train": indices[:nb_train], "test": indices[nb_train:]}
         for set_name in set_names:
             for i in indices[set_name]:
                 xs[set_name].append(lang_data[i])
@@ -102,18 +111,17 @@ def main(nb_elements, source_path, data_path):
         data_path = lidtk.utils.make_path_absolute(data_path)
         dataset_filepath = os.path.join(data_path, "x_{}.txt".format(set_name))
         logging.debug("Write dataset_filepath={}".format(dataset_filepath))
-        with open(dataset_filepath, 'w') as f:
+        with open(dataset_filepath, "w") as f:
             for el in xs[set_name]:
-                f.write(el + '\n')
+                f.write(el + "\n")
 
         labels_filepath = os.path.join(data_path, "y_{}.txt".format(set_name))
-        with open(labels_filepath, 'w') as f:
+        with open(labels_filepath, "w") as f:
             for el in ys[set_name]:
-                f.write(el + '\n')
+                f.write(el + "\n")
 
         urls_filepath = os.path.join(data_path, "urls_{}.txt".format(set_name))
-        with open(urls_filepath, 'w') as f:
+        with open(urls_filepath, "w") as f:
             for el in urls:  # [set_name]
-                f.write(el + '\n')
-    logging.info("Done writing files to {}"
-                 .format(data_path))
+                f.write(el + "\n")
+    logging.info("Done writing files to {}".format(data_path))
