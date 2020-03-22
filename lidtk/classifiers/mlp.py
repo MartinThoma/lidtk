@@ -17,6 +17,7 @@ from lidtk.classifiers import tfidf_features as feature_extractor_module
 from lidtk.data import wili
 from lidtk.utils import load_cfg
 
+logger = logging.getLogger(__name__)
 model_name = "mlp-3layer-tfidf-50"
 model = None
 
@@ -59,7 +60,7 @@ def main_loaded(config, data_module, feature_extractor_module):
         data[set_name] = wili.lang_codes_to_one_hot(data[set_name], wili.labels_s)
     # data['x_test'] = vectorizer.transform(data['x_test'])
     optimizer = get_optimizer(config)
-    logging.debug(data["x_train"][0])
+    logger.debug(data["x_train"][0])
     model = load_model(config, data["x_train"][0].shape)
     model.compile(
         loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"]
@@ -79,9 +80,7 @@ def main_loaded(config, data_module, feature_extractor_module):
 
     t2 = time.time()
     model.save(config["classification"]["artifacts_path"])
-    logging.info(
-        "Save model to '{}'".format(config["classification"]["artifacts_path"])
-    )
+    logger.info("Save model to '{}'".format(config["classification"]["artifacts_path"]))
     preds = model.predict(data["x_test"])
     y_pred = np.argmax(preds, axis=1)
     y_true = np.argmax(data["y_test"], axis=1)

@@ -389,14 +389,3 @@ def get_percentile_like(xs, min_amount):
 
 wiki = get_language_data()
 initialize(wiki)
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
-    found = check_presence()
-    main()
-    # print(globals()['wiki2iso'])
-    print_language_families(wiki, found["found_files"])
-    print(group_by_language_family(wiki))

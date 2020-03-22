@@ -34,18 +34,16 @@ from scipy.spatial import distance
 
 # First party modules
 import lidtk.classifiers
-
-# Needed to import for pickle
 from lidtk.classifiers.char_features import FeatureExtractor  # noqa
 from lidtk.data import wili
-
 
 random.seed(0)
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
-    level=logging.DEBUG,
+    level=logging.INFO,
     stream=sys.stdout,
 )
+logger = logging.getLogger(__name__)
 
 
 def ido(x, y):
@@ -162,7 +160,7 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
 
     # Read data
     data = wili.load_data()
-    logging.info("Finished loading data")
+    logger.info("Finished loading data")
 
     # Train
     trained = train(data, unicode_cutoff, coverage, metric)
@@ -219,7 +217,7 @@ def train(data, unicode_cutoff, coverage, metric):
     for lang, char_list in common_chars_by_lang.items():
         common_chars = common_chars.union(char_list)
     common_chars = list(common_chars)
-    logging.info(
+    logger.info(
         "|{metric} & {coverage}% & {cutoff} &  {characters} chars".format(
             metric=metric.__name__,
             coverage=(coverage * 100),
@@ -260,7 +258,7 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
         for char in common_chars:
             language_model[lang][char] = float(char_counter[char]) / total_count
 
-    logging.info("Language model ready")
+    logger.info("Language model ready")
     for lang in ["deu", "eng", "fra"]:
         print(
             u"{lang}: {model}".format(lang=lang, model=model_repr(language_model, lang))

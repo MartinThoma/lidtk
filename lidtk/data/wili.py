@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split
 import lidtk.utils
 from lidtk.utils import make_path_absolute
 
+logger = logging.getLogger(__name__)
 isodict = None
 
 
@@ -133,22 +134,22 @@ def load_data(config=None):
         config = {}
     cfg = lidtk.utils.load_cfg()
     x_train_path = cfg["x_train_path"]
-    logging.info("wili.load_data uses x_train_path='{}'".format(x_train_path))
+    logger.info("wili.load_data uses x_train_path='{}'".format(x_train_path))
     with codecs.open(x_train_path, "r", "utf-8") as f:
         x_train = f.read().strip().split("\n")
     y_train_path = cfg["y_train_path"]
-    logging.info("wili.load_data uses y_train_path='{}'".format(y_train_path))
+    logger.info("wili.load_data uses y_train_path='{}'".format(y_train_path))
     with codecs.open(y_train_path, "r", "utf-8") as f:
         y_train = f.read().strip().split("\n")
     x_train, x_val, y_train, y_val = train_test_split(
         x_train, y_train, stratify=y_train, test_size=0.2, random_state=0
     )
     x_test_path = cfg["x_test_path"]
-    logging.info("wili.load_data uses x_test_path='{}'".format(x_test_path))
+    logger.info("wili.load_data uses x_test_path='{}'".format(x_test_path))
     with codecs.open(x_test_path, "r", "utf-8") as f:
         x_test = f.read().strip().split("\n")
     y_test_path = cfg["y_test_path"]
-    logging.info("wili.load_data uses y_test_path='{}'".format(y_test_path))
+    logger.info("wili.load_data uses y_test_path='{}'".format(y_test_path))
     with codecs.open(y_test_path, "r", "utf-8") as f:
         y_test = f.read().strip().split("\n")
     ys = {"y_train": y_train, "y_val": y_val, "y_test": y_test}

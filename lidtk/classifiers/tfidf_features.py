@@ -15,6 +15,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from lidtk.data import wili
 from lidtk.utils import load_cfg
 
+logger = logging.getLogger(__name__)
+
 
 @click.command(name="vectorizer", help="Train Tfidf vectorizer")
 @click.option(
@@ -32,7 +34,7 @@ def main(config_file):
     print(ret["xs"]["x_train"][0])
     filepath = config["feature-extraction"]["serialization_path"]
     with open(filepath, "wb") as handle:
-        logging.info("Store model to '{}'".format(filepath))
+        logger.info("Store model to '{}'".format(filepath))
         pickle.dump(ret["vectorizer"], handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
@@ -61,7 +63,7 @@ def get_features(config, data):
     xs = {}
     vectorizer.fit(data["x_train"])
     # Serialize trained vectorizer
-    logging.info(
+    logger.info(
         "Serialize vectorizer to '{}'".format(
             config["feature-extraction"]["serialization_path"]
         )

@@ -22,6 +22,7 @@ import wikipedia
 # First party modules
 from lidtk.utils import make_path_absolute
 
+logger = logging.getLogger(__name__)
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
@@ -42,8 +43,8 @@ def main(to_extract, target_dir):
     """
     target_dir = make_path_absolute(target_dir)
     for lang in get_wiki_codes():
-        logging.info("#" * 80)
-        logging.info(lang)
+        logger.info("#" * 80)
+        logger.info(lang)
         pickle_filename = os.path.join(target_dir, "{lang}.pickle".format(lang=lang))
         if not os.path.exists(pickle_filename):
             paragraphs, used_pages = find_pages(lang, to_extract)
@@ -75,7 +76,7 @@ def get_wiki_codes(skip_langs=None):
         skip_langs = []
         # skip_langs = ['haw', 'ab', 'pi', 'xal', 'nov', 'kl', 'arc', 'na',
         #               'ki', 'tpi']
-        logging.info("Skip the following wikipedias: {}".format(skip_langs))
+        logger.info("Skip the following wikipedias: {}".format(skip_langs))
     return [lang for lang in content if lang not in skip_langs]
 
 

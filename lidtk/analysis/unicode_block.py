@@ -12,6 +12,8 @@ import numpy as np
 # First party modules
 from lidtk.data import wili
 
+logger = logging.getLogger(__name__)
+
 
 @click.command(name="analyze-unicode-block", help=__doc__)
 @click.option("--start", default=123, show_default=True)
@@ -20,7 +22,7 @@ def main(start, end):
     """Run."""
     # Read data
     data = wili.load_data()
-    logging.info("Finished loading data")
+    logger.info("Finished loading data")
 
     lang_amounts = {}
     for paragraph, label in zip(data["x_train"], data["y_train"]):

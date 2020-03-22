@@ -8,7 +8,6 @@ import logging
 import os
 import random
 import re
-import sys
 import unicodedata
 
 # Third party modules
@@ -20,11 +19,7 @@ from lidtk.data import language_utils
 
 random.seed(0)
 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(message)s",
-    level=logging.DEBUG,
-    stream=sys.stdout,
-)
+logger = logging.getLogger(__name__)
 
 
 def normalize_data(paragraph):
@@ -110,7 +105,7 @@ def main(nb_elements, source_path, data_path):
         # Write data
         data_path = lidtk.utils.make_path_absolute(data_path)
         dataset_filepath = os.path.join(data_path, "x_{}.txt".format(set_name))
-        logging.debug("Write dataset_filepath={}".format(dataset_filepath))
+        logger.debug("Write dataset_filepath={}".format(dataset_filepath))
         with open(dataset_filepath, "w") as f:
             for el in xs[set_name]:
                 f.write(el + "\n")
@@ -124,4 +119,4 @@ def main(nb_elements, source_path, data_path):
         with open(urls_filepath, "w") as f:
             for el in urls:  # [set_name]
                 f.write(el + "\n")
-    logging.info("Done writing files to {}".format(data_path))
+    logger.info("Done writing files to {}".format(data_path))

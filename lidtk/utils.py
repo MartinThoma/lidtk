@@ -13,6 +13,8 @@ import click
 import pkg_resources
 import yaml
 
+logger = logging.getLogger(__name__)
+
 
 def make_path_absolute(path):
     """
@@ -165,7 +167,7 @@ def map_classification_result(config, source, dest):
             new_lines.append(cfg["mapping"][line])
         else:
             new_lines.append("unk")
-            logging.warning("Map '{}' to 'unk'".format(line))
+            logger.warning("Map '{}' to 'unk'".format(line))
 
     # Write text file
     with open(dest, "w") as fp:

@@ -51,7 +51,3 @@ entry_point.add_command(cdm.entry_point)
 entry_point.add_command(lidtk.utils.map_classification_result)
 entry_point.add_command(lidtk.classifiers.google_mod.entry_point)
 entry_point.add_command(lidtk.classifiers.tfidf_nn.entry_point)
-
-
-if __name__ == "__main__":
-    entry_point()

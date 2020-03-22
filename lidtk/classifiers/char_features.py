@@ -16,6 +16,8 @@ import progressbar
 # First party modules
 import lidtk.utils
 
+logger = logging.getLogger(__name__)
+
 
 class FeatureExtractor(object):
     """Character feature extractor."""
@@ -46,21 +48,19 @@ class FeatureExtractor(object):
         -------
         feature extractor
         """
-        logging.info("count characters")
+        logger.info("count characters")
         char_counter_by_lang = defaultdict(Counter)
         for x, y in zip(xs, ys):
             char_counter_by_lang[y] += Counter(x)
 
-        logging.info(
-            "get common characters to get coverage of {}".format(self.coverage)
-        )
+        logger.info("get common characters to get coverage of {}".format(self.coverage))
         common_chars_by_lang = {}
         for key, character_counter in char_counter_by_lang.items():
             common_chars_by_lang[key] = self._get_common_characters(
                 character_counter, coverage=self.coverage
             )
 
-        logging.info("unify set of common characters")
+        logger.info("unify set of common characters")
         common_chars = set()
         for lang, char_list in common_chars_by_lang.items():
             common_chars = common_chars.union(char_list)
@@ -117,7 +117,7 @@ class FeatureExtractor(object):
             TODO
         """
         target_shape = (len(xs), len(self.chars))
-        logging.info("transform_multiple to target_shape={}".format(target_shape))
+        logger.info("transform_multiple to target_shape={}".format(target_shape))
         dists = np.zeros(target_shape)
         if bar:
             bar = progressbar.ProgressBar(redirect_stdout=True, max_value=len(xs))
@@ -145,7 +145,7 @@ class FeatureExtractor(object):
         cfg = lidtk.utils.load_cfg()
         train_xs_pickle = cfg["train_xs_pickle_path"].format(self.coverage, set_name)
         if not os.path.exists(train_xs_pickle + ".npy"):
-            logging.info(
+            logger.info(
                 "Start creating {} x {}".format(len(data[set_name]), len(self.chars))
             )
             xs = self.transform_multiple(data[set_name], bar=True)
@@ -206,7 +206,7 @@ def get_features(config, data):
     cfg = lidtk.utils.load_cfg()
     feature_extractor_path = cfg["feature_extractor_path"].format(config["coverage"])
     if not os.path.isfile(feature_extractor_path):
-        logging.info("Create vectorizer")
+        logger.info("Create vectorizer")
         vectorizer = FeatureExtractor(
             data["x_train"], data["y_train"], coverage=config["coverage"]
         )

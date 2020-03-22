@@ -15,6 +15,7 @@ import lidtk.features
 import lidtk.utils
 from lidtk.data import wili
 
+logger = logging.getLogger(__name__)
 config = None
 
 
@@ -120,7 +121,7 @@ def train(config, data=None):
     if data is None:
         # Read data
         data = wili.load_data()
-        logging.info("Finished loading data")
+        logger.info("Finished loading data")
     nn_module = imp.load_source("nn_module", cfg["classifier"]["script_path"])
     model = nn_module.create_model(
         lidtk.features.get_dim(cfg), len(set(data["y_train"]))

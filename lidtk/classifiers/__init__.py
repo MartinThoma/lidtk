@@ -20,6 +20,8 @@ import progressbar
 import lidtk.utils
 from lidtk.data import wili
 
+logger = logging.getLogger(__name__)
+
 
 class LIDClassifier(ABC):
     """
@@ -91,7 +93,7 @@ class LIDClassifier(ABC):
         languages = set()
         # Read data
         data = wili.load_data()
-        logging.info("Finished loading data")
+        logger.info("Finished loading data")
         for set_name in ["test", "train"]:
             x_set_name = "x_{}".format(set_name)
             bar = progressbar.ProgressBar(
@@ -102,7 +104,7 @@ class LIDClassifier(ABC):
                     predicted = self.predict(el)
                 except Exception as e:
                     predicted = "UNK"
-                    logging.error({"message": "Exception in get_languages", "error": e})
+                    logger.error({"message": "Exception in get_languages", "error": e})
                 languages.add(predicted)
                 bar.update(i + 1)
             bar.finish()
@@ -132,13 +134,13 @@ class LIDClassifier(ABC):
         """
         # Read data
         data = wili.load_data()
-        logging.info("Finished loading data")
+        logger.info("Finished loading data")
         times = []
         bar = progressbar.ProgressBar(
             redirect_stdout=True, max_value=len(data["x_test"])
         )
         result_filepath = os.path.abspath(result_file)
-        logging.info("Write results to {}".format(result_filepath))
+        logger.info("Write results to {}".format(result_filepath))
         results = {"meta": {}}
         now = datetime.datetime.now()
         results["meta"]["experiment_start"] = "{:%Y-%m-%d %H:%M:%S}".format(now)
@@ -169,7 +171,7 @@ class LIDClassifier(ABC):
                         identifier = "test_{}".format(i)
                         cl_results[label_t][predicted].append([identifier, el])
                 except Exception as e:  # catch them all
-                    logging.error({"message": "Exception in eval_wili", "error": e})
+                    logger.error({"message": "Exception in eval_wili", "error": e})
                     predicted = "UNK-exception"
                 filepointer.write(predicted + "\n")
         bar.finish()
