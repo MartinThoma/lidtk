@@ -26,7 +26,7 @@ def extract(cfg, text):
     elif cfg["features"]["type"] == "tfidf":
         return get_tfidif_features(cfg, [text])[0]
     else:
-        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
+        raise NotImplementedError(f"Feature: {cfg['features']['type']}")
 
 
 def get_dim(cfg):
@@ -42,11 +42,11 @@ def get_dim(cfg):
     feature_dim : int
     """
     if cfg["features"]["type"] == "raw":
-        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
+        raise NotImplementedError(f"Feature: {cfg['features']['type']}")
     elif cfg["features"]["type"] == "tfidf":
         pass  # TODO
     else:
-        raise NotImplemented("Feature: {}".format(cfg["features"]["type"]))
+        raise NotImplementedError(f"Feature: {cfg['features']['type']}")
 
 
 def train_tfidf_features(config, data):

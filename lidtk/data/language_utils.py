@@ -198,10 +198,10 @@ def read_language_file(pickle_filepath):
 
     Examples
     --------
-    >>> from lidtk.utils import make_path_absolute
-    >>> path = make_path_absolute('~/.lidtk/lang/de.pickle')
-    >>> data = read_language_file(path)
-    >>> sorted(list(data.keys()))
+    >> from lidtk.utils import make_path_absolute
+    >> path = make_path_absolute('~/.lidtk/lang/de.pickle')
+    >> data = read_language_file(path)
+    >> sorted(list(data.keys()))
     ['paragraphs', 'used_pages']
     """
     with open(pickle_filepath, "rb") as handle:

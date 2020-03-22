@@ -70,7 +70,7 @@ def get_hardware_info():
         hw_info["GPU driver"] = version
     try:
         hw_info["VGA"] = find_vga()
-    except:
+    except:  # noqa
         pass
     return hw_info
 

@@ -186,7 +186,7 @@ def find_missmatches():
     wili_doesnt_know = []
     for lang in cld2.LANGUAGES:
         lang = {"name": lang[0], "code": lang[1]}
-        lang["name"] = unicode(lang["name"])
+        lang["name"] = str(lang["name"])
         if lang["code"] in servicecode2label:
             continue
         elif lang["code"] in wiki_codes:

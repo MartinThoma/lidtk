@@ -1,8 +1,15 @@
 # Core Library modules
+import logging
 import os
 import urllib.request
 import zipfile
 from os.path import expanduser
+
+
+def pytest_configure(config):
+    """Flake8 is to verbose. Mute it."""
+    logging.getLogger("flake8").setLevel(logging.WARN)
+
 
 lidtk_path = os.path.join(expanduser("~"), ".lidtk")
 

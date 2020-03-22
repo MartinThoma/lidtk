@@ -29,7 +29,7 @@ def main(lang_stats):
     ]
     for key, ylabel, threshold_max in to_analyze:
         print("key: {}".format(key))
-        l = sorted(
+        languages = sorted(
             [
                 d[key]
                 for iso_lang_code, d in lang_stats.items()
@@ -46,7 +46,7 @@ def main(lang_stats):
         eng_value = lang_stats["eng"][key]
         rus_value = lang_stats["rus"][key]
         zh_yue_value = lang_stats["zh-yue"][key]
-        for value in l:
+        for value in languages:
             if value == eng_value and not en_found:
                 colors.append("red")
                 en_found = True
@@ -58,7 +58,7 @@ def main(lang_stats):
                 zh_yue_found = True
             else:
                 colors.append("grey")
-        plot_1d(l, colors, xlabel="Languages", ylabel=ylabel, name=key)
+        plot_1d(languages, colors, xlabel="Languages", ylabel=ylabel, name=key)
 
 
 def plot_1d(l, colors=None, xlabel="", ylabel="", name="example"):

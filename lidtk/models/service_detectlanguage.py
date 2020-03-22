@@ -189,7 +189,7 @@ def find_missmatches():
 
     wili_doesnt_know = []
     for lang in detectlanguage.languages():
-        lang["name"] = unicode(lang["name"])
+        lang["name"] = str(lang["name"])
         if lang["code"] in detectlanguage2label:
             continue
         elif lang["code"] in wiki_codes:

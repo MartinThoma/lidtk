@@ -231,7 +231,7 @@ def parse_page(
     """
     try:
         page = wikipedia.page(random_page)
-    except:  # I don't care about erros - just try the next!
+    except:  # noqa, I don't care about erros - just try the next!
         return
     if page.title in queried:
         return
