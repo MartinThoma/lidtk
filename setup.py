@@ -7,6 +7,7 @@ setup(
         "click>=6.7",
         "detectlanguage>=1.2.1",
         "fuzzywuzzy>=0.16.0",
+        "python-Levenshtein",
         "h5py>=2.7.1",
         "Keras>=2.0.6",
         "langdetect>=1.0.7",

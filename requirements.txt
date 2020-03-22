@@ -44,6 +44,7 @@ pyasn1==0.4.8             # via pyasn1-modules, rsa
 pycparser==2.20           # via cffi
 pyparsing==2.4.6          # via matplotlib
 python-dateutil==2.8.1    # via matplotlib, pandas
+python-levenshtein==0.12.0  # via lidtk (setup.py)
 python-utils==2.4.0       # via progressbar2
 pytz==2019.3              # via pandas
 pyyaml==5.3.1             # via keras, lidtk (setup.py)

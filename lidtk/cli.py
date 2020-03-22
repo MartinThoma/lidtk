@@ -28,7 +28,7 @@ import lidtk.utils
 
 filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
 with open(filepath, "r") as stream:
-    config = yaml.load(stream)
+    config = yaml.safe_load(stream)
 logging.config.dictConfig(config["LOGGING"])
 
 
