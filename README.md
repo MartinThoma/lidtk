@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/116556356.svg)](https://zenodo.org/badge/latestdoi/116556356)
+[![Build Status](https://travis-ci.org/MartinThoma/lidtk.svg?branch=master)](https://travis-ci.org/MartinThoma/lidtk)
 
 # lidtk
 
