@@ -1,0 +1,3 @@
+include lidtk/config.yaml
+include lidtk/models/detectlanguage.csv
+include lidtk/classifiers/config/*
