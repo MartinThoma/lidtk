@@ -12,7 +12,7 @@ Prerequesites
 
 # Third party modules
 import cld2
-from fuzzywuzzy import process
+from rapidfuzz import process
 
 servicecode2label = {
     "gv": "glv",
@@ -199,8 +199,8 @@ def find_missmatches():
             norm = lang["name"]
             if "_" in norm:
                 norm = norm.split("_")[1]
-            extracted = process.extractOne(lang["name"], english_names)
-            if extracted[1] > 60:
+            extracted = process.extractOne(lang["name"], english_names, score_cutoff=60)
+            if extracted:
                 i = english_names.index(extracted[0])
                 print(
                     "service ({}): {} == {} (WiLI)? : '{}': '{}'".format(
