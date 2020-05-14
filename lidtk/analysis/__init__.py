@@ -42,6 +42,6 @@ def manual_error_analysis(errors, author_known_languages):
                 )
             )
             for nb, el in enumerate(errors_lang):
-                print("{}. {}".format(nb, el))
+                print(f"{nb}. {el}")
             print("")
         print("\n")

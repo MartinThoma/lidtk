@@ -13,7 +13,7 @@ def main():
     lang_files = glob.glob("lang/*.pickle")
     for lang_file in lang_files:
         lang = lang_file.split("/")[-1].split(".")[0]
-        target_path = "lang_txt/{}.txt".format(lang)
+        target_path = f"lang_txt/{lang}.txt"
         convert(lang_file, target_path)
 
 

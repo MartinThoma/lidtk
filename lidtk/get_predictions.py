@@ -36,7 +36,7 @@ def get_predictions(experiment_meta, data_module, model_module):
     print(y_pred)
     t1 = time.time()
     elapsed_time = t1 - t0
-    print("time: {}s".format(elapsed_time))
+    print(f"time: {elapsed_time}s")
     print("time per element: {}s".format(elapsed_time / n_elements))
 
     os.makedirs(experiment_meta["artifacts_path"])
@@ -45,7 +45,7 @@ def get_predictions(experiment_meta, data_module, model_module):
     )
     with open(pred_txt, "w") as f:
         for pred in y_pred:
-            f.write("{}\n".format(pred))
+            f.write(f"{pred}\n")
 
 
 def get_parser():
@@ -69,7 +69,7 @@ def get_parser():
 if __name__ == "__main__":
     args = get_parser().parse_args()
     # Read YAML experiment definition file
-    with open(args.experiment_filepath, "r") as stream:
+    with open(args.experiment_filepath) as stream:
         meta = yaml.load(stream)
     # Make paths absolute
     meta = make_paths_absolute(os.path.dirname(args.experiment_filepath), meta)

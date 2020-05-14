@@ -4,7 +4,6 @@
 
 # Core Library modules
 import datetime
-import io
 import json
 import logging
 import os
@@ -95,7 +94,7 @@ class LIDClassifier(ABC):
         data = wili.load_data()
         logger.info("Finished loading data")
         for set_name in ["test", "train"]:
-            x_set_name = "x_{}".format(set_name)
+            x_set_name = f"x_{set_name}"
             bar = progressbar.ProgressBar(
                 redirect_stdout=True, max_value=len(data[x_set_name])
             )
@@ -140,10 +139,10 @@ class LIDClassifier(ABC):
             redirect_stdout=True, max_value=len(data["x_test"])
         )
         result_filepath = os.path.abspath(result_file)
-        logger.info("Write results to {}".format(result_filepath))
+        logger.info(f"Write results to {result_filepath}")
         results = {"meta": {}}
         now = datetime.datetime.now()
-        results["meta"]["experiment_start"] = "{:%Y-%m-%d %H:%M:%S}".format(now)
+        results["meta"]["experiment_start"] = f"{now:%Y-%m-%d %H:%M:%S}"
         cl_results = {}
         if languages is None:
             eval_unk = False
@@ -168,7 +167,7 @@ class LIDClassifier(ABC):
                             cl_results[label_t] = {}
                         if predicted not in cl_results[label_t]:
                             cl_results[label_t][predicted] = []
-                        identifier = "test_{}".format(i)
+                        identifier = f"test_{i}"
                         cl_results[label_t][predicted].append([identifier, el])
                 except Exception as e:  # catch them all
                     logger.error({"message": "Exception in eval_wili", "error": e})
@@ -182,7 +181,7 @@ class LIDClassifier(ABC):
         logfile = result_filepath + ".json"
         results["meta"]["hardware"] = lidtk.utils.get_hardware_info()
         results["meta"]["software"] = lidtk.utils.get_software_info()
-        with io.open(logfile, "w", encoding="utf8") as f:
+        with open(logfile, "w", encoding="utf8") as f:
             f.write(json.dumps(results, indent=4, sort_keys=True, ensure_ascii=False))
 
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Create tfidf.pickle."""
 
@@ -34,7 +33,7 @@ def main(config_file):
     print(ret["xs"]["x_train"][0])
     filepath = config["feature-extraction"]["serialization_path"]
     with open(filepath, "wb") as handle:
-        logger.info("Store model to '{}'".format(filepath))
+        logger.info(f"Store model to '{filepath}'")
         pickle.dump(ret["vectorizer"], handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 

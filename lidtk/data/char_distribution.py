@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Visualize C_0.99 for all languages except the 10 with most characters."""
 
@@ -28,7 +27,7 @@ def main(lang_stats):
         ("paraphgrah_len_max", "Maximum paragrpah length", 15000),
     ]
     for key, ylabel, threshold_max in to_analyze:
-        print("key: {}".format(key))
+        print(f"key: {key}")
         languages = sorted(
             [
                 d[key]
@@ -67,8 +66,8 @@ def plot_1d(l, colors=None, xlabel="", ylabel="", name="example"):
     ax.set(xlabel=xlabel, ylabel=ylabel, label="big")
     ax.set_xticks([])
 
-    plt.savefig("{name}.pdf".format(name=name))
-    plt.savefig("{name}.png".format(name=name))
+    plt.savefig(f"{name}.pdf")
+    plt.savefig(f"{name}.png")
     plt.show()
 
 

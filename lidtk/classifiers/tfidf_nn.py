@@ -179,7 +179,7 @@ def print_languages(config_filepath, label_filepath):
 @entry_point.command(name="wili")
 @click.option(
     "--result_file",
-    default="{}_results.txt".format(classifier_name),
+    default=f"{classifier_name}_results.txt",
     show_default=True,
     help="Where to store the predictions",
 )

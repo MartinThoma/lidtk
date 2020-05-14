@@ -45,7 +45,7 @@ def main(to_extract, target_dir):
     for lang in get_wiki_codes():
         logger.info("#" * 80)
         logger.info(lang)
-        pickle_filename = os.path.join(target_dir, "{lang}.pickle".format(lang=lang))
+        pickle_filename = os.path.join(target_dir, f"{lang}.pickle")
         if not os.path.exists(pickle_filename):
             paragraphs, used_pages = find_pages(lang, to_extract)
             if len(paragraphs) < to_extract:
@@ -76,7 +76,7 @@ def get_wiki_codes(skip_langs=None):
         skip_langs = []
         # skip_langs = ['haw', 'ab', 'pi', 'xal', 'nov', 'kl', 'arc', 'na',
         #               'ki', 'tpi']
-        logger.info("Skip the following wikipedias: {}".format(skip_langs))
+        logger.info(f"Skip the following wikipedias: {skip_langs}")
     return [lang for lang in content if lang not in skip_langs]
 
 
@@ -242,7 +242,7 @@ def parse_page(
 
     if verbose:
         t = page.title
-        print(u"\t## {}".format(t))
+        print(f"\t## {t}")
     content = re.sub("={2,}", "==", content)
     sections = content.split("==")
     for section in sections:
@@ -285,7 +285,7 @@ def get_all_page_titles(lang, apcontinue="", max_pages=float("inf")):
         "list=allpages",
         "aplimit=2",
         "apfilterredir=nonredirects",
-        "apcontinue={}".format(apcontinue),
+        f"apcontinue={apcontinue}",
     ]
     max_reached = False
     while apcontinue and len(page_titles) < max_pages:
@@ -296,7 +296,7 @@ def get_all_page_titles(lang, apcontinue="", max_pages=float("inf")):
             apcontinue = None
             break
         apcontinue = result["continue"]["apcontinue"]
-        q[2] = u"apcontinue={}".format(apcontinue)
+        q[2] = f"apcontinue={apcontinue}"
         if len(page_titles) > max_pages:
             print("max_pages reached")
             max_reached = True
@@ -323,7 +323,7 @@ def query(lang, query):
     """
     query = "&".join(query)
     q = (
-        u"https://{lang}.wikipedia.org/w/api.php?action=query&{query}"
+        "https://{lang}.wikipedia.org/w/api.php?action=query&{query}"
         "&format=json".format(lang=lang, query=query)
     )
     r = requests.get(q)

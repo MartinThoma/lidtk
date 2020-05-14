@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Run the lidtk main script."""
 
@@ -27,7 +26,7 @@ import lidtk.data.download_documents
 import lidtk.utils
 
 filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
-with open(filepath, "r") as stream:
+with open(filepath) as stream:
     config = yaml.safe_load(stream)
 logging.config.dictConfig(config["LOGGING"])
 

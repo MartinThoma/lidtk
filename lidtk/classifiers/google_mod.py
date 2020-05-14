@@ -57,4 +57,4 @@ def list_languages():
     results = translate_client.get_languages()
 
     for language in results:
-        print(u"{name} ({language})".format(**language))
+        print("{name} ({language})".format(**language))

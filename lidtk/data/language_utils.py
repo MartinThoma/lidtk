@@ -42,11 +42,9 @@ def main(lang_dir, theta=0.99):
     files = sorted(glob.glob(lang_dir))
     lang_stats = {}
     if len(files) == 0:
-        print(
-            "No files found at '{}'. You might want to download first.".format(lang_dir)
-        )
+        print(f"No files found at '{lang_dir}'. You might want to download first.")
         return
-    print("theta={}".format(theta))
+    print(f"theta={theta}")
     print("lang:                 characters             paragraphs      ")
     print("-------------------------------------------------------------")
     for filepath in files:
@@ -68,8 +66,8 @@ def main(lang_dir, theta=0.99):
             "paraphgrah_len_mean": paraphgrah_lengths.mean(),
         }
         print(
-            u"{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "
-            u"| [{:>5} {:6.1f} {:>6}] '{}' ({} chars)".format(
+            "{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "
+            "| [{:>5} {:6.1f} {:>6}] '{}' ({} chars)".format(
                 iso,
                 len(chars),
                 char_occurences.min() * 100,  # least common char
@@ -79,7 +77,7 @@ def main(lang_dir, theta=0.99):
                 paraphgrah_lengths.min(),
                 paraphgrah_lengths.mean(),
                 paraphgrah_lengths.max(),
-                u"".join(common_chars),
+                "".join(common_chars),
                 len(common_chars),
             )
         )
@@ -116,16 +114,14 @@ def check_presence(lang_dir="lang"):
     """
     wiki = wiki2iso.keys()
     for wikicode in wiki:
-        path = os.path.join(lang_dir, "{}.pickle".format(wikicode))
+        path = os.path.join(lang_dir, f"{wikicode}.pickle")
         if not os.path.isfile(path):
-            print(
-                "{} could not be found, but was expected due to wikifile".format(path)
-            )
-    found_files = glob.glob("{}/*.pickle".format(lang_dir))
+            print(f"{path} could not be found, but was expected due to wikifile")
+    found_files = glob.glob(f"{lang_dir}/*.pickle")
     for path in found_files:
         wikicode = path.split("/")[1].split(".")[0]
         if wikicode not in wiki2iso:
-            print("Found '{}' unexpectedly".format(wikicode))
+            print(f"Found '{wikicode}' unexpectedly")
     return {"found_files": found_files}
 
 
@@ -212,7 +208,7 @@ def read_language_file(pickle_filepath):
 def analyze_language_families(csv_filepath):
     """Analyze which language families are present in the dataset."""
     # Read CSV file
-    with open(csv_filepath, "r") as fp:
+    with open(csv_filepath) as fp:
         reader = csv.reader(fp, delimiter=";", quotechar='"')
         # next(reader, None)  # skip the headers
         wiki = [row for row in reader]
@@ -221,7 +217,7 @@ def analyze_language_families(csv_filepath):
     language_fams = [el["Language family"] for el in wiki]
     language_family_counter = sorted(Counter(language_fams).items(), key=lambda n: n[1])
     for key, value in language_family_counter:
-        print("{}: {}".format(key, value))
+        print(f"{key}: {value}")
     print(", ".join(languages))
 
 
@@ -251,7 +247,7 @@ def get_language_data(csv_filepath=None):
     if csv_filepath is None:
         cfg = lidtk.utils.load_cfg()
         csv_filepath = cfg["labels_path"]
-    with open(csv_filepath, "r") as fp:
+    with open(csv_filepath) as fp:
         wiki = [
             {k: v for k, v in row.items()}
             for row in csv.DictReader(
@@ -313,7 +309,7 @@ def print_language_families(wiki, found_files):
         "## Total languages: {} ({} files)".format(len(language_fams), len(found_files))
     )
     for key, value in sorted_fams:
-        print("{}: {}".format(key, value))
+        print(f"{key}: {value}")
     print(", ".join(languages))
 
 

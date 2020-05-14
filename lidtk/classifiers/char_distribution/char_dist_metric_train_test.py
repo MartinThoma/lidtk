@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 r"""
 Train and test character distance models.
@@ -261,7 +260,7 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
     logger.info("Language model ready")
     for lang in ["deu", "eng", "fra"]:
         print(
-            u"{lang}: {model}".format(lang=lang, model=model_repr(language_model, lang))
+            "{lang}: {model}".format(lang=lang, model=model_repr(language_model, lang))
         )
 
     # should be the same for all languages
@@ -274,7 +273,7 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
     return language_models, chars
 
 
-def preprocess(x, unicode_cutoff, cut_off_char=u"澳"):
+def preprocess(x, unicode_cutoff, cut_off_char="澳"):
     """
     Preprocess the string x.
 
@@ -288,7 +287,7 @@ def preprocess(x, unicode_cutoff, cut_off_char=u"澳"):
     preprocessed_str : str
         Some characters are replaced by a 'cut off' parameter
     """
-    y = u""
+    y = ""
     for el in x:
         if unicode_cutoff is not None and ord(el) > unicode_cutoff:
             y += cut_off_char
@@ -332,7 +331,7 @@ def model_repr(models, key):
     m = sorted(m, key=lambda n: n[1], reverse=True)
     s = ""
     for char, prob in m:
-        s += u"{}={:4.2f}%  ".format(char, prob * 100)
+        s += "{}={:4.2f}%  ".format(char, prob * 100)
     return s
 
 

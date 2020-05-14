@@ -38,8 +38,8 @@ def main(start, end):
     for key in lang_amounts.keys():
         lang_amounts[key] = np.array(lang_amounts[key]).mean() * 100
 
-    print("Label    Chars in range [{} - {}]".format(start, end))
+    print(f"Label    Chars in range [{start} - {end}]")
     print("-" * 80)
     lang_a = sorted(lang_amounts.items(), key=lambda n: n[1], reverse=True)
     for i, (label, chars_in_range) in enumerate(lang_a, start=1):
-        print("{:>3}. {:<10}  {:>5.2f}%".format(i, label, chars_in_range))
+        print(f"{i:>3}. {label:<10}  {chars_in_range:>5.2f}%")

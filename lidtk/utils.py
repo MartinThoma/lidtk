@@ -106,7 +106,7 @@ def load_cfg(yaml_filepath=None):
     if yaml_filepath is None:
         yaml_filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
     # Read YAML experiment definition file
-    with open(yaml_filepath, "r") as stream:
+    with open(yaml_filepath) as stream:
         cfg = yaml.safe_load(stream)
     cfg = make_paths_absolute(os.path.dirname(yaml_filepath), cfg)
     return cfg
@@ -156,7 +156,7 @@ def map_classification_result(config, source, dest):
     cfg = load_cfg(config)
 
     # Read data
-    with open(source, "r") as fp:
+    with open(source) as fp:
         read_lines = fp.readlines()
         read_lines = [line.rstrip("\n") for line in read_lines]
 
@@ -167,7 +167,7 @@ def map_classification_result(config, source, dest):
             new_lines.append(cfg["mapping"][line])
         else:
             new_lines.append("unk")
-            logger.warning("Map '{}' to 'unk'".format(line))
+            logger.warning(f"Map '{line}' to 'unk'")
 
     # Write text file
     with open(dest, "w") as fp:

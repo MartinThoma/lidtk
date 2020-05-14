@@ -104,19 +104,19 @@ def main(nb_elements, source_path, data_path):
 
         # Write data
         data_path = lidtk.utils.make_path_absolute(data_path)
-        dataset_filepath = os.path.join(data_path, "x_{}.txt".format(set_name))
-        logger.debug("Write dataset_filepath={}".format(dataset_filepath))
+        dataset_filepath = os.path.join(data_path, f"x_{set_name}.txt")
+        logger.debug(f"Write dataset_filepath={dataset_filepath}")
         with open(dataset_filepath, "w") as f:
             for el in xs[set_name]:
                 f.write(el + "\n")
 
-        labels_filepath = os.path.join(data_path, "y_{}.txt".format(set_name))
+        labels_filepath = os.path.join(data_path, f"y_{set_name}.txt")
         with open(labels_filepath, "w") as f:
             for el in ys[set_name]:
                 f.write(el + "\n")
 
-        urls_filepath = os.path.join(data_path, "urls_{}.txt".format(set_name))
+        urls_filepath = os.path.join(data_path, f"urls_{set_name}.txt")
         with open(urls_filepath, "w") as f:
             for el in urls:  # [set_name]
                 f.write(el + "\n")
-    logger.info("Done writing files to {}".format(data_path))
+    logger.info(f"Done writing files to {data_path}")

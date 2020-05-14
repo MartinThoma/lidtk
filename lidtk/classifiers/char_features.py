@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Extract character features."""
 
@@ -19,7 +18,7 @@ import lidtk.utils
 logger = logging.getLogger(__name__)
 
 
-class FeatureExtractor(object):
+class FeatureExtractor:
     """Character feature extractor."""
 
     def __init__(self, xs, ys, coverage=0.8):
@@ -53,7 +52,7 @@ class FeatureExtractor(object):
         for x, y in zip(xs, ys):
             char_counter_by_lang[y] += Counter(x)
 
-        logger.info("get common characters to get coverage of {}".format(self.coverage))
+        logger.info(f"get common characters to get coverage of {self.coverage}")
         common_chars_by_lang = {}
         for key, character_counter in char_counter_by_lang.items():
             common_chars_by_lang[key] = self._get_common_characters(
@@ -117,7 +116,7 @@ class FeatureExtractor(object):
             TODO
         """
         target_shape = (len(xs), len(self.chars))
-        logger.info("transform_multiple to target_shape={}".format(target_shape))
+        logger.info(f"transform_multiple to target_shape={target_shape}")
         dists = np.zeros(target_shape)
         if bar:
             bar = progressbar.ProgressBar(redirect_stdout=True, max_value=len(xs))
