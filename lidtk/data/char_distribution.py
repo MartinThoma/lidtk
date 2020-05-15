@@ -60,9 +60,9 @@ def main(lang_stats):
         plot_1d(languages, colors, xlabel="Languages", ylabel=ylabel, name=key)
 
 
-def plot_1d(l, colors=None, xlabel="", ylabel="", name="example"):
-    """Plot a 1D list l of numbers."""
-    ax = sns.barplot([i for i in range(len(l))], l, palette=colors)
+def plot_1d(data, colors=None, xlabel="", ylabel="", name="example"):
+    """Plot a 1D list data of numbers."""
+    ax = sns.barplot([i for i in range(len(data))], data, palette=colors)
     ax.set(xlabel=xlabel, ylabel=ylabel, label="big")
     ax.set_xticks([])
 

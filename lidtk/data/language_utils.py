@@ -285,7 +285,7 @@ def print_all_languages(wiki):
         Each dict represents a langauge
     """
     languages = sorted([el["English"] for el in wiki])
-    languages = [l for l in languages if len(l) > 0]
+    languages = [lang for lang in languages if len(lang) > 0]
     print(", ".join(languages))
 
 
@@ -300,7 +300,7 @@ def print_language_families(wiki, found_files):
     found_files : list of str
     """
     languages = sorted([el["English"] for el in wiki])
-    languages = [l for l in languages if len(l) > 0]
+    languages = [lang for lang in languages if len(lang) > 0]
     language_fams = [el["Language family"] for el in wiki]
     sorted_fams = sorted(
         Counter(language_fams).items(), key=lambda n: n[1], reverse=True
