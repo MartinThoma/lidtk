@@ -27,6 +27,7 @@ class GCClassifier(lidtk.classifiers.LIDClassifier):
         ----------
         text : str
         """
+        # Third party modules
         from google.cloud import translate
 
         translate_client = translate.Client()
@@ -50,6 +51,7 @@ entry_point = lidtk.classifiers.classifier_cli_factor(classifier)
 @entry_point.command(name="list-languages")
 def list_languages():
     """List all available languages."""
+    # Third party modules
     from google.cloud import translate
 
     translate_client = translate.Client()

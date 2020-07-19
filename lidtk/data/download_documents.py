@@ -24,6 +24,7 @@ from lidtk.utils import make_path_absolute
 
 logger = logging.getLogger(__name__)
 logging.getLogger("requests").setLevel(logging.WARNING)
+INFINITY = float("inf")
 
 
 @click.command(name="download", help=__doc__)
@@ -199,7 +200,7 @@ def find_pages(lang_wiki="de", to_extract=1000, max_time_s=4 * 60 * 60, verbose=
             max_reached = out["max_reached"]
             apcontinue = out["apcontinue"]
             random.shuffle(page_titles_queue)
-            print("Loaded {} pages".format(len(page_titles_queue)))
+            print(f"Loaded {len(page_titles_queue)} pages")
             while len(extracted_paragraphs) < to_extract and len(page_titles_queue) > 0:
                 print(len(page_titles_queue))
                 page_title, revision_id = page_titles_queue.pop()
@@ -259,7 +260,7 @@ def parse_page(
                 print("###")
 
 
-def get_all_page_titles(lang, apcontinue="", max_pages=float("inf")):
+def get_all_page_titles(lang, apcontinue="", max_pages=INFINITY):
     """
     Get all page titles.
 

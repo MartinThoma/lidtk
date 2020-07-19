@@ -28,6 +28,7 @@ def create_model(nb_classes, input_shape, config=None):
 if __name__ == "__main__":
     model = create_model(100, (20000,))
     model.summary()
+    # Third party modules
     from keras.utils import plot_model
 
     plot_model(model, to_file="baseline.png", show_layer_names=False, show_shapes=True)

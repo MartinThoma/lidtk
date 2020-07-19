@@ -9,7 +9,7 @@ setup(
         "fuzzywuzzy>=0.16.0",
         "python-Levenshtein",
         "h5py>=2.7.1",
-        "Keras>=2.0.6",
+        "Keras>=2.0.6,<2.4.0",
         "langdetect>=1.0.7",
         "langid>=1.1.6",
         "matplotlib>=2.1.2",
@@ -23,5 +23,4 @@ setup(
         "tensorflow>=1.2.0",
         "wikipedia>=1.4.0",
     ],
-    tests_require=["pytest>=3.3.2", "pytest-cov>=2.5.1", "pytest-pep8>=1.0.6",],
 )

@@ -173,12 +173,12 @@ def create_model(nb_classes, input_shape):
 
 def find_missmatches():
     """Find which languages detectlanguage and WiLI support."""
-    print(
-        "detectlanguage supports {} languages.".format(len(detectlanguage.languages()))
-    )
+    print(f"detectlanguage supports {len(detectlanguage.languages())} languages.")
+    # Core Library modules
     import sys
 
     sys.path.append("..")
+    # Third party modules
     import language_utils
 
     labels_file = os.path.abspath("../labels.csv")
@@ -204,16 +204,8 @@ def find_missmatches():
     for lang in language_data:
         if lang["Label"] not in detectlanguage2label.values():
             dl_doesnt_know.append(lang["Label"])
-    print(
-        "WiLI does not know: {} ({})".format(
-            [el for el in wili_doesnt_know], len(wili_doesnt_know)
-        )
-    )
-    print(
-        "Detectlanguage does not know: {} ({})".format(
-            dl_doesnt_know, len(dl_doesnt_know)
-        )
-    )
+    print(f"WiLI does not know: {list(wili_doesnt_know)} " f"({len(wili_doesnt_know)})")
+    print(f"Detectlanguage does not know: {dl_doesnt_know} ({len(dl_doesnt_know)})")
 
 
 if __name__ == "__main__":

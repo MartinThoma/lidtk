@@ -63,9 +63,8 @@ def get_features(config, data):
     vectorizer.fit(data["x_train"])
     # Serialize trained vectorizer
     logger.info(
-        "Serialize vectorizer to '{}'".format(
-            config["feature-extraction"]["serialization_path"]
-        )
+        "Serialize vectorizer to "
+        f"'{config['feature-extraction']['serialization_path']}'"
     )
     with open(config["feature-extraction"]["serialization_path"], "wb") as fin:
         pickle.dump(vectorizer, fin)
@@ -76,9 +75,9 @@ def get_features(config, data):
 
 def analyze_vocabulary(ret):
     """Show which vocabulary is used by the vectorizer."""
-    voc = sorted([key for key, _ in ret["vectorizer"].vocabulary_.items()])
+    voc = sorted(key for key, _ in ret["vectorizer"].vocabulary_.items())
     print(",".join(voc))
-    print("Vocabulary: {}".format(len(voc)))
+    print(f"Vocabulary: {len(voc)}")
 
 
 def load_feature_extractor(config):

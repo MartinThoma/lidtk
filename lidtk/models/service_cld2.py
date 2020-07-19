@@ -175,7 +175,8 @@ def find_missmatches():
 
     Print everything directly
     """
-    print("cld2 supports {} languages.".format(len(cld2.LANGUAGES)))
+    print(f"cld2 supports {len(cld2.LANGUAGES)} languages.")
+    # First party modules
     from lidtk.data import language_utils
 
     language_data = language_utils.get_language_data("labels.csv")
@@ -202,13 +203,9 @@ def find_missmatches():
             if extracted[1] > 60:
                 i = english_names.index(extracted[0])
                 print(
-                    "service ({}): {} == {} (WiLI)? : '{}': '{}'".format(
-                        lang["code"],
-                        lang["name"],
-                        extracted[0],
-                        lang["code"],
-                        language_data[i]["Label"],
-                    )
+                    f"service ({lang['code']}): {lang['name']} == "
+                    f"{extracted[0]} (WiLI)? : '{lang['code']}': "
+                    f"'{language_data[i]['Label']}'"
                 )
             wili_doesnt_know.append(lang)
 
@@ -218,12 +215,8 @@ def find_missmatches():
     for lang in language_data:
         if lang["Label"] not in servicecode2label.values():
             dl_doesnt_know.append(lang["Label"])
-    print(
-        "WiLI does not know: {} ({})".format(
-            [el for el in wili_doesnt_know], len(wili_doesnt_know)
-        )
-    )
-    print("cld2 does not know: {} ({})".format(dl_doesnt_know, len(dl_doesnt_know)))
+    print(f"WiLI does not know: {list(wili_doesnt_know)} ({len(wili_doesnt_know)})")
+    print(f"cld2 does not know: {dl_doesnt_know} ({len(dl_doesnt_know)})")
 
 
 if __name__ == "__main__":

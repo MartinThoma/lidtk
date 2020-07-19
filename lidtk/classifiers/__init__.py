@@ -107,7 +107,7 @@ class LIDClassifier(ABC):
                 languages.add(predicted)
                 bar.update(i + 1)
             bar.finish()
-        return sorted(list(languages))
+        return sorted(languages)
 
     def get_mapping_languages(self):
         """
@@ -118,7 +118,7 @@ class LIDClassifier(ABC):
         languages : list of str
             Each str is a ISO 369-3 code
         """
-        return sorted([lang for _, lang in self.cfg["mapping"].items()])
+        return sorted(lang for _, lang in self.cfg["mapping"].items())
 
     def eval_wili(self, result_file, languages=None, eval_unk=False):
         """
@@ -176,7 +176,7 @@ class LIDClassifier(ABC):
         bar.finish()
         results["cl_results"] = cl_results
         times = np.array(times)
-        print("Average time per 10**6 elements: {:.2f}s".format(times.mean() * 10 ** 6))
+        print(f"Average time per 10**6 elements: {times.mean() * 10 ** 6:.2f}s")
         results["time_per_10*6"] = times.mean() * 10 ** 6
         logfile = result_filepath + ".json"
         results["meta"]["hardware"] = lidtk.utils.get_hardware_info()
@@ -240,11 +240,9 @@ def classifier_cli_factor(classifier):
         print(
             ", ".join(
                 sorted(
-                    [
-                        iso2name.get(iso, iso)
-                        for iso in classifier.get_mapping_languages()
-                        if iso != "UNK"
-                    ]
+                    iso2name.get(iso, iso)
+                    for iso in classifier.get_mapping_languages()
+                    if iso != "UNK"
                 )
             )
         )
@@ -252,7 +250,7 @@ def classifier_cli_factor(classifier):
     @entry_point.command(name="wili")
     @click.option(
         "--result_file",
-        default="{}_results.txt".format(classifier.cfg["name"]),
+        default=f"{classifier.cfg['name']}_results.txt",
         show_default=True,
         help="Where to store the predictions",
     )
@@ -270,7 +268,7 @@ def classifier_cli_factor(classifier):
     @entry_point.command(name="wili_k")
     @click.option(
         "--result_file",
-        default=("{}_results_known.txt".format(classifier.cfg["name"])),
+        default=(f"{classifier.cfg['name']}_results_known.txt"),
         show_default=True,
         help="Where to store the predictions",
     )
@@ -288,7 +286,7 @@ def classifier_cli_factor(classifier):
     @entry_point.command(name="wili_unk")
     @click.option(
         "--result_file",
-        default=("{}_results_unknown.txt".format(classifier.cfg["name"])),
+        default=(f"{classifier.cfg['name']}_results_unknown.txt"),
         show_default=True,
         help="Where to store the predictions",
     )

@@ -50,6 +50,7 @@ def main_loaded(config, data_module, feature_extractor_module):
     feature_extractor_module : Python module
     """
     data = data_module.load_data()
+    # First party modules
     from lidtk.classifiers import tfidf_features
 
     vectorizer = tfidf_features.load_feature_extractor(config)
@@ -79,7 +80,7 @@ def main_loaded(config, data_module, feature_extractor_module):
 
     t2 = time.time()
     model.save(config["classification"]["artifacts_path"])
-    logger.info("Save model to '{}'".format(config["classification"]["artifacts_path"]))
+    logger.info(f"Save model to '{config['classification']['artifacts_path']}'")
     preds = model.predict(data["x_test"])
     y_pred = np.argmax(preds, axis=1)
     y_true = np.argmax(data["y_test"], axis=1)
@@ -104,9 +105,8 @@ def predict(text):
 
 def create_model(nb_classes, input_shape):
     """Create a MLP model."""
-    # from keras.layers import Dropout
-    from keras.layers import Input
-    from keras.layers import Dense
+    # Third party modules
+    from keras.layers import Dense, Input
     from keras.models import Model
 
     input_ = Input(shape=input_shape)
@@ -119,6 +119,7 @@ def create_model(nb_classes, input_shape):
 
 def get_optimizer(config):
     """Return an optimizer."""
+    # Third party modules
     from keras.optimizers import Adam
 
     lr = config["classification"]["optimizer"]["initial_lr"]

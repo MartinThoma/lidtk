@@ -37,9 +37,8 @@ def manual_error_analysis(errors, author_known_languages):
             continue
         for true_lang, errors_lang in conv_err[label].items():
             print(
-                "## True: {}, Predicted: {} (count: {})".format(
-                    true_lang, label, len(errors_lang)
-                )
+                f"## True: {true_lang}, Predicted: {label} "
+                f"(count: {len(errors_lang)})"
             )
             for nb, el in enumerate(errors_lang):
                 print(f"{nb}. {el}")

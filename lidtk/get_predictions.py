@@ -7,6 +7,7 @@ import imp
 import os
 import pprint
 import time
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
 # Third party modules
 import yaml
@@ -37,7 +38,7 @@ def get_predictions(experiment_meta, data_module, model_module):
     t1 = time.time()
     elapsed_time = t1 - t0
     print(f"time: {elapsed_time}s")
-    print("time per element: {}s".format(elapsed_time / n_elements))
+    print(f"time per element: {elapsed_time / n_elements}s")
 
     os.makedirs(experiment_meta["artifacts_path"])
     pred_txt = os.path.join(
@@ -50,8 +51,6 @@ def get_predictions(experiment_meta, data_module, model_module):
 
 def get_parser():
     """Get parser object."""
-    from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-
     parser = ArgumentParser(
         description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
     )

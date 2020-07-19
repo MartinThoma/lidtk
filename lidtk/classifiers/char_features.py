@@ -61,7 +61,7 @@ class FeatureExtractor:
 
         logger.info("unify set of common characters")
         common_chars = set()
-        for lang, char_list in common_chars_by_lang.items():
+        for _lang, char_list in common_chars_by_lang.items():
             common_chars = common_chars.union(char_list)
         common_chars.add("other")
         self.chars = list(common_chars)
@@ -144,9 +144,7 @@ class FeatureExtractor:
         cfg = lidtk.utils.load_cfg()
         train_xs_pickle = cfg["train_xs_pickle_path"].format(self.coverage, set_name)
         if not os.path.exists(train_xs_pickle + ".npy"):
-            logger.info(
-                "Start creating {} x {}".format(len(data[set_name]), len(self.chars))
-            )
+            logger.info(f"Start creating {len(data[set_name])} x {len(self.chars)}")
             xs = self.transform_multiple(data[set_name], bar=True)
             # Serialize the transformed data
             np.save(train_xs_pickle, xs)
@@ -177,7 +175,7 @@ class FeatureExtractor:
             character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True
         )
         chars = []
-        count_sum = sum([el[1] for el in counts])
+        count_sum = sum(el[1] for el in counts)
         count_sum_min = coverage * count_sum
         count = 0
         for char, char_count in counts:

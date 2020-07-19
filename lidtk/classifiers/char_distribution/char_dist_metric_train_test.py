@@ -213,7 +213,7 @@ def train(data, unicode_cutoff, coverage, metric):
             character_counter, coverage=coverage
         )
     common_chars = set()
-    for lang, char_list in common_chars_by_lang.items():
+    for _lang, char_list in common_chars_by_lang.items():
         common_chars = common_chars.union(char_list)
     common_chars = list(common_chars)
     logger.info(
@@ -314,7 +314,7 @@ def get_common_characters(character_counter, coverage=1.0):
     assert coverage > 0.0
     counts = sorted(character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True)
     chars = []
-    count_sum = sum([el[1] for el in counts])
+    count_sum = sum(el[1] for el in counts)
     count_sum_min = coverage * count_sum
     count = 0
     for char, char_count in counts:
@@ -331,7 +331,7 @@ def model_repr(models, key):
     m = sorted(m, key=lambda n: n[1], reverse=True)
     s = ""
     for char, prob in m:
-        s += "{}={:4.2f}%  ".format(char, prob * 100)
+        s += f"{char}={prob * 100:4.2f}%  "
     return s
 
 

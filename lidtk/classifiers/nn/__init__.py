@@ -98,6 +98,7 @@ def init_nn(config):
     ----------
     config : dict
     """
+    # Third party modules
     import keras.models
 
     weigths = config["classifier"]["weight_path"]

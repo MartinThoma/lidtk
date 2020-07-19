@@ -1,0 +1,15 @@
+flake8
+flake8-bugbear
+flake8-builtins
+flake8-comprehensions
+flake8-string-format
+pydocstyle
+pytest
+pytest-black
+pytest-cov
+pytest-flake8
+pytest-mccabe
+pytest-mypy
+twine
+wheel
+pip-tools

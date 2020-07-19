@@ -66,7 +66,7 @@ def main(lang_dir, theta=0.99):
             "paraphgrah_len_mean": paraphgrah_lengths.mean(),
         }
         print(
-            "{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "
+            "{:>9} || {:>5}: {:>5.2f} {:>5.2f} {:>5.2f} {:>5.2f} "  # noqa
             "| [{:>5} {:6.1f} {:>6}] '{}' ({} chars)".format(
                 iso,
                 len(chars),
@@ -81,21 +81,21 @@ def main(lang_dir, theta=0.99):
                 len(common_chars),
             )
         )
+    mean_paragraph_len = np.array(
+        [el["paraphgrah_len_mean"] for el in lang_stats.values()]
+    ).mean()
     print(
-        "Mean paragraph length of mean language paragraph lengths: {}".format(
-            np.array([el["paraphgrah_len_mean"] for el in lang_stats.values()]).mean()
-        )
+        f"Mean paragraph length of mean language paragraph lengths: {mean_paragraph_len}"
     )
-    print(
-        "Longest paragraph length: {}".format(
-            np.array([el["paraphgrah_len_max"] for el in lang_stats.values()]).max()
-        )
-    )
+    max_paragraph_len = np.array(
+        [el["paraphgrah_len_max"] for el in lang_stats.values()]
+    ).max()
+    print(f"Longest paragraph length: {max_paragraph_len}")
     i = 0
     for lang, info in lang_stats.items():
         if info["theta_99_len"] >= 150:
             i += 1
-            print("{}. {}: {} characters".format(i, lang, info["theta_99_len"]))
+            print(f"{i}. {lang}: {info['theta_99_len']} characters")
     char_distribution.main(lang_stats)
 
 
@@ -211,9 +211,9 @@ def analyze_language_families(csv_filepath):
     with open(csv_filepath) as fp:
         reader = csv.reader(fp, delimiter=";", quotechar='"')
         # next(reader, None)  # skip the headers
-        wiki = [row for row in reader]
+        wiki = list(reader)
 
-    languages = sorted([el["English"] for el in wiki])
+    languages = sorted(el["English"] for el in wiki)
     language_fams = [el["Language family"] for el in wiki]
     language_family_counter = sorted(Counter(language_fams).items(), key=lambda n: n[1])
     for key, value in language_family_counter:
@@ -284,7 +284,7 @@ def print_all_languages(wiki):
     wiki : list of dicts
         Each dict represents a langauge
     """
-    languages = sorted([el["English"] for el in wiki])
+    languages = sorted(el["English"] for el in wiki)
     languages = [lang for lang in languages if len(lang) > 0]
     print(", ".join(languages))
 
@@ -299,15 +299,13 @@ def print_language_families(wiki, found_files):
         Each dict represents a langauge
     found_files : list of str
     """
-    languages = sorted([el["English"] for el in wiki])
+    languages = sorted(el["English"] for el in wiki)
     languages = [lang for lang in languages if len(lang) > 0]
     language_fams = [el["Language family"] for el in wiki]
     sorted_fams = sorted(
         Counter(language_fams).items(), key=lambda n: n[1], reverse=True
     )
-    print(
-        "## Total languages: {} ({} files)".format(len(language_fams), len(found_files))
-    )
+    print(f"## Total languages: {len(language_fams)} ({len(found_files)} files)")
     for key, value in sorted_fams:
         print(f"{key}: {value}")
     print(", ".join(languages))
@@ -353,8 +351,6 @@ def get_characters(lang_data):
     -------
     characters : Counter Object
     """
-    from collections import Counter
-
     characters = Counter()  # maps the character to the count
     for paragraph in lang_data:
         characters += Counter(paragraph)

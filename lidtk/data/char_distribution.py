@@ -29,11 +29,7 @@ def main(lang_stats):
     for key, ylabel, threshold_max in to_analyze:
         print(f"key: {key}")
         languages = sorted(
-            [
-                d[key]
-                for iso_lang_code, d in lang_stats.items()
-                if d[key] < threshold_max
-            ]
+            d[key] for iso_lang_code, d in lang_stats.items() if d[key] < threshold_max
         )
         for iso_lang_code, d in lang_stats.items():
             if d[key] >= threshold_max:
@@ -62,7 +58,7 @@ def main(lang_stats):
 
 def plot_1d(data, colors=None, xlabel="", ylabel="", name="example"):
     """Plot a 1D list data of numbers."""
-    ax = sns.barplot([i for i in range(len(data))], data, palette=colors)
+    ax = sns.barplot(list(range(len(data))), data, palette=colors)
     ax.set(xlabel=xlabel, ylabel=ylabel, label="big")
     ax.set_xticks([])
 

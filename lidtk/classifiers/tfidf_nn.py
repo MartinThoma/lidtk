@@ -56,6 +56,7 @@ class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
         self.labels = wili.labels
 
     def load(self, vectorizer_filename, classifier_filename):
+        # Third party modules
         from keras.models import load_model
 
         with open(vectorizer_filename, "rb") as handle:
@@ -166,11 +167,9 @@ def print_languages(config_filepath, label_filepath):
     print(
         ", ".join(
             sorted(
-                [
-                    iso2name[iso]
-                    for iso in classifier.get_mapping_languages()
-                    if iso != "UNK"
-                ]
+                iso2name[iso]
+                for iso in classifier.get_mapping_languages()
+                if iso != "UNK"
             )
         )
     )
