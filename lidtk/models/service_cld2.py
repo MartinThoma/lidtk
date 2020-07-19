@@ -169,7 +169,7 @@ servicecode2label = {
 }
 
 
-def find_missmatches():
+def find_missmatches() -> None:
     """
     Find which sets CLD-2 supports, but not WiLI and vice-versa.
 

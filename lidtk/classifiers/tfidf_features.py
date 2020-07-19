@@ -5,6 +5,7 @@
 # Core Library modules
 import logging
 import pickle
+from typing import Any, Dict
 
 # Third party modules
 import click
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
     type=click.Path(exists=True),
     help="Path to a YAML configuration file",
 )
-def main(config_file):
+def main(config_file: str) -> None:
     config = load_cfg(config_file)
     data = wili.load_data()
     ret = get_features(config, data)
@@ -37,14 +38,14 @@ def main(config_file):
         pickle.dump(ret["vectorizer"], handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def get_features(config, data):
+def get_features(config: Dict[str, Any], data: Dict[Any, Any]) -> Dict[str, Any]:
     """
     Get tf-idf features based on characters.
 
     Parameters
     ----------
-    config : dict
-    data : dict
+    config : Dict[str, Any]
+    data : Dict[Any, Any]
     """
     if config is None:
         config = {}
@@ -73,14 +74,14 @@ def get_features(config, data):
     return {"vectorizer": vectorizer, "xs": xs}
 
 
-def analyze_vocabulary(ret):
+def analyze_vocabulary(ret) -> None:
     """Show which vocabulary is used by the vectorizer."""
     voc = sorted(key for key, _ in ret["vectorizer"].vocabulary_.items())
     print(",".join(voc))
     print(f"Vocabulary: {len(voc)}")
 
 
-def load_feature_extractor(config):
+def load_feature_extractor(config: Dict[str, Any]):
     filepath = config["feature-extraction"]["serialization_path"]
     with open(filepath, "rb") as handle:
         vectorizer = pickle.load(handle)

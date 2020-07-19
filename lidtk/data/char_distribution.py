@@ -2,6 +2,9 @@
 
 """Visualize C_0.99 for all languages except the 10 with most characters."""
 
+# Core Library modules
+from typing import Any, Dict
+
 # Third party modules
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -9,13 +12,13 @@ import seaborn as sns
 sns.set_style("whitegrid")
 
 
-def main(lang_stats):
+def main(lang_stats: Dict[str, Dict[str, Any]]) -> None:
     """
     Plot basic statisics of languages.
 
     Parameters
     ----------
-    lang_stats : list of dict
+    lang_stats : Dict[str, Dict[str, Any]]
         Each dict represents a language
     """
     to_analyze = [
@@ -56,7 +59,9 @@ def main(lang_stats):
         plot_1d(languages, colors, xlabel="Languages", ylabel=ylabel, name=key)
 
 
-def plot_1d(data, colors=None, xlabel="", ylabel="", name="example"):
+def plot_1d(
+    data, colors=None, xlabel: str = "", ylabel: str = "", name: str = "example"
+) -> None:
     """Plot a 1D list data of numbers."""
     ax = sns.barplot(list(range(len(data))), data, palette=colors)
     ax.set(xlabel=xlabel, ylabel=ylabel, label="big")
@@ -65,7 +70,3 @@ def plot_1d(data, colors=None, xlabel="", ylabel="", name="example"):
     plt.savefig(f"{name}.pdf")
     plt.savefig(f"{name}.png")
     plt.show()
-
-
-if __name__ == "__main__":
-    main()

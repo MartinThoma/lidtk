@@ -4,9 +4,10 @@ import os
 import urllib.request
 import zipfile
 from os.path import expanduser
+from typing import Any, Dict
 
 
-def pytest_configure(config):
+def pytest_configure(config: Dict[Any, Any]) -> None:
     """Flake8 is to verbose. Mute it."""
     logging.getLogger("flake8").setLevel(logging.WARN)
 

@@ -11,6 +11,7 @@ import random
 import re
 import time
 import unicodedata
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Third party modules
 import click
@@ -30,7 +31,7 @@ INFINITY = float("inf")
 @click.command(name="download", help=__doc__)
 @click.option("--to_extract", default=1000, show_default=True)
 @click.option("--target_dir", default="~/.data/langs/", show_default=True)
-def main(to_extract, target_dir):
+def main(to_extract: int, target_dir: str) -> None:
     """
     Extract language data from Wikipedia projects.
 
@@ -56,18 +57,18 @@ def main(to_extract, target_dir):
                 pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def get_wiki_codes(skip_langs=None):
+def get_wiki_codes(skip_langs: Optional[List[str]] = None) -> List[Any]:
     """
     Get wikipedia codes to fetch data from.
 
     Parameters
     ----------
-    skip_langs : list, optional
+    skip_langs : Optional[List[str]]
         A hack to test things faster.
 
     Returns
     -------
-    wiki_codes : list
+    wiki_codes : List[Any]
     """
     wiki_languages_filepath = pkg_resources.resource_filename("lidtk", "languages.csv")
     with open(wiki_languages_filepath) as f:
@@ -81,7 +82,7 @@ def get_wiki_codes(skip_langs=None):
     return [lang for lang in content if lang not in skip_langs]
 
 
-def normalize_data(paragraph):
+def normalize_data(paragraph: str) -> str:
     """
     Bring unicode in one form.
 
@@ -100,7 +101,7 @@ def normalize_data(paragraph):
     return paragraph.strip()
 
 
-def extract_paragraphs(section, min_paragraph_length=140):
+def extract_paragraphs(section: str, min_paragraph_length: int = 140) -> List[str]:
     """
     Extract paragraphs from Wikipedia.
 
@@ -125,7 +126,7 @@ def extract_paragraphs(section, min_paragraph_length=140):
     return paragraphs
 
 
-def is_literature(paragraph):
+def is_literature(paragraph: str) -> bool:
     """
     Check if a paragraph is a literature entry.
 
@@ -144,15 +145,20 @@ def is_literature(paragraph):
     vol_regex = re.compile(r"""vol\. [IVCXL\d]+""", re.IGNORECASE)
     return (
         "ISBN" in paragraph
-        or doi_regex.search(paragraph)
-        or issn_regex.search(paragraph)
-        or vol_regex.search(paragraph)
+        or bool(doi_regex.search(paragraph))
+        or bool(issn_regex.search(paragraph))
+        or bool(vol_regex.search(paragraph))
         or "https://" in paragraph
         or "http://" in paragraph
     )
 
 
-def find_pages(lang_wiki="de", to_extract=1000, max_time_s=4 * 60 * 60, verbose=False):
+def find_pages(
+    lang_wiki: str = "de",
+    to_extract: int = 1000,
+    max_time_s: int = 4 * 60 * 60,
+    verbose: bool = False,
+):
     """
     Extract paragraphs from random wikipedia pages of a given language.
 
@@ -170,9 +176,9 @@ def find_pages(lang_wiki="de", to_extract=1000, max_time_s=4 * 60 * 60, verbose=
     tuple : extracted_paragraphs, list of source pages
     """
     wikipedia.set_lang(lang_wiki)
-    extracted_paragraphs = []
-    used_pages = set()
-    queried = []
+    extracted_paragraphs = []  # type: List[str]
+    used_pages = set()  # type: Set[str]
+    queried = []  # type: List[str]
     bar = progressbar.ProgressBar(redirect_stdout=True, max_value=to_extract)
     t0 = time.time()
     while len(extracted_paragraphs) < to_extract and (time.time() - t0) < max_time_s:
@@ -260,7 +266,9 @@ def parse_page(
                 print("###")
 
 
-def get_all_page_titles(lang, apcontinue="", max_pages=INFINITY):
+def get_all_page_titles(
+    lang: str, apcontinue: Union[None, bool, str] = "", max_pages: float = INFINITY
+) -> Dict[str, Any]:
     """
     Get all page titles.
 
@@ -275,12 +283,12 @@ def get_all_page_titles(lang, apcontinue="", max_pages=INFINITY):
 
     Returns
     -------
-    results : dict
+    results : Dict[str, Any]
         'page_titles' : list
         'apcontinue' : str
         'max_reached' : bool
     """
-    page_titles = []
+    page_titles = []  # type: List[Tuple[str, str]]
     apcontinue = True
     q = [
         "list=allpages",

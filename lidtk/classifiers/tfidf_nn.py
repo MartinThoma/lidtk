@@ -9,6 +9,7 @@ tfidf = text frequency, inverse document frequency
 # Core Library modules
 import os
 import pickle
+from typing import Optional
 
 # Third party modules
 import click
@@ -21,10 +22,34 @@ import lidtk.classifiers.tfidf_features
 from lidtk.data import wili
 
 classifier_name = "tfidf_nn"
-classifier = None
+classifier: Optional[lidtk.classifiers.LIDClassifier] = None
 
 
-def load_classifier(filepath):
+class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
+    """LID with the TfidfNNClassifier."""
+
+    def __init__(self, filepath: str):
+        super().__init__(filepath)
+        self.labels = wili.labels
+
+    def load(self, vectorizer_filename: str, classifier_filename: str) -> None:
+        # Third party modules
+        from keras.models import load_model
+
+        with open(vectorizer_filename, "rb") as handle:
+            self.vectorizer = pickle.load(handle)
+        self.model = load_model(classifier_filename)
+
+    def predict(self, text: str) -> str:
+        """Predicting the language of a text."""
+        features = self.vectorizer.transform([text]).toarray()
+        prediction = self.model.predict(features)
+        most_likely = np.argmax(prediction, axis=1)
+        most_likely = [self.map2wili(index) for index in most_likely]
+        return most_likely[0]
+
+
+def load_classifier(filepath: str) -> TfidfNNClassifier:
     """
     Load a TfidfNNClassifier.
 
@@ -48,46 +73,16 @@ def load_classifier(filepath):
     return classifier
 
 
-class TfidfNNClassifier(lidtk.classifiers.LIDClassifier):
-    """LID with the TfidfNNClassifier."""
-
-    def __init__(self, filepath):
-        super().__init__(filepath)
-        self.labels = wili.labels
-
-    def load(self, vectorizer_filename, classifier_filename):
-        # Third party modules
-        from keras.models import load_model
-
-        with open(vectorizer_filename, "rb") as handle:
-            self.vectorizer = pickle.load(handle)
-        self.model = load_model(classifier_filename)
-
-    def predict(self, text):
-        """
-        Predicting the language of a text.
-
-        Parameters
-        ----------
-        text : str
-        """
-        features = self.vectorizer.transform([text]).toarray()
-        prediction = self.model.predict(features)
-        most_likely = np.argmax(prediction, axis=1)
-        most_likely = [self.map2wili(index) for index in most_likely]
-        return most_likely[0]
-
-
 ###############################################################################
 # CLI                                                                         #
 ###############################################################################
 @click.group(name=classifier_name)
-def entry_point():
+def entry_point() -> None:
     """Use the TfidfNNClassifier classifier."""
 
 
 @entry_point.group(name="train")
-def train_entry_point():
+def train_entry_point() -> None:
     """Train the TfidfNNClassifier classifier."""
 
 
@@ -103,7 +98,7 @@ train_entry_point.add_command(lidtk.classifiers.mlp.main)
     type=click.Path(exists=True),
     help="Path to a YAML configuration file",
 )
-def predict_cli(text, config_filepath):
+def predict_cli(text: str, config_filepath: str) -> None:
     """
     Command line interface function for predicting the language of a text.
 
@@ -114,6 +109,7 @@ def predict_cli(text, config_filepath):
         Path to a YAML configuration file.
     """
     load_classifier(config_filepath)
+    assert classifier is not None  # for mypy
     print(classifier.predict(text))
 
 
@@ -124,7 +120,7 @@ def predict_cli(text, config_filepath):
     type=click.Path(exists=True),
     help="Path to a YAML configuration file",
 )
-def get_languages(config_filepath):
+def get_languages(config_filepath: str) -> None:
     """
     Get all predicted languages of for the WiLI dataset.
 
@@ -134,6 +130,7 @@ def get_languages(config_filepath):
         Path to a YAML configuration file.
     """
     load_classifier(config_filepath)
+    assert classifier is not None  # for mypy
     print(classifier.get_languages())
 
 
@@ -150,7 +147,7 @@ def get_languages(config_filepath):
     type=click.Path(exists=True),
     help="Path to a YAML configuration file",
 )
-def print_languages(config_filepath, label_filepath):
+def print_languages(config_filepath: str, label_filepath: str) -> None:
     """
     Print supported languages of classifier.
 
@@ -161,6 +158,7 @@ def print_languages(config_filepath, label_filepath):
     label_filepath : str
     """
     load_classifier(config_filepath)
+    assert classifier is not None  # for mypy
     label_filepath = os.path.abspath(label_filepath)
     wili_labels = wili.get_language_data(label_filepath)
     iso2name = {el["ISO 369-3"]: el["English"] for el in wili_labels}
@@ -188,7 +186,7 @@ def print_languages(config_filepath, label_filepath):
     type=click.Path(exists=True),
     help="Path to a YAML configuration file",
 )
-def eval_wili(config_filepath, result_file):
+def eval_wili(config_filepath: str, result_file: str) -> None:
     """
     CLI function evaluating the classifier on WiLI.
 
@@ -200,4 +198,5 @@ def eval_wili(config_filepath, result_file):
         Path to a file where the results will be stored
     """
     load_classifier(config_filepath)
+    assert classifier is not None  # for mypy
     classifier.eval_wili(result_file)

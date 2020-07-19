@@ -1,7 +1,13 @@
 """Utility functions for error analysis."""
 
 
-def manual_error_analysis(errors, author_known_languages):
+# Core Library modules
+from typing import Any, Dict, List
+
+
+def manual_error_analysis(
+    errors: Dict[str, Dict[str, List[str]]], author_known_languages: List[str]
+) -> None:
     """
     Print errors for manual analysis.
 
@@ -9,7 +15,7 @@ def manual_error_analysis(errors, author_known_languages):
     ----------
     errors : dict of dict of lists
         Has the form 'errors[true][predicted] = [sample 1, sample 2, ...]'
-    author_known_languages : list of str
+    author_known_languages : List[str]
     """
     # print("# Author knows the true language")
     # for true_lang in author_known_languages:
@@ -23,7 +29,7 @@ def manual_error_analysis(errors, author_known_languages):
     #     print("\n\n")
 
     print("# Author knows the (wrongly) predicted langauge")
-    conv_err = {}
+    conv_err = {}  # type: Dict[Any, Any]
     for true_lang, tmp in errors.items():
         for pred_lang, samples in tmp.items():
             if pred_lang not in conv_err:

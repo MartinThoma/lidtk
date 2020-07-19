@@ -19,7 +19,7 @@ import lidtk.classifiers
 class GCClassifier(lidtk.classifiers.LIDClassifier):
     """LID with the Google Cloud classifier."""
 
-    def predict(self, text):
+    def predict(self, text: str) -> str:
         """
         Predicting the language of a text.
 
@@ -49,7 +49,7 @@ entry_point = lidtk.classifiers.classifier_cli_factor(classifier)
 
 
 @entry_point.command(name="list-languages")
-def list_languages():
+def list_languages() -> None:
     """List all available languages."""
     # Third party modules
     from google.cloud import translate

@@ -20,7 +20,7 @@ import lidtk.classifiers
 class CLD2Classifier(lidtk.classifiers.LIDClassifier):
     """LID with the CLD-2 classifier."""
 
-    def predict(self, text):
+    def predict(self, text: str) -> str:
         """
         Predicting the language of a text.
 

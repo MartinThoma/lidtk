@@ -4,12 +4,14 @@
 
 # Core Library modules
 import pickle
+from typing import Any, Dict
 
 # Third party modules
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def extract(cfg, text):
+def extract(cfg: Dict[str, Any], text: str):
     """
     Extract features.
 
@@ -29,18 +31,19 @@ def extract(cfg, text):
         raise NotImplementedError(f"Feature: {cfg['features']['type']}")
 
 
-def get_dim(cfg):
+def get_dim(cfg: Dict[str, Any]) -> None:
     """
     Get the dimension of the extracted features.
 
     Parameters
     ----------
-    cfg : dict
+    cfg : Dict[str, Any]
 
     Returns
     -------
     feature_dim : int
     """
+    # TODO: Is this used anywhere? It looks as if this was never finished
     if cfg["features"]["type"] == "raw":
         raise NotImplementedError(f"Feature: {cfg['features']['type']}")
     elif cfg["features"]["type"] == "tfidf":
@@ -49,14 +52,16 @@ def get_dim(cfg):
         raise NotImplementedError(f"Feature: {cfg['features']['type']}")
 
 
-def train_tfidf_features(config, data):
+def train_tfidf_features(
+    config: Dict[str, Any], data: Dict[Any, Any]
+) -> Dict[str, Any]:
     """
     Get tf-idf features based on characters.
 
     Parameters
     ----------
-    config : dict
-    data : dict
+    config : Dict[str, Any]
+    data : Dict[str, Any]
     """
     if config is None:
         config = {}
@@ -80,18 +85,18 @@ def train_tfidf_features(config, data):
     return {"vectorizer": vectorizer, "xs": xs}
 
 
-def get_tfidif_features(cfg, samples):
+def get_tfidif_features(cfg: Dict[str, Any], samples: np.ndarray) -> np.ndarray:
     """
     Get Tf-idf features for samples.
 
     Parameters
     ----------
     cfg : dict
-    samples : ndarray
+    samples : np.ndarray
 
     Returns
     -------
-    tfidf_features : ndarray
+    tfidf_features : np.ndarray
     """
     if "vectorizer" not in cfg["features"]:
         # Load data (deserialize)

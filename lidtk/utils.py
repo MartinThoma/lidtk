@@ -7,6 +7,7 @@ import logging
 import os
 import platform
 import subprocess
+from typing import Any, Dict
 
 # Third party modules
 import click
@@ -16,7 +17,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-def make_path_absolute(path):
+def make_path_absolute(path: str) -> str:
     """
     Get an absolute filepath.
 
@@ -33,7 +34,7 @@ def make_path_absolute(path):
     return path
 
 
-def get_software_info():
+def get_software_info() -> Dict[str, Any]:
     """
     Get information about the used software.
 
@@ -47,7 +48,7 @@ def get_software_info():
     return sw_info
 
 
-def get_hardware_info():
+def get_hardware_info() -> Dict[str, Any]:
     """
     Get important environment information that might influence experiments.
 
@@ -77,7 +78,7 @@ def get_hardware_info():
     return hw_info
 
 
-def find_vga():
+def find_vga() -> str:
     """
     Get VGA identifier.
 
@@ -91,7 +92,7 @@ def find_vga():
     return str(vga).strip()
 
 
-def load_cfg(yaml_filepath=None):
+def load_cfg(yaml_filepath: str = None) -> Dict[str, Any]:
     """
     Load a YAML configuration file.
 
@@ -101,7 +102,7 @@ def load_cfg(yaml_filepath=None):
 
     Returns
     -------
-    cfg : dict
+    cfg : Dict[str, Any]
     """
     if yaml_filepath is None:
         yaml_filepath = pkg_resources.resource_filename("lidtk", "config.yaml")
@@ -112,18 +113,18 @@ def load_cfg(yaml_filepath=None):
     return cfg
 
 
-def make_paths_absolute(dir_, cfg):
+def make_paths_absolute(dir_: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
     """
     Make all values for keys ending with `_path` absolute to dir_.
 
     Parameters
     ----------
     dir_ : str
-    cfg : dict
+    cfg : Dict[str, Any]
 
     Returns
     -------
-    cfg : dict
+    cfg : Dict[str, Any]
     """
     for key in cfg.keys():
         if hasattr(key, "endswith") and key.endswith("_path"):
@@ -143,7 +144,7 @@ def make_paths_absolute(dir_, cfg):
 )
 @click.option("--source", type=click.Path(exists=True), help="Path to a txt file")
 @click.option("--dest", type=click.Path(exists=False), help="Path to a txt file")
-def map_classification_result(config, source, dest):
+def map_classification_result(config: str, source: str, dest: str) -> None:
     """
     Map the classification to something known by WiLI.
 

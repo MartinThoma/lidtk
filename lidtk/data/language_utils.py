@@ -8,6 +8,7 @@ import glob
 import os
 import pickle
 from collections import Counter
+from typing import Any, Dict, List, NewType, Optional, cast
 
 # Third party modules
 import click
@@ -20,16 +21,19 @@ from lidtk.classifiers.char_distribution.char_dist_metric_train_test import (
 )
 from lidtk.data import char_distribution
 
-iso2wiki = None
-wiki2iso = None
-wiki2label = None
+iso2wiki = None  # type: Optional[Dict[str, str]]
+wiki2iso = None  # type: Optional[Dict[str, str]]
+wiki2label = None  # type: Optional[Dict[str, str]]
 cfg = lidtk.utils.load_cfg()
+
+# Each dict represents a langauge
+WikiType = NewType("WikiType", List[Dict[str, Any]])
 
 
 @click.command(name="analyze-data", help=__doc__)
 @click.option("--lang_dir", default=cfg["lang_dir_path"], show_default=True)
 @click.option("--theta", default=0.99, show_default=True)
-def main(lang_dir, theta=0.99):
+def main(lang_dir: str, theta: float = 0.99) -> None:
     """
     Analyze the distribution of languages.
 
@@ -99,7 +103,7 @@ def main(lang_dir, theta=0.99):
     char_distribution.main(lang_stats)
 
 
-def check_presence(lang_dir="lang"):
+def check_presence(lang_dir: str = "lang") -> Dict[Any, Any]:
     """
     Check how many files of the wiki2iso dict are present.
 
@@ -110,8 +114,9 @@ def check_presence(lang_dir="lang"):
 
     Returns
     -------
-    results : dict
+    results : Dict[Any, Any]
     """
+    assert wiki2iso is not None, "call 'initialize' first"
     wiki = wiki2iso.keys()
     for wikicode in wiki:
         path = os.path.join(lang_dir, f"{wikicode}.pickle")
@@ -125,7 +130,7 @@ def check_presence(lang_dir="lang"):
     return {"found_files": found_files}
 
 
-def get_label(wiki_code):
+def get_label(wiki_code: str) -> str:
     """
     Get label from wiki code.
 
@@ -135,7 +140,7 @@ def get_label(wiki_code):
 
     Returns
     -------
-    str
+    label : str
 
     Examples
     --------
@@ -148,10 +153,11 @@ def get_label(wiki_code):
     >>> get_label('gom')
     'kok'
     """
+    assert wiki2label is not None, "Call 'initialize' first"
     return wiki2label[wiki_code]
 
 
-def get_iso(wiki_code):
+def get_iso(wiki_code: str) -> str:
     """
     Get ISO code from wiki code.
 
@@ -161,7 +167,7 @@ def get_iso(wiki_code):
 
     Returns
     -------
-    str
+    iso : str
 
     Examples
     --------
@@ -174,13 +180,14 @@ def get_iso(wiki_code):
     >>> get_iso('gom')
     'kok'
     """
+    assert wiki2iso is not None, "call 'initialize' first"
     iso = wiki2iso.get(wiki_code, wiki_code)
     if len(iso) == 0:
         iso = wiki_code
     return iso
 
 
-def read_language_file(pickle_filepath):
+def read_language_file(pickle_filepath: str) -> Dict[Any, Any]:
     """
     Read language file.
 
@@ -190,7 +197,7 @@ def read_language_file(pickle_filepath):
 
     Returns
     -------
-    language_data : dict
+    language_data : Dict[Any, Any]
 
     Examples
     --------
@@ -205,11 +212,11 @@ def read_language_file(pickle_filepath):
     return unserialized_data
 
 
-def analyze_language_families(csv_filepath):
+def analyze_language_families(csv_filepath: str) -> None:
     """Analyze which language families are present in the dataset."""
     # Read CSV file
     with open(csv_filepath) as fp:
-        reader = csv.reader(fp, delimiter=";", quotechar='"')
+        reader = csv.DictReader(fp, delimiter=";", quotechar='"')
         # next(reader, None)  # skip the headers
         wiki = list(reader)
 
@@ -221,7 +228,7 @@ def analyze_language_families(csv_filepath):
     print(", ".join(languages))
 
 
-def get_language_data(csv_filepath=None):
+def get_language_data(csv_filepath: str = None) -> WikiType:
     """
     Get language data.
 
@@ -231,8 +238,7 @@ def get_language_data(csv_filepath=None):
 
     Returns
     -------
-    wiki : list of dicts
-        Each dict represents a langauge
+    wiki : WikiType
 
     Example
     -------
@@ -248,24 +254,20 @@ def get_language_data(csv_filepath=None):
         cfg = lidtk.utils.load_cfg()
         csv_filepath = cfg["labels_path"]
     with open(csv_filepath) as fp:
-        wiki = [
-            {k: v for k, v in row.items()}
-            for row in csv.DictReader(
-                fp, skipinitialspace=True, delimiter=";", quotechar='"'
-            )
-        ]
+        wiki = cast(
+            WikiType,
+            [
+                {k: v for k, v in row.items()}
+                for row in csv.DictReader(
+                    fp, skipinitialspace=True, delimiter=";", quotechar='"'
+                )
+            ],
+        )
     return wiki
 
 
-def initialize(wiki):
-    """
-    Initialize global datastructures.
-
-    Parameters
-    ----------
-    wiki : list of dicts
-        Each dict represents a langauge
-    """
+def initialize(wiki: WikiType) -> None:
+    """Initialize global datastructures."""
     globals()["iso2wiki"] = {}
     globals()["wiki2iso"] = {}
     globals()["wiki2label"] = {}
@@ -275,30 +277,15 @@ def initialize(wiki):
         globals()["wiki2label"][el["Wiki Code"]] = el["Label"]
 
 
-def print_all_languages(wiki):
-    """
-    Print all languages as a sorted list.
-
-    Parameters
-    ----------
-    wiki : list of dicts
-        Each dict represents a langauge
-    """
+def print_all_languages(wiki: WikiType) -> None:
+    """Print all languages as a sorted list."""
     languages = sorted(el["English"] for el in wiki)
     languages = [lang for lang in languages if len(lang) > 0]
     print(", ".join(languages))
 
 
-def print_language_families(wiki, found_files):
-    """
-    Print how often each language family is represented.
-
-    Parameters
-    ----------
-    wiki : list of dicts
-        Each dict represents a langauge
-    found_files : list of str
-    """
+def print_language_families(wiki: WikiType, found_files: List[str]) -> None:
+    """Print how often each language family is represented."""
     languages = sorted(el["English"] for el in wiki)
     languages = [lang for lang in languages if len(lang) > 0]
     language_fams = [el["Language family"] for el in wiki]
@@ -311,21 +298,10 @@ def print_language_families(wiki, found_files):
     print(", ".join(languages))
 
 
-def group_by_language_family(wiki):
-    """
-    Group languages by language family.
-
-    Parameters
-    ----------
-    wiki : list of dicts
-        Each dict represents a langauge
-
-    Returns
-    -------
-    dict
-    """
-    families = []
-    fam2index = {}
+def group_by_language_family(wiki: WikiType) -> Dict[str, List[Dict[str, Any]]]:
+    """Group languages by language family."""
+    families: List[Dict[str, Any]] = []
+    fam2index: Dict[str, int] = {}
     for language in wiki:
         eng = language["English"]
         if language["Language family"] not in fam2index:
@@ -333,37 +309,38 @@ def group_by_language_family(wiki):
             families.append({language["Language family"]: [eng]})
         else:
             d = families[fam2index[language["Language family"]]]
-            key = d.keys()[0]
+            key = list(d.keys())[0]
             d[key].append(eng)
     return {"": families}
 
 
-def get_characters(lang_data):
+def get_characters(lang_data: List[str]) -> Counter:
     """
     Return a sorted list of characters in the language corpus.
 
     Parameters
     ----------
-    lang_data : list of str
+    lang_data : List[str]
         A list of all paragraphs
 
     Returns
     -------
-    characters : Counter Object
+    characters : Counter
     """
-    characters = Counter()  # maps the character to the count
+    # maps the character to the count
+    characters = Counter()  # type: Counter
     for paragraph in lang_data:
         characters += Counter(paragraph)
     return characters
 
 
-def get_percentile_like(xs, min_amount):
+def get_percentile_like(xs: List[float], min_amount: float) -> float:
     """
     Get the minimum value so that the sum of bigger values makes min_amount.
 
     Parameters
     ----------
-    xs : list of float
+    xs : List[float]
     min_amount : float
 
     Returns
@@ -371,7 +348,7 @@ def get_percentile_like(xs, min_amount):
     float
     """
     xs = sorted(xs, reverse=True)
-    sum_ = 0
+    sum_ = 0.0
     i = 0
     while sum_ < min_amount:
         sum_ += xs[i]

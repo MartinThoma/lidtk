@@ -33,7 +33,7 @@ logging.config.dictConfig(config["LOGGING"])
 
 @click.group()
 @click.version_option(version=lidtk.__version__)
-def entry_point():
+def entry_point() -> None:
     pass
 
 

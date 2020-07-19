@@ -9,6 +9,7 @@ import os
 import random
 import re
 import unicodedata
+from typing import Any, Dict, List
 
 # Third party modules
 import click
@@ -22,7 +23,7 @@ random.seed(0)
 logger = logging.getLogger(__name__)
 
 
-def normalize_data(paragraph):
+def normalize_data(paragraph: str) -> str:
     """
     Bring unicode in one form.
 
@@ -47,7 +48,7 @@ def normalize_data(paragraph):
     show_default=True,
     help="Path to directory where the created dataset gets stored.",
 )
-def main(nb_elements, source_path, data_path):
+def main(nb_elements: int, source_path: str, data_path: str) -> None:
     """
     Create dataset.
 
@@ -60,8 +61,8 @@ def main(nb_elements, source_path, data_path):
     * urls.txt
     """
     set_names = ["train", "test"]
-    xs = {"train": [], "test": []}
-    ys = {"train": [], "test": []}
+    xs: Dict[str, List[Any]] = {"train": [], "test": []}
+    ys: Dict[str, List[Any]] = {"train": [], "test": []}
     urls = []
     lang_path = lidtk.utils.make_path_absolute(source_path)
     files = sorted(glob.glob(lang_path))
@@ -87,9 +88,9 @@ def main(nb_elements, source_path, data_path):
         indices = list(range(nb_elements))
         nb_train = int(nb_elements / 2)
         random.shuffle(indices)
-        indices = {"train": indices[:nb_train], "test": indices[nb_train:]}
+        indices_dict = {"train": indices[:nb_train], "test": indices[nb_train:]}
         for set_name in set_names:
-            for i in indices[set_name]:
+            for i in indices_dict[set_name]:
                 xs[set_name].append(lang_data[i])
                 ys[set_name].append(label)
                 # urls[set_name].append()

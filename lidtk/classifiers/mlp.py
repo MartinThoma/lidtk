@@ -5,10 +5,13 @@
 # Core Library modules
 import logging
 import time
+from typing import Any, Dict, Optional
 
 # Third party modules
 import click
 import numpy as np
+from keras.layers import Dense, Input
+from keras.models import Model
 from sklearn.metrics import accuracy_score
 
 # First party modules
@@ -18,7 +21,7 @@ from lidtk.utils import load_cfg
 
 logger = logging.getLogger(__name__)
 model_name = "mlp-3layer-tfidf-50"
-model = None
+model = None  # type: Optional[Model]
 
 
 ###############################################################################
@@ -26,26 +29,26 @@ model = None
 ###############################################################################
 @click.command(name="mlp", help=__doc__)
 @click.option("--config", "config_filepath", help="Load YAML configuration file")
-def main(config_filepath):
+def main(config_filepath: str) -> None:
     """Load data, train model and evaluate it."""
     config = load_cfg(config_filepath)
     main_loaded(config, wili, feature_extractor_module)
 
 
-def load_model(config, shape):
+def load_model(config: Dict[str, Any], shape) -> Model:
     """Load a model."""
     model = create_model(wili.n_classes, shape)
     print(model.summary())
     return model
 
 
-def main_loaded(config, data_module, feature_extractor_module):
+def main_loaded(config: Dict[str, Any], data_module, feature_extractor_module) -> None:
     """
     Load data, train model and evaluate it.
 
     Parameters
     ----------
-    config : dict
+    config : Dict[str, Any]
     data_module : Python module
     feature_extractor_module : Python module
     """
@@ -62,6 +65,7 @@ def main_loaded(config, data_module, feature_extractor_module):
     optimizer = get_optimizer(config)
     logger.debug(data["x_train"][0])
     model = load_model(config, data["x_train"][0].shape)
+    assert model is not None  # for mypy
     model.compile(
         loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"]
     )
@@ -97,18 +101,15 @@ def main_loaded(config, data_module, feature_extractor_module):
     )
 
 
-def predict(text):
+def predict(text: str):
     """Predict the language of a text."""
+    assert model is not None, "Call 'load_model' first"
     preds = model.predict(text)
     return preds
 
 
-def create_model(nb_classes, input_shape):
+def create_model(nb_classes: int, input_shape) -> Model:
     """Create a MLP model."""
-    # Third party modules
-    from keras.layers import Dense, Input
-    from keras.models import Model
-
     input_ = Input(shape=input_shape)
     x = input_
     x = Dense(512, activation="relu")(x)
@@ -117,7 +118,7 @@ def create_model(nb_classes, input_shape):
     return model
 
 
-def get_optimizer(config):
+def get_optimizer(config: Dict[str, Any]):
     """Return an optimizer."""
     # Third party modules
     from keras.optimizers import Adam

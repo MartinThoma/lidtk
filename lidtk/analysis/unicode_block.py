@@ -4,6 +4,7 @@
 
 # Core Library modules
 import logging
+from typing import Any, Dict, List
 
 # Third party modules
 import click
@@ -18,13 +19,13 @@ logger = logging.getLogger(__name__)
 @click.command(name="analyze-unicode-block", help=__doc__)
 @click.option("--start", default=123, show_default=True)
 @click.option("--end", default=456, show_default=True, help="End of Unicode range")
-def main(start, end):
+def main(start: int, end: int) -> None:
     """Run."""
     # Read data
     data = wili.load_data()
     logger.info("Finished loading data")
 
-    lang_amounts = {}
+    lang_amounts = {}  # type: Dict[str, List[Any]]
     for paragraph, label in zip(data["x_train"], data["y_train"]):
         if label not in lang_amounts:
             lang_amounts[label] = []
@@ -41,5 +42,5 @@ def main(start, end):
     print(f"Label    Chars in range [{start} - {end}]")
     print("-" * 80)
     lang_a = sorted(lang_amounts.items(), key=lambda n: n[1], reverse=True)
-    for i, (label, chars_in_range) in enumerate(lang_a, start=1):
-        print(f"{i:>3}. {label:<10}  {chars_in_range:>5.2f}%")
+    for i, (label, chars_in_range_t) in enumerate(lang_a, start=1):
+        print(f"{i:>3}. {label:<10}  {chars_in_range_t:>5.2f}%")

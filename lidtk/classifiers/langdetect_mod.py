@@ -9,6 +9,9 @@ Notes
 * Based on: https://github.com/shuyo/language-detection
 """
 
+# Core Library modules
+from typing import Any, Dict, List
+
 # Third party modules
 import click
 import pkg_resources
@@ -23,7 +26,7 @@ DetectorFactory.seed = 0  # Make sure we get consistent results
 class LangdetectClassifier(lidtk.classifiers.LIDClassifier):
     """LID with the Langdetect classifier."""
 
-    def predict(self, text):
+    def predict(self, text: str) -> str:
         """
         Predicting the language of a text.
 
@@ -33,7 +36,7 @@ class LangdetectClassifier(lidtk.classifiers.LIDClassifier):
         """
         return self.map2wili(detect(text))
 
-    def predict_proba(self, text):
+    def predict_proba(self, text: str) -> List[Dict[str, Any]]:
         """
         Predicting probability of languages of a text.
 
@@ -61,7 +64,7 @@ entry_point = lidtk.classifiers.classifier_cli_factor(classifier)
 
 @entry_point.command(name="predict_proba")
 @click.option("--text")
-def predict_proba_cli(text):
+def predict_proba_cli(text: str) -> None:
     """
     CLI function for predicting the probability of a language of a text.
 

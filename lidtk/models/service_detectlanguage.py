@@ -11,6 +11,7 @@ Prerequesites
 
 # Core Library modules
 import os
+from typing import Any, List
 
 # Third party modules
 import detectlanguage
@@ -144,12 +145,12 @@ detectlanguage2label = {
 class ServiceClassifier:
     """Wrap services in a class to get the desired interface."""
 
-    def __init__(self, api_key):
+    def __init__(self, api_key: str):
         """Constructor."""
         self.api_key = api_key
         detectlanguage.configuration.api_key = api_key
 
-    def predict(self, text_or_list):
+    def predict(self, text_or_list: str) -> List[str]:
         """
         Predict the language.
 
@@ -159,19 +160,19 @@ class ServiceClassifier:
 
         Returns
         -------
-        languages : list
+        languages : List[str]
         """
         res = detectlanguage.detect(text_or_list)
         return [el[0]["language"] for el in res]
 
 
-def create_model(nb_classes, input_shape):
+def create_model(nb_classes: int, input_shape: Any) -> ServiceClassifier:
     """Create a model for LID."""
     model = ServiceClassifier("c5b442a13bdc4522f2a0463581c5bcb0")
     return model
 
 
-def find_missmatches():
+def find_missmatches() -> None:
     """Find which languages detectlanguage and WiLI support."""
     print(f"detectlanguage supports {len(detectlanguage.languages())} languages.")
     # Core Library modules

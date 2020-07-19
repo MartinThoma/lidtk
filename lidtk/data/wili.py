@@ -6,6 +6,7 @@
 import codecs
 import csv
 import logging
+from typing import Any, Dict, List
 
 # Third party modules
 import numpy as np
@@ -19,38 +20,38 @@ logger = logging.getLogger(__name__)
 isodict = None
 
 
-def lang_codes_to_one_hot(data, wili_codes):
+def lang_codes_to_one_hot(data: List[str], wili_codes: List[str]) -> np.ndarray:
     """
     Convert an iterable of ISO 369-3 codes to a one-hot array.
 
     Parameters
     ----------
-    data : list of str
+    data : List[str]
         Each str is a WiLI language code
-    wili_codes : list of str
+    wili_codes : List[str]
         List of WiLi language codes codes which define the order.
         This has to contain any code in data
 
     Returns
     -------
-    transformed : ndarray
+    transformed : np.ndarray
     """
     transformed = [wili_codes.index(el) for el in data]
     return indices_to_one_hot(transformed, len(wili_codes))
 
 
-def indices_to_one_hot(data, nb_classes):
+def indices_to_one_hot(data: List[int], nb_classes: int) -> np.ndarray:
     """
     Convert an iterable of indices to one-hot encoded labels.
 
     Parameters
     ----------
-    data : list of int
+    data : List[int]
     nb_classes : int
 
     Returns
     -------
-    transformed : ndarray
+    transformed : np.ndarray
 
     Examples
     --------
@@ -66,7 +67,7 @@ def indices_to_one_hot(data, nb_classes):
     return np.eye(nb_classes)[targets]
 
 
-def get_language_data(csv_filepath=None):
+def get_language_data(csv_filepath: str = None) -> List[Dict[Any, Any]]:
     """
     Get language data.
 
@@ -76,7 +77,7 @@ def get_language_data(csv_filepath=None):
 
     Returns
     -------
-    wili_labels : list of dicts
+    wili_labels : List[Dict[Any, Any]]
 
     Example
     -------

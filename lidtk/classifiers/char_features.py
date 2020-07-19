@@ -7,6 +7,7 @@ import logging
 import os
 import pickle
 from collections import Counter, defaultdict
+from typing import Any, Dict, List, Optional, Set
 
 # Third party modules
 import numpy as np
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 class FeatureExtractor:
     """Character feature extractor."""
 
-    def __init__(self, xs, ys, coverage=0.8):
+    def __init__(self, xs, ys, coverage: float = 0.8):
         """
         Initialize the feature extractor.
 
@@ -29,26 +30,26 @@ class FeatureExtractor:
         ----------
         coverage : float in (0, 1]
         """
-        self.chars = []
-        self.char2index = {}
+        self.chars = []  # type: List[str]
+        self.char2index = {}  # type: Dict[str, int]
         self.coverage = coverage
         self.fit(xs, ys)
 
-    def fit(self, xs, ys):
+    def fit(self, xs: List[str], ys: List[str]):
         """
         Fit the feature extractor to the data.
 
         Parameters
         ----------
-        xs : list of str
-        ys : list of str
+        xs : List[str]
+        ys : List[str]
 
         Returns
         -------
         feature extractor
         """
         logger.info("count characters")
-        char_counter_by_lang = defaultdict(Counter)
+        char_counter_by_lang: Dict[str, Counter] = defaultdict(Counter)
         for x, y in zip(xs, ys):
             char_counter_by_lang[y] += Counter(x)
 
@@ -60,7 +61,7 @@ class FeatureExtractor:
             )
 
         logger.info("unify set of common characters")
-        common_chars = set()
+        common_chars = set()  # type: Set[str]
         for _lang, char_list in common_chars_by_lang.items():
             common_chars = common_chars.union(char_list)
         common_chars.add("other")
@@ -78,7 +79,7 @@ class FeatureExtractor:
             dist = self.transform_single(xs)
         return dist
 
-    def transform_single(self, x):
+    def transform_single(self, x: str) -> np.ndarray:
         """
         Get distribution of characters in sample.
 
@@ -88,7 +89,7 @@ class FeatureExtractor:
 
         Returns
         -------
-        distribution : numpy array of dtype float
+        distribution : np.ndarray of dtype float
             Frequency of characters
         """
         dist = np.zeros(len(self.chars), dtype=np.float32)
@@ -101,7 +102,9 @@ class FeatureExtractor:
         dist /= dist.sum()
         return dist
 
-    def transform_multiple(self, xs, bar=False):
+    def transform_multiple(
+        self, xs, bar: Optional[progressbar.ProgressBar] = None
+    ) -> np.ndarray:
         """
         TODO.
 
@@ -112,7 +115,7 @@ class FeatureExtractor:
 
         Returns
         -------
-        dists : ndarray
+        dists : np.ndarray
             TODO
         """
         target_shape = (len(xs), len(self.chars))
@@ -128,19 +131,8 @@ class FeatureExtractor:
             bar.finish()
         return dists
 
-    def get_xs_set(self, data, set_name):
-        """
-        Get featureset.
-
-        Parameters
-        ----------
-        data : dict
-        set_name : str
-
-        Returns
-        -------
-        xs : ndarray
-        """
+    def get_xs_set(self, data: Dict[Any, Any], set_name: str) -> np.ndarray:
+        """Get featureset."""
         cfg = lidtk.utils.load_cfg()
         train_xs_pickle = cfg["train_xs_pickle_path"].format(self.coverage, set_name)
         if not os.path.exists(train_xs_pickle + ".npy"):
@@ -153,13 +145,15 @@ class FeatureExtractor:
             xs = np.load(train_xs_pickle + ".npy")
         return xs
 
-    def _get_common_characters(self, character_counter, coverage=1.0):
+    def _get_common_characters(
+        self, character_counter: Counter, coverage: float = 1.0
+    ) -> List[str]:
         """
         Get the most common characters of a language.
 
         Parameters
         ----------
-        character_counter : collections.Counter
+        character_counter : Counter
         coverage : float, optional (default: 1.0)
             Take the most common characters that make up `coverage` of the
             dataset
@@ -186,14 +180,14 @@ class FeatureExtractor:
         return chars
 
 
-def get_features(config, data):
+def get_features(config: Dict[str, Any], data: Dict[Any, Any]) -> Dict[Any, Any]:
     """
     Get tf-idf features based on characters.
 
     Parameters
     ----------
-    config : dict
-    data : dict
+    config : Dict[str, Any]
+    data : Dict[Any, Any]
 
     Returns
     -------

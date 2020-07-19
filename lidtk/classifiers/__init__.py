@@ -9,6 +9,7 @@ import logging
 import os
 import time
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List
 
 # Third party modules
 import click
@@ -31,12 +32,12 @@ class LIDClassifier(ABC):
     cfg : dict
     """
 
-    def __init__(self, cfg_path):
+    def __init__(self, cfg_path: str):
         """Constructor."""
         cfg_path = os.path.abspath(cfg_path)
         self.cfg = lidtk.utils.load_cfg(cfg_path)
 
-    def map2wili(self, services_code):
+    def map2wili(self, services_code: str) -> str:
         """
         Map the classifiers code to ISO 369-3 code.
 
@@ -51,7 +52,7 @@ class LIDClassifier(ABC):
         return self.cfg["mapping"].get(services_code, "UNK")
 
     @abstractmethod
-    def predict(self, text):
+    def predict(self, text: str) -> str:
         """
         Predict the language of the given text.
 
@@ -65,28 +66,28 @@ class LIDClassifier(ABC):
             ISO 369-3 code
         """
 
-    def predict_bulk(self, texts):
+    def predict_bulk(self, texts: List[str]) -> List[str]:
         """
         Predict the language of a list of texts.
 
         Parameters
         ----------
-        texts : list of str
+        texts : List[str]
 
         Returns
         -------
-        languages : list of str
+        languages : List[str]
             List of ISO 369-3 codes or UNK
         """
         return [self.predict(text) for text in texts]
 
-    def get_languages(self):
+    def get_languages(self) -> List[str]:
         """
         Find which languages are predicted for the WiLI dataset.
 
         Returns
         -------
-        languages : list of str
+        languages : List[str]
             Each str is a ISO 369-3 code
         """
         languages = set()
@@ -109,18 +110,20 @@ class LIDClassifier(ABC):
             bar.finish()
         return sorted(languages)
 
-    def get_mapping_languages(self):
+    def get_mapping_languages(self) -> List[str]:
         """
         Get the languages supported by th classifier and supported by WiLI.
 
         Returns
         -------
-        languages : list of str
+        languages : List[str]
             Each str is a ISO 369-3 code
         """
         return sorted(lang for _, lang in self.cfg["mapping"].items())
 
-    def eval_wili(self, result_file, languages=None, eval_unk=False):
+    def eval_wili(
+        self, result_file: str, languages: List[str] = None, eval_unk: bool = False
+    ) -> None:
         """
         Evaluate the classifier on WiLI.
 
@@ -128,8 +131,9 @@ class LIDClassifier(ABC):
         ----------
         result_file : str
             Path to a file where the results will be stored
-        languages : list, optional (default: All languages)
+        languages : List[str], optional (default: All languages)
             Filter languages by this list
+        eval_unk : bool, optional (default: False)
         """
         # Read data
         data = wili.load_data()
@@ -140,10 +144,10 @@ class LIDClassifier(ABC):
         )
         result_filepath = os.path.abspath(result_file)
         logger.info(f"Write results to {result_filepath}")
-        results = {"meta": {}}
+        results: Dict[str, Any] = {"meta": {}}
         now = datetime.datetime.now()
         results["meta"]["experiment_start"] = f"{now:%Y-%m-%d %H:%M:%S}"
-        cl_results = {}
+        cl_results = {}  # type: Dict[str, Dict[str, List[Any]]]
         if languages is None:
             eval_unk = False
         with open(result_filepath, "w") as filepointer:
@@ -175,9 +179,9 @@ class LIDClassifier(ABC):
                 filepointer.write(predicted + "\n")
         bar.finish()
         results["cl_results"] = cl_results
-        times = np.array(times)
-        print(f"Average time per 10**6 elements: {times.mean() * 10 ** 6:.2f}s")
-        results["time_per_10*6"] = times.mean() * 10 ** 6
+        times_arr = np.array(times)
+        print(f"Average time per 10**6 elements: {times_arr.mean() * 10 ** 6:.2f}s")
+        results["time_per_10*6"] = times_arr.mean() * 10 ** 6
         logfile = result_filepath + ".json"
         results["meta"]["hardware"] = lidtk.utils.get_hardware_info()
         results["meta"]["software"] = lidtk.utils.get_software_info()
@@ -185,7 +189,7 @@ class LIDClassifier(ABC):
             f.write(json.dumps(results, indent=4, sort_keys=True, ensure_ascii=False))
 
 
-def classifier_cli_factor(classifier):
+def classifier_cli_factor(classifier: LIDClassifier) -> click.Group:
     """
     Create the CLI for a classifier.
 
@@ -195,16 +199,16 @@ def classifier_cli_factor(classifier):
 
     Returns
     -------
-    entry_point : function
+    entry_point : click.Group
     """
 
     @click.group(name=classifier.cfg["name"])
-    def entry_point():
+    def entry_point() -> None:
         """Use this language classifier."""
 
     @entry_point.command(name="predict")
     @click.option("--text")
-    def predict_cli(text):
+    def predict_cli(text: str) -> None:
         """
         Command line interface function for predicting the language of a text.
 
@@ -215,7 +219,7 @@ def classifier_cli_factor(classifier):
         print(classifier.predict(text))
 
     @entry_point.command(name="get_languages")
-    def get_languages():
+    def get_languages() -> None:
         """Get all predicted languages of for the WiLI dataset."""
         print(classifier.get_languages())
 
@@ -226,14 +230,8 @@ def classifier_cli_factor(classifier):
         type=click.Path(exists=True),
         help="CSV file with delimiter ;",
     )
-    def print_languages(label_filepath):
-        """
-        Print supported languages of classifier.
-
-        Parameters
-        ----------
-        label_filepath : str
-        """
+    def print_languages(label_filepath: str) -> None:
+        """Print supported languages of classifier."""
         label_filepath = os.path.abspath(label_filepath)
         wili_labels = wili.get_language_data(label_filepath)
         iso2name = {el["ISO 369-3"]: el["English"] for el in wili_labels}
@@ -254,7 +252,7 @@ def classifier_cli_factor(classifier):
         show_default=True,
         help="Where to store the predictions",
     )
-    def eval_wili(result_file):
+    def eval_wili(result_file: str) -> None:
         """
         CLI function evaluating the classifier on WiLI.
 
@@ -272,7 +270,7 @@ def classifier_cli_factor(classifier):
         show_default=True,
         help="Where to store the predictions",
     )
-    def eval_wili_known(result_file):
+    def eval_wili_known(result_file: str) -> None:
         """
         CLI function evaluating the classifier on WiLI.
 
@@ -290,7 +288,7 @@ def classifier_cli_factor(classifier):
         show_default=True,
         help="Where to store the predictions",
     )
-    def eval_wili_unknown(result_file):
+    def eval_wili_unknown(result_file: str) -> None:
         """
         CLI function evaluating the classifier on WiLI.
 

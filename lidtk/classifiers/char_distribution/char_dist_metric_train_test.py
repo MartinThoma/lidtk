@@ -24,6 +24,7 @@ import pickle
 import random
 import sys
 from collections import Counter, defaultdict
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 
 # Third party modules
 import click
@@ -45,15 +46,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def ido(x, y):
+def ido(x: np.ndarray, y: np.ndarray) -> float:
     """
     Calculate the distance of x and y with the ido metric.
 
     Parameters
     ----------
-    x : numpy array
+    x : np.ndarray
         A probability distribution
-    y : numpy array
+    y : np.ndarray
         A probability distribution
 
     Returns
@@ -69,8 +70,8 @@ def ido(x, y):
     return 1 - np.sum(np.minimum(x, y))
 
 
-language_models = None
-language_models_chars = None
+language_models = None  # type: Optional[Dict[Any, Any]]
+language_models_chars = None  # type: Optional[List[str]]
 comp_metric = ido
 
 
@@ -78,13 +79,13 @@ comp_metric = ido
 # CLI                                                                         #
 ###############################################################################
 @click.group(name="char-distrib")
-def entry_point():
+def entry_point() -> None:
     """Use the character distribution language classifier."""
 
 
 @entry_point.command(name="predict")
 @click.option("--text")
-def predict_cli(text):
+def predict_cli(text: str) -> None:
     """
     Command line interface function for predicting the language of a text.
 
@@ -102,7 +103,7 @@ def predict_cli(text):
     show_default=True,
     help="Where to store the predictions",
 )
-def eval_wili(result_file):
+def eval_wili(result_file: str) -> None:
     """
     CLI function evaluating the classifier on WiLI.
 
@@ -113,7 +114,7 @@ def eval_wili(result_file):
     """
     if language_models is None:
         init_language_models(comp_metric, unicode_cutoff=10 ** 6)
-    lidtk.classifiers.eval_wili(result_file, predict)
+    lidtk.classifiers.eval_wili(result_file, predict)  # type: ignore
 
 
 ###############################################################################
@@ -129,14 +130,15 @@ def eval_wili(result_file):
     type=click.Choice(["train", "test", "val"]),
 )
 @click.option("--unicode_cutoff", default=10 ** 6, show_default=True)
-def main(coverage, metric, unicode_cutoff, set_name="train"):
+def main(coverage: float, metric: int, unicode_cutoff: int, set_name: str = "train"):
     """
     Train and test character distance models.
 
     Parameters
     ----------
     coverage : float
-    metric : function
+    metric : int
+        Specify a function
     unicode_cutoff : int
     set_name : str
         Define on which set to evaluate
@@ -153,7 +155,7 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
         distance.sqeuclidean,  # 8
         scipy.stats.entropy,  # 9
     ]
-    metric = metrics[metric]
+    metric_function = metrics[metric]
 
     # config = {'coverage': coverage}
 
@@ -162,7 +164,7 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
     logger.info("Finished loading data")
 
     # Train
-    trained = train(data, unicode_cutoff, coverage, metric)
+    trained = train(data, unicode_cutoff, coverage, metric_function)
 
     # Create model for each language and store it
     out_tmp = get_counts_by_lang(
@@ -170,7 +172,7 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
     )
     language_models, chars = out_tmp
     model_filename = "~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle".format(
-        metric=metric.__name__, cutoff=unicode_cutoff
+        metric=metric_function.__name__, cutoff=unicode_cutoff
     )
     model_filename = os.path.expanduser(model_filename)
     with open(model_filename, "wb") as handle:
@@ -179,7 +181,7 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
 
     # Evaluate
     cm_filepath = "char_{metric}_{coverage}_{cutoff}_{set_name}.cm.csv".format(
-        metric=metric.__name__,
+        metric=metric_function.__name__,
         coverage=coverage,
         cutoff=unicode_cutoff,
         set_name=set_name,
@@ -188,22 +190,11 @@ def main(coverage, metric, unicode_cutoff, set_name="train"):
     cm_filepath = os.path.join(cfg["artifacts_path"], cm_filepath)
 
 
-def train(data, unicode_cutoff, coverage, metric):
-    """
-    Train a model which is purely based on character distributions.
-
-    Parameters
-    ----------
-    data : dict
-    unicode_cutoff : int
-    coverage : float
-    metric : function
-
-    Returns
-    -------
-    results : dict
-    """
-    char_counter_by_lang = defaultdict(Counter)
+def train(
+    data: Dict[Any, Any], unicode_cutoff: int, coverage: float, metric: Callable
+) -> Dict[Any, Any]:
+    """Train a model which is purely based on character distributions."""
+    char_counter_by_lang = defaultdict(Counter)  # type: Dict[str, Counter]
     for x, y in zip(data["x_train"], data["y_train"]):
         char_counter_by_lang[y] += Counter(preprocess(x, unicode_cutoff))
 
@@ -212,10 +203,9 @@ def train(data, unicode_cutoff, coverage, metric):
         common_chars_by_lang[key] = get_common_characters(
             character_counter, coverage=coverage
         )
-    common_chars = set()
+    common_chars = set()  # type: Set[str]
     for _lang, char_list in common_chars_by_lang.items():
         common_chars = common_chars.union(char_list)
-    common_chars = list(common_chars)
     logger.info(
         "|{metric} & {coverage}% & {cutoff} &  {characters} chars".format(
             metric=metric.__name__,
@@ -224,19 +214,21 @@ def train(data, unicode_cutoff, coverage, metric):
             characters=len(common_chars),
         )
     )
-    results = {}
-    results["common_chars"] = common_chars
+    results = {}  # type: Dict[str, Any]
+    results["common_chars"] = list(common_chars)
     results["char_counter_by_lang"] = char_counter_by_lang
     return results
 
 
-def get_counts_by_lang(common_chars, char_counter_by_lang):
+def get_counts_by_lang(
+    common_chars: List[str], char_counter_by_lang: Dict[str, Dict[str, int]]
+) -> Tuple[Dict[Any, Any], List[str]]:
     """
     Get a language model for each language.
 
     Parameters
     ----------
-    common_chars : list of str
+    common_chars : List[str]
     char_counter_by_lang : dict
         Maps language to list of int. This list has the same length as
         common_chars and represents the number of times the character was
@@ -244,8 +236,8 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
 
     Returns
     -------
-    language_models, chars : (dict, list of str)
-        maps (code => ndarray)
+    language_models, chars : (Dict, List[str])
+        maps (code => np.ndarray)
     """
     language_model = {}
     for lang, char_counter in char_counter_by_lang.items():
@@ -273,7 +265,7 @@ def get_counts_by_lang(common_chars, char_counter_by_lang):
     return language_models, chars
 
 
-def preprocess(x, unicode_cutoff, cut_off_char="澳"):
+def preprocess(x: str, unicode_cutoff: int, cut_off_char: str = "澳") -> str:
     """
     Preprocess the string x.
 
@@ -296,13 +288,15 @@ def preprocess(x, unicode_cutoff, cut_off_char="澳"):
     return y
 
 
-def get_common_characters(character_counter, coverage=1.0):
+def get_common_characters(
+    character_counter: Counter, coverage: float = 1.0
+) -> List[str]:
     """
     Get the most common characters of a language.
 
     Parameters
     ----------
-    character_counter : collections.Counter
+    character_counter : Counter
     coverage : float, optional (default: 1.0)
         Take the most common characters that make up `coverage` of the dataset
 
@@ -325,7 +319,7 @@ def get_common_characters(character_counter, coverage=1.0):
     return chars
 
 
-def model_repr(models, key):
+def model_repr(models: Dict[str, Dict[str, float]], key) -> str:
     """Get a model representation."""
     m = [(char, proba) for char, proba in models[key].items() if proba > 0.0001]
     m = sorted(m, key=lambda n: n[1], reverse=True)
@@ -335,19 +329,18 @@ def model_repr(models, key):
     return s
 
 
-def get_distribution(x, chars):
+def get_distribution(x: str, chars: List[str]) -> np.ndarray:
     """
     Get distribution of characters in sample.
 
     Parameters
     ----------
     x : str
-    chars : iterable
-        e.g. a list of str
+    chars : List[str]
 
     Returns
     -------
-    distribution : ndarray
+    distribution : np.ndarray
         Has the same length as chars
     """
     dist = np.zeros(len(chars), dtype=np.float32)
@@ -363,7 +356,7 @@ def get_distribution(x, chars):
     return dist
 
 
-def predict(text):
+def predict(text: str):
     """
     Predict the language of a text.
 
@@ -377,11 +370,13 @@ def predict(text):
     """
     if language_models is None:
         init_language_models(comp_metric, unicode_cutoff=10 ** 6)
+    assert language_models is not None  # for mypy
+    assert language_models_chars is not None  # for mypy
     x_distribution = get_distribution(text, language_models_chars)
     return predict_param(language_models, comp_metric, x_distribution, best_only=True)
 
 
-def init_language_models(metric, unicode_cutoff):
+def init_language_models(metric: Callable, unicode_cutoff: int) -> None:
     """Initialize the language_models global variable."""
     model_filename = "~/.lidtk/models/char_dist_{metric}_{cutoff}.pickle".format(
         metric=metric.__name__, cutoff=unicode_cutoff
@@ -394,27 +389,33 @@ def init_language_models(metric, unicode_cutoff):
     globals()["language_models_chars"] = data["chars"]
 
 
-def predict_param(language_models, comp_metric, x_distribution, best_only=True):
+def predict_param(
+    language_models: Dict[str, Any],
+    comp_metric: Callable,
+    x_distribution: np.ndarray,
+    best_only: bool = True,
+) -> Union[List[Tuple[float, str]], str]:
     """
     Predict the language of x.
 
     Parameters
     ----------
-    language_models : dict
+    language_models : Dict[str, Any]
         language => model
     comp_metric : function with two parameters (model_dist, x_dist)
-    x_distribution : numpy array of dtype float
+    x_distribution : np.ndarray of dtype float
     best_only : bool, optional (default: True)
         If this is True, then only the most likely language code is be returned
         Otherwise, the list of tuples is returned.
 
     Returns
     -------
-    distances : list of tuples or str
+    distances : List[Tuple[float, str]]
         If best_only, then [(distance, 'language'), ...]
         Otherwise, 'language'
     """
-    distances = []  # tuples (distance, language)
+    # List[Tuple[distance, language]]
+    distances = []  # type: List[Tuple[float, str]]
     for lang, model_distribution in language_models.items():
         distance = comp_metric(model_distribution, x_distribution)
         distances.append((distance, lang))

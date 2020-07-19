@@ -8,7 +8,7 @@ import glob
 import pickle
 
 
-def main():
+def main() -> None:
     """Convert all pickle language files to txt files."""
     lang_files = glob.glob("lang/*.pickle")
     for lang_file in lang_files:
@@ -17,7 +17,7 @@ def main():
         convert(lang_file, target_path)
 
 
-def convert(source_path, target_path):
+def convert(source_path: str, target_path: str) -> None:
     """
     Convert a single pickle language files to a txt file.
 

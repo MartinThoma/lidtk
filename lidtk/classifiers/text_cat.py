@@ -20,14 +20,8 @@ import lidtk.classifiers
 class TextCatClassifier(lidtk.classifiers.LIDClassifier):
     """LID Classifier which uses TextCat."""
 
-    def predict(self, text):
-        """
-        Predicting the language of a text.
-
-        Parameters
-        ----------
-        text : str
-        """
+    def predict(self, text: str) -> str:
+        """Predicting the language of a text."""
         o = nltk.classify.textcat.TextCat()
         language_code = o.guess_language(text)
         return language_code
