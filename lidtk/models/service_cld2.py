@@ -13,6 +13,9 @@ Prerequesites
 import cld2
 from fuzzywuzzy import process
 
+# First party modules
+from lidtk.data import language_utils
+
 servicecode2label = {
     "gv": "glv",
     "gu": "guj",
@@ -176,9 +179,6 @@ def find_missmatches() -> None:
     Print everything directly
     """
     print(f"cld2 supports {len(cld2.LANGUAGES)} languages.")
-    # First party modules
-    from lidtk.data import language_utils
-
     language_data = language_utils.get_language_data("labels.csv")
     wiki_codes = [el["Wiki Code"] for el in language_data]
     english_names = [el["English"].lower().decode("UTF-8") for el in language_data]

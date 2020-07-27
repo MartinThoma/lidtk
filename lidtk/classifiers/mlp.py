@@ -5,19 +5,21 @@
 # Core Library modules
 import logging
 import time
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 # Third party modules
 import click
 import numpy as np
-from keras.layers import Dense, Input
-from keras.models import Model
 from sklearn.metrics import accuracy_score
 
 # First party modules
 from lidtk.classifiers import tfidf_features as feature_extractor_module
 from lidtk.data import wili
 from lidtk.utils import load_cfg
+
+if TYPE_CHECKING:
+    # Third party modules
+    from keras.models import Model
 
 logger = logging.getLogger(__name__)
 model_name = "mlp-3layer-tfidf-50"
@@ -35,7 +37,7 @@ def main(config_filepath: str) -> None:
     main_loaded(config, wili, feature_extractor_module)
 
 
-def load_model(config: Dict[str, Any], shape) -> Model:
+def load_model(config: Dict[str, Any], shape) -> "Model":
     """Load a model."""
     model = create_model(wili.n_classes, shape)
     print(model.summary())
@@ -108,8 +110,12 @@ def predict(text: str):
     return preds
 
 
-def create_model(nb_classes: int, input_shape) -> Model:
+def create_model(nb_classes: int, input_shape) -> "Model":
     """Create a MLP model."""
+    # Third party modules
+    from keras.layers import Dense, Input
+    from keras.models import Model
+
     input_ = Input(shape=input_shape)
     x = input_
     x = Dense(512, activation="relu")(x)

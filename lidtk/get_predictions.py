@@ -8,6 +8,7 @@ import os
 import pprint
 import time
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+from typing import Dict
 
 # Third party modules
 import yaml
@@ -16,13 +17,13 @@ import yaml
 from lidtk.utils import make_paths_absolute
 
 
-def get_predictions(experiment_meta, data_module, model_module):
+def get_predictions(experiment_meta: Dict, data_module, model_module) -> None:
     """
     Get predictions for one experiment.
 
     Parameters
     ----------
-    experiment_meta : dict
+    experiment_meta : Dict
     data_module : Python module
     model_module : Python module
     """

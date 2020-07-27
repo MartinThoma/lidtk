@@ -16,6 +16,9 @@ from typing import Any, List
 # Third party modules
 import detectlanguage
 
+# First party modules
+from lidtk.data import language_utils
+
 detectlanguage2label = {
     "gv": "glv",
     "gu": "guj",
@@ -175,13 +178,6 @@ def create_model(nb_classes: int, input_shape: Any) -> ServiceClassifier:
 def find_missmatches() -> None:
     """Find which languages detectlanguage and WiLI support."""
     print(f"detectlanguage supports {len(detectlanguage.languages())} languages.")
-    # Core Library modules
-    import sys
-
-    sys.path.append("..")
-    # Third party modules
-    import language_utils
-
     labels_file = os.path.abspath("../labels.csv")
     language_data = language_utils.get_language_data(labels_file)
     wiki_codes = [el["Wiki Code"] for el in language_data]

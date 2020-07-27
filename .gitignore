@@ -103,3 +103,5 @@ ENV/
 *.h5
 *.txt
 tests/reports/
+
+*.json
