@@ -2,6 +2,10 @@
 [![PyPI version](https://badge.fury.io/py/lidtk.svg)](https://badge.fury.io/py/lidtk)
 [![Python Support](https://img.shields.io/pypi/pyversions/lidtk.svg)](https://pypi.org/project/lidtk/)
 [![Build Status](https://travis-ci.org/MartinThoma/lidtk.svg?branch=master)](https://travis-ci.org/MartinThoma/lidtk)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![GitHub last commit](https://img.shields.io/github/last-commit/MartinThoma/lidtk)
+![GitHub commits since latest release (by SemVer)](https://img.shields.io/github/commits-since/MartinThoma/lidtk/0.2.0)
+[![CodeFactor](https://www.codefactor.io/repository/github/martinthoma/lidtk/badge/master)](https://www.codefactor.io/repository/github/martinthoma/lidtk/overview/master)
 
 # lidtk
 
