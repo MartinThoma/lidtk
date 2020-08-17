@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 r"""
 Train and test character distance models.
 
@@ -157,8 +155,6 @@ def main(coverage: float, metric: int, unicode_cutoff: int, set_name: str = "tra
     ]
     metric_function = metrics[metric]
 
-    # config = {'coverage': coverage}
-
     # Read data
     data = wili.load_data()
     logger.info("Finished loading data")
@@ -305,7 +301,7 @@ def get_common_characters(
     common_characters : list of most common characters that cover `coverage`
         of all character occurences, ordered by count (most common first).
     """
-    assert coverage > 0.0
+    assert coverage > 0.0, f"coverage={coverage}, but > 0 expected"
     counts = sorted(character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True)
     chars = []
     count_sum = sum(el[1] for el in counts)
@@ -370,8 +366,8 @@ def predict(text: str):
     """
     if language_models is None:
         init_language_models(comp_metric, unicode_cutoff=10 ** 6)
-    assert language_models is not None  # for mypy
-    assert language_models_chars is not None  # for mypy
+    assert language_models is not None, "assert for mypy"
+    assert language_models_chars is not None, "assert for mypy"
     x_distribution = get_distribution(text, language_models_chars)
     return predict_param(language_models, comp_metric, x_distribution, best_only=True)
 
@@ -414,7 +410,6 @@ def predict_param(
         If best_only, then [(distance, 'language'), ...]
         Otherwise, 'language'
     """
-    # List[Tuple[distance, language]]
     distances = []  # type: List[Tuple[float, str]]
     for lang, model_distribution in language_models.items():
         distance = comp_metric(model_distribution, x_distribution)

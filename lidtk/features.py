@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Feature Extraction module."""
 
 # Core Library modules

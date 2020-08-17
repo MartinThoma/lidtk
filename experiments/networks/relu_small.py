@@ -1,14 +1,8 @@
-#!/usr/bin/env python
-
 """Create a sequential model."""
 
 # Third party modules
 from keras.layers import Activation, Dense, Input
 from keras.models import Model
-
-# from keras.layers import Dropout
-# from keras.layers.normalization import BatchNormalization
-# from keras.regularizers import l2
 
 
 def create_model(nb_classes, input_shape, config=None):
@@ -28,6 +22,7 @@ def create_model(nb_classes, input_shape, config=None):
 if __name__ == "__main__":
     model = create_model(100, (20000,))
     model.summary()
+
     # Third party modules
     from keras.utils import plot_model
 

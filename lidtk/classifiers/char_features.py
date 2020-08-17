@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Extract character features."""
 
 # Core Library modules
@@ -164,7 +162,7 @@ class FeatureExtractor:
             `coverage` of all character occurences, ordered by count (most
             common first).
         """
-        assert coverage > 0.0
+        assert coverage > 0.0, f"coverage={coverage} was expected to be positive"
         counts = sorted(
             character_counter.items(), key=lambda n: (n[1], n[0]), reverse=True
         )

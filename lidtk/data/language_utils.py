@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Utility function for the languages themselves."""
 
 # Core Library modules
@@ -217,7 +215,6 @@ def analyze_language_families(csv_filepath: str) -> None:
     # Read CSV file
     with open(csv_filepath) as fp:
         reader = csv.DictReader(fp, delimiter=";", quotechar='"')
-        # next(reader, None)  # skip the headers
         wiki = list(reader)
 
     languages = sorted(el["English"] for el in wiki)

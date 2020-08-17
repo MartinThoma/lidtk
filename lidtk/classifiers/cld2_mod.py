@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Run classification with CLD2.
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Load WiLI-Dataset."""
 
 # Core Library modules

@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-"""Analyze  how important a Unicode block is for the different languages."""
+"""Analyze how important a Unicode block is for the different languages."""
 
 # Core Library modules
 import logging

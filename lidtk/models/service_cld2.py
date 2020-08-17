@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Script for the usage of the detectlanguage.com service.
 
@@ -220,6 +218,4 @@ def find_missmatches() -> None:
 
 
 if __name__ == "__main__":
-    # model = create_model(None, None)
-    # print(model.predict("Ich habe ein Haus."))
     find_missmatches()

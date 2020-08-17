@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Visualize C_0.99 for all languages except the 10 with most characters."""
 
 # Core Library modules

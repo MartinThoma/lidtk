@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Create sharable dataset from downloaded texts."""
 
 # Core Library modules
@@ -93,15 +91,12 @@ def main(nb_elements: int, source_path: str, data_path: str) -> None:
             for i in indices_dict[set_name]:
                 xs[set_name].append(lang_data[i])
                 ys[set_name].append(label)
-                # urls[set_name].append()
-        # print("{:>3}: {}".format(label, filepath))
     for set_name in set_names:
         # Prevent languages from building blocks:
         perm = list(range(len(xs[set_name])))
         random.shuffle(perm)
         xs[set_name] = [xs[set_name][i] for i in perm]
         ys[set_name] = [ys[set_name][i] for i in perm]
-        # urls[set_name] = [urls[set_name][i] for i in perm]
 
         # Write data
         data_path = lidtk.utils.make_path_absolute(data_path)

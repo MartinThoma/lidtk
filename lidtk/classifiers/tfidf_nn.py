@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Run classification with tfidf-features and Neural Network classifier.
 
@@ -109,7 +107,7 @@ def predict_cli(text: str, config_filepath: str) -> None:
         Path to a YAML configuration file.
     """
     load_classifier(config_filepath)
-    assert classifier is not None  # for mypy
+    assert classifier is not None, "for mypy"
     print(classifier.predict(text))
 
 
@@ -130,7 +128,7 @@ def get_languages(config_filepath: str) -> None:
         Path to a YAML configuration file.
     """
     load_classifier(config_filepath)
-    assert classifier is not None  # for mypy
+    assert classifier is not None, "for mypy"
     print(classifier.get_languages())
 
 
@@ -158,7 +156,7 @@ def print_languages(config_filepath: str, label_filepath: str) -> None:
     label_filepath : str
     """
     load_classifier(config_filepath)
-    assert classifier is not None  # for mypy
+    assert classifier is not None, "for mypy"
     label_filepath = os.path.abspath(label_filepath)
     wili_labels = wili.get_language_data(label_filepath)
     iso2name = {el["ISO 369-3"]: el["English"] for el in wili_labels}
@@ -198,5 +196,5 @@ def eval_wili(config_filepath: str, result_file: str) -> None:
         Path to a file where the results will be stored
     """
     load_classifier(config_filepath)
-    assert classifier is not None  # for mypy
+    assert classifier is not None, "for mypy"
     classifier.eval_wili(result_file)

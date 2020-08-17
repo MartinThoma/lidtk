@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Neural Network Classifier."""
 
 # Core Library modules

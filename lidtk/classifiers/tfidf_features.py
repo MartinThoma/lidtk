@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Create tfidf.pickle."""
 
 # Core Library modules

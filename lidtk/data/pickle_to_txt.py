@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Convert a language pickle file to a txt."""
 
 # Core Library modules

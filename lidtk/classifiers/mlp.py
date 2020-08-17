@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Train and evaluate a MLP."""
 
 # Core Library modules
@@ -63,11 +61,10 @@ def main_loaded(config: Dict[str, Any], data_module, feature_extractor_module) -
         data[set_name] = vectorizer.transform(data[set_name]).toarray()
     for set_name in ["y_train", "y_val", "y_test"]:
         data[set_name] = wili.lang_codes_to_one_hot(data[set_name], wili.labels_s)
-    # data['x_test'] = vectorizer.transform(data['x_test'])
     optimizer = get_optimizer(config)
     logger.debug(data["x_train"][0])
     model = load_model(config, data["x_train"][0].shape)
-    assert model is not None  # for mypy
+    assert model is not None, "for mypy"
     model.compile(
         loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"]
     )
@@ -79,26 +76,18 @@ def main_loaded(config: Dict[str, Any], data_module, feature_extractor_module) -
         epochs=config["classification"]["optimizer"]["epochs"],
         validation_data=(data["x_val"], data["y_val"]),
         shuffle=True,
-        # callbacks=callbacks
     )
     t1 = time.time()
-    # res = get_tptnfpfn(model, data)
-
-    t2 = time.time()
     model.save(config["classification"]["artifacts_path"])
     logger.info(f"Save model to '{config['classification']['artifacts_path']}'")
     preds = model.predict(data["x_test"])
     y_pred = np.argmax(preds, axis=1)
     y_true = np.argmax(data["y_test"], axis=1)
     print(
-        (
-            "{clf_name:<30}: {acc:>4.2f}% in {train_time:0.2f}s "
-            "train / {test_time:0.2f}s test"
-        ).format(
+        "{clf_name:<30}: {acc:>4.2f}% in {train_time:0.2f}s train".format(
             clf_name="MLP",
             acc=(accuracy_score(y_true=y_true, y_pred=y_pred) * 100),
             train_time=(t1 - t0),
-            test_time=(t2 - t1),
         )
     )
 

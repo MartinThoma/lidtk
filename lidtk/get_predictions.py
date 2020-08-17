@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Get predictions."""
 
 # Core Library modules

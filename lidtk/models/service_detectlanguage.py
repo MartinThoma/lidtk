@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Script for the usage of the detectlanguage.com service.
 
@@ -201,11 +199,9 @@ def find_missmatches() -> None:
     for lang in language_data:
         if lang["Label"] not in detectlanguage2label.values():
             dl_doesnt_know.append(lang["Label"])
-    print(f"WiLI does not know: {list(wili_doesnt_know)} " f"({len(wili_doesnt_know)})")
+    print(f"WiLI does not know: {list(wili_doesnt_know)} ({len(wili_doesnt_know)})")
     print(f"Detectlanguage does not know: {dl_doesnt_know} ({len(dl_doesnt_know)})")
 
 
 if __name__ == "__main__":
-    # model = create_model(None, None)
-    # print(model.predict("Ich habe ein Haus."))
     find_missmatches()

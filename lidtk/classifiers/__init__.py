@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Language classifiers."""
 
 # Core Library modules

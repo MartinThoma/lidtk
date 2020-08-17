@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Download 1000 documents of each language."""
 
 # Core Library modules
@@ -138,9 +136,7 @@ def is_literature(paragraph: str) -> bool:
     -------
     is_literature : bool
     """
-    doi_regex = re.compile(
-        r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/""" r"""(?:(?!["&\'<>])\S)+)"""
-    )
+    doi_regex = re.compile(r"""(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+)""")
     issn_regex = re.compile(r"""ISSN \d+""", re.IGNORECASE)
     vol_regex = re.compile(r"""vol\. [IVCXL\d]+""", re.IGNORECASE)
     return (
@@ -196,7 +192,6 @@ def find_pages(
                 verbose,
                 to_extract,
             )
-    # print("Start extracting pages")
     if False and len(extracted_paragraphs) < to_extract:
         apcontinue = ""
         max_reached = False

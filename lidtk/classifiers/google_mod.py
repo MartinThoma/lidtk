@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Run classification with Google Cloud.
 
@@ -32,9 +30,7 @@ class GCClassifier(lidtk.classifiers.LIDClassifier):
 
         translate_client = translate.Client()
         result = translate_client.detect_language(text)
-        # print('Confidence: {}'.format(result['confidence']))
-        # print('Language: {}'.format(result['language']))
-        return result["language"]  # self.map2wili(details[0].language_code)
+        return result["language"]
 
 
 path = "classifiers/config/google-cloud.yaml"
