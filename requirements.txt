@@ -61,7 +61,7 @@ soupsieve==2.0.1          # via beautifulsoup4
 tensorboard-plugin-wit==1.7.0  # via tensorboard
 tensorboard==2.3.0        # via tensorflow
 tensorflow-estimator==2.3.0  # via tensorflow
-tensorflow==2.3.0         # via lidtk (setup.py)
+tensorflow==2.3.1         # via lidtk (setup.py)
 termcolor==1.1.0          # via tensorflow
 threadpoolctl==2.1.0      # via scikit-learn
 tqdm==4.48.2              # via nltk
