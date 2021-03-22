@@ -1,0 +1,19 @@
+# cld2-cffi  # does not work with pip-compile
+click
+detectlanguage
+fuzzywuzzy
+h5py
+Keras<2.4.0
+langdetect
+langid
+matplotlib
+nltk
+numpy
+progressbar2
+python-Levenshtein
+PyYAML
+scikit-learn
+scipy
+seaborn
+tensorflow
+wikipedia

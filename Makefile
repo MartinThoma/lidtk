@@ -1,8 +1,9 @@
 maint:
+	pip install -r requirements/dev.txt
 	pre-commit autoupdate && pre-commit run --all-files
-	pip-compile -U requirements-lint.in
-	pip-compile -U requirements-dev.in
-	pip-compile -U setup.py
+	pip-compile -U requirements/prod.in
+	pip-compile -U requirements/ci.in
+	pip-compile -U requirements/dev.in
 
 upload:
 	make clean
@@ -23,4 +24,4 @@ mutmut-results:
 
 bandit:
 	# Python3 only: B322 is save
-	bandit -r mpu -s B322
+	bandit -r lidtk -s B322

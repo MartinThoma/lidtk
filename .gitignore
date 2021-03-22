@@ -101,7 +101,6 @@ ENV/
 .mypy_cache/
 *.pickle
 *.h5
-*.txt
 tests/reports/
 
 *.json

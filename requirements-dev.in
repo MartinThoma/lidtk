@@ -1,8 +1,0 @@
-pip-tools
-pydocstyle
-pytest
-pytest-cov
-pytest-mccabe
-pytest-timeout
-twine
-wheel

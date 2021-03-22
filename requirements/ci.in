@@ -1,5 +1,7 @@
+-r prod.txt
 black
 flake8
+flake8_implicit_str_concat
 flake8-assert-msg
 flake8-bugbear
 flake8-builtins
@@ -10,6 +12,9 @@ flake8-isort
 flake8-pytest-style
 flake8-raise
 flake8-string-format
-flake8_implicit_str_concat
 mypy
 pydocstyle
+pytest
+pytest-cov
+pytest-mccabe
+pytest-timeout
